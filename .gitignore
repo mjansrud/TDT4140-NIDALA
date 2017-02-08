@@ -1,0 +1,13 @@
+db.sqlite3
+*.sql
+*.pyc
+*.swp
+.AppleDouble
+/static/
+/media/
+/env/
+.DS_Store
+*.AppleDouble
+*.DS_Store
+/.idea/
+*.sql
