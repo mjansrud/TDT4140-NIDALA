@@ -78,7 +78,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'nidala_main',
         'USER': 'nidala_user',
-        'PASSWORD': '----------',
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD', ''),
         'HOST': '87.76.28.159',
         'PORT': '',  # Set to empty string for default.
     }
