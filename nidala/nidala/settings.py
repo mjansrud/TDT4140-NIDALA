@@ -75,8 +75,12 @@ WSGI_APPLICATION = 'nidala.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'nidala_main',
+        'USER': 'nidala_user',
+        'PASSWORD': '------',
+        'HOST': '87.76.28.159',
+        'PORT': '',  # Set to empty string for default.
     }
 }
 
