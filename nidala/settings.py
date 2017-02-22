@@ -93,7 +93,7 @@ else:
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'nidala_main',
             'USER': 'nidala_user',
-            'PASSWORD': os.environ.get('DATABASE_PASSWORD', ''),
+            'PASSWORD': os.environ.get('SERVER_PASSWORD', ''),
             'HOST': '87.76.28.159',
             'PORT': '',  # Set to empty string for default.
         }
@@ -108,10 +108,13 @@ POST_OFFICE = {
 }
 
 EMAIL_BACKEND = 'post_office.EmailBackend'
-EMAIL_HOST = ''
-EMAIL_PORT = ''
-EMAIL_HOST_USER = ''
-DEFAULT_FROM_MAIL = ''
+EMAIL_HOST = 'mail.founder.no'
+EMAIL_PORT = '465'
+EMAIL_USE_SSL = True
+DEFAULT_FROM_MAIL = 'post@nidala.no'
+EMAIL_HOST_USER = 'post@nidala.no'
+EMAIL_HOST_PASSWORD = os.environ.get('SERVER_PASSWORD', '')
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators

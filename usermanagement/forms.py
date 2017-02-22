@@ -4,21 +4,21 @@ from django import forms
 
 
 class LoginForm(forms.Form):
-    email = forms.EmailField(label='Email', max_length=100)
-    password = forms.CharField(label='Password', max_length=100, widget=forms.PasswordInput)
+    email = forms.EmailField(label='E-post', max_length=100)
+    password = forms.CharField(label='Passord', max_length=100, widget=forms.PasswordInput)
 
     def clean(self):
         cleaned_data = super(LoginForm, self).clean()
         email = cleaned_data.get("email")
         password = cleaned_data.get("password")
 
-        error_msg = "Email or password is wrong"
+        error_msg = "E-posten eller passordet er feil"
         if email and password:
             try:
                 user = User.objects.get(email=email)
                 if not user.is_active:
                     self.add_error('email',
-                                   'The account is not confirmed. Click forgot password to receive a new confirmation email')
+                                   'Brukeren er ikke aktivert. Trykk på glemt passord for å motta en ny e-post')
                     return
             except User.DoesNotExist:
                 self.add_error('email', error_msg)
@@ -35,15 +35,15 @@ class LoginForm(forms.Form):
             user = User.objects.get(email=email)
             login(request, user)
         except User.DoesNotExist:
-            print("Could not login user with email: {}".format(email))
+            print("Kan ikke logge inn brukeren med e-post: {}".format(email))
 
 
 class SignUpForm(forms.Form):
-    first_name = forms.CharField(label='First name', max_length=255)
-    last_name = forms.CharField(label='Last name', max_length=255)
-    email = forms.EmailField(label='Email', max_length=255)
-    password = forms.CharField(label='Password', max_length=255, widget=forms.PasswordInput)
-    confirm_password = forms.CharField(label='Confirm password', max_length=255, widget=forms.PasswordInput)
+    first_name = forms.CharField(label='Fornavn', max_length=255)
+    last_name = forms.CharField(label='Etternavn', max_length=255)
+    email = forms.EmailField(label='E-post', max_length=255)
+    password = forms.CharField(label='Passord', max_length=255, widget=forms.PasswordInput)
+    confirm_password = forms.CharField(label='Bekreft passord', max_length=255, widget=forms.PasswordInput)
 
     def clean(self):
         cleaned_data = super(SignUpForm, self).clean()
@@ -53,18 +53,18 @@ class SignUpForm(forms.Form):
 
         try:
             User.objects.get(email=email)
-            self.add_error('email', 'The email address is already registered')
+            self.add_error('email', 'E-posten er allerede registrert')
         except User.DoesNotExist:
             pass
 
         if password != confirm_password:
-            msg = 'Passwords does not match'
+            msg = 'Passordene er ikke like'
             self.add_error('password', msg)
             self.add_error('confirm_password', msg)
 
         if not check_password(password):
             self.add_error('password',
-                           'Password must be at least 8 characters, contain at least one number and at least one capital letter')
+                           'Passordet må være minst 8 tegn, inneholde minst et tall og en stor bokstav')
 
     def create_user(self):
         first_name = self.cleaned_data.get('first_name')
@@ -81,7 +81,7 @@ class SignUpForm(forms.Form):
 
 
 class ForgotPasswordForm(forms.Form):
-    email = forms.CharField(label='Email', max_length=100)
+    email = forms.CharField(label='E-post', max_length=100)
 
     def clean(self):
         cleaned_data = super(ForgotPasswordForm, self).clean()
@@ -90,12 +90,12 @@ class ForgotPasswordForm(forms.Form):
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
-            self.add_error('email', 'The email is not registered')
+            self.add_error('email', 'E-posten er ikke registrert')
 
 
 class SetPasswordForm(forms.Form):
-    new_password = forms.CharField(label='New password', max_length=100, widget=forms.PasswordInput)
-    confirm_password = forms.CharField(label='Confirm new password', max_length=100, widget=forms.PasswordInput)
+    new_password = forms.CharField(label='Nytt passord', max_length=100, widget=forms.PasswordInput)
+    confirm_password = forms.CharField(label='Bekreft passord', max_length=100, widget=forms.PasswordInput)
 
     def clean(self):
         cleaned_data = super(SetPasswordForm, self).clean()
@@ -103,18 +103,18 @@ class SetPasswordForm(forms.Form):
         confirm_password = cleaned_data.get('confirm_password')
 
         if new_password != confirm_password:
-            self.add_error('new_password', 'Passwords does not match')
-            self.add_error('confirm_password', 'Passwords does not match')
+            self.add_error('new_password', 'Passordene er ikke like')
+            self.add_error('confirm_password', 'Passordene er ikke like')
 
         if not check_password(new_password):
             self.add_error('new_password',
-                           'Password must be at least 8 characters, contain at least one number and at least one capital letter')
+                           'Passordet må være minst 8 tegn, inneholde minst et tall og en stor bokstav')
 
 
 class ChangePasswordForm(forms.Form):
-    current_password = forms.CharField(label='Current password', max_length=100, widget=forms.PasswordInput)
-    new_password = forms.CharField(label='New password', max_length=100, widget=forms.PasswordInput)
-    confirm_password = forms.CharField(label='Confirm new password', max_length=100, widget=forms.PasswordInput)
+    current_password = forms.CharField(label='Nåværende passord', max_length=100, widget=forms.PasswordInput)
+    new_password = forms.CharField(label='Nytt passord', max_length=100, widget=forms.PasswordInput)
+    confirm_password = forms.CharField(label='Bekreft passord', max_length=100, widget=forms.PasswordInput)
 
     def __init__(self, email, *args, **kwargs):
         self.email = email
@@ -130,15 +130,15 @@ class ChangePasswordForm(forms.Form):
         user = User.objects.get(email=email)
 
         if not user.check_password(current_password):
-            self.add_error('current_password', 'Wrong password')
+            self.add_error('current_password', 'Feil passord')
 
         if new_password != confirm_password:
-            self.add_error('new_password', 'Passwords does not match')
-            self.add_error('confirm_password', 'Passwords does not match')
+            self.add_error('new_password', 'Passordene er ikke like')
+            self.add_error('confirm_password', 'Passordene er ikke like')
 
         if not check_password(new_password):
             self.add_error('new_password',
-                           'Password must be at least 8 characters, contain at least one number and at least one capital letter')
+                           'Passordet må være minst 8 tegn, inneholde minst et tall og en stor bokstav')
 
     def change_password(self, request):
         email = self.email
