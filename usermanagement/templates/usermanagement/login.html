@@ -9,21 +9,21 @@
 {% block content %}
   <div class="container">
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-xs-12 col-md-6 col-md-offset-3">
         <div class="panel panel-default full-page-panel">
           <div class="panel-heading">
-            <h3 class="panel-title">Log in</h3>
+            <h3 class="panel-title">Logg inn</h3>
           </div>
           <div class="panel-body panel-content">
             <form action="{% url 'user:login' %}" method="post" class="form">
               {% csrf_token %}
               {% bootstrap_form form %}
               <div class="form-group">
-                <a id="forgot-password-link" href="{% url 'user:forgot-password' %}">Forgot password?</a>
+                <a id="forgot-password-link" href="{% url 'user:forgot-password' %}">Glemt passord?</a>
               </div>
               <input hidden value="{{ next }}" name="next">
               {% buttons %}
-                <button type="submit" class="btn btn-primary submit-button">Log in</button>
+                <button type="submit" class="btn btn-primary submit-button">Logg inn</button>
               {% endbuttons %}
             </form>
           </div>

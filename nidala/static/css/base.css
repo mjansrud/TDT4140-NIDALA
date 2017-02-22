@@ -10,6 +10,10 @@ form .alert {
     display: none;
 }
 
+.navbar {
+    margin-bottom: 50px;
+}
+
 .dropdown-header {
     font-weight: bold;
     font-size: 1.3rem;
