@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrap3',
+    'post_office',
     'nidala',
+    'usermanagement'
 ]
 
 MIDDLEWARE = [
@@ -98,6 +100,18 @@ else:
     }
 
 
+# Email setup
+POST_OFFICE = {
+    'LOG_LEVEL': 2,
+    'DEFAULT_PRIORITY': 'now',
+
+}
+
+EMAIL_BACKEND = 'post_office.EmailBackend'
+EMAIL_HOST = ''
+EMAIL_PORT = ''
+EMAIL_HOST_USER = ''
+DEFAULT_FROM_MAIL = ''
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
