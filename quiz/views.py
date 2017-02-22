@@ -1,3 +1,4 @@
 from django.shortcuts import render
+def index(request):
 
-# Create your views here.
+    return render(request, 'nidala/quiz.html')
