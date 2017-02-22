@@ -1,0 +1,35 @@
+{% extends 'nidala/base.html' %}
+
+{% block content %}
+  <div class="container-fluid">
+    <h1 class="text-center">Quiz</h1>
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-md-6 col-md-offset-3">
+
+            <form action="" method="POST">{% csrf_token %}
+               <ul class="list-group">
+                 <li class="list-group-item">
+                   <a href="tdt4120"> Fag navn1</a>
+                 </li>
+                 <li class="list-group-item">
+                   <a> Fag navn2</a>
+                 </li>
+
+
+
+
+               </ul>
+
+
+            </form>
+
+
+        </div>
+      </div>
+  </div>
+</div>
+
+
+  </div>
+{% endblock content %}

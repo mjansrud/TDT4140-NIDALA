@@ -15,3 +15,5 @@ def index(request):
         'form': form,
     }
     return render(request, 'nidala/index.html', context)
+
+
