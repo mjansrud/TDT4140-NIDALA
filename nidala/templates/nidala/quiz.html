@@ -10,11 +10,38 @@
             <form action="" method="POST">{% csrf_token %}
               <input type=hidden name="question_id" value="{{ question.id }}">
 
-              <ul class="list-group">
+              <ul class="list-group"> {#Iterer gjennom alle spørsmålene#}
                   <li class="list-group-item">
-                    Spørsmål 1
-                    <li class="list-group-item"></li>
+                    <div>
+                      <h5>Spørsmål 1</h5>
+                    </div>
 
+                    <div class="checkbox">
+                      <label><input type="checkbox" value="">Svar 1</label>
+                    </div>
+                    <div class="checkbox">
+                      <label><input type="checkbox" value="">Svar 2</label>
+                    </div>
+                    <div class="checkbox">
+                      <label><input type="checkbox" value="">Svar 3</label>
+                    </div>
+
+                  </li>
+                  <li class="list-group-item">
+                    <div>
+                      <h5>Spørsmål 2</h5>
+                    </div>
+
+
+                     <div class="radio">
+                      <label><input type="radio" name="optradio">Svar 1</label>
+                    </div>
+                    <div class="checkbox">
+                      <label><input type="radio" name="optradio">Svar 2</label>
+                    </div>
+                    <div class="checkbox">
+                      <label><input type="radio" name="optradio">Svar 3</label>
+                    </div>
                   </li>
 
               </ul>
