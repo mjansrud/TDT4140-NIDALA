@@ -9,11 +9,9 @@ from django.utils import timezone
 # Time the activation is valid, in hours
 VALID_TIME = 48
 
-
 class UserTokenManager(models.Manager):
     def prune_expired(self):
         self.filter(created__lt=timezone.now() - timedelta(hours=VALID_TIME)).delete()
-
 
 class UserToken(models.Model):
     user = models.ForeignKey(User)

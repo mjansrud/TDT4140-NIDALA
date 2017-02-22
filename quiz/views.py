@@ -8,5 +8,9 @@ def quizList(request):
 def quizID(request):
     return render(request, 'nidala/quiz.html')
 
+def quizResult(request):
+    return render(request, 'nidala/quizResult.html')
+
 def subjects(request):
     return render(request, 'nidala/subjects.html')
+
