@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'bootstrap3',
     'post_office',
     'nidala',
-    'usermanagement'
+    'usermanagement',
+    'quiz',
 ]
 
 MIDDLEWARE = [
