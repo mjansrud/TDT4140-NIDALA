@@ -1,4 +1,5 @@
-[  {
+[
+  {
     "model": "post_office.emailtemplate",
     "pk": 1,
     "fields": {
@@ -26,6 +27,24 @@
       "html_content": "<p>Here you have a link to reset your password:</p>\r\n\r\n<p>Link: <a href=\"http://{{ request.get_host }}/user/set-password/{{ token.key }}/\">http://{{ request.get_host }}/user/set-password/{{ token.key }}/</a></p>\r\n\r\n<p>Kind regards,</p>\r\n<p>The team at DSSCDB</p>",
       "language": "",
       "default_template": null
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$30000$v9f5EFnFOEOE$I642AW4OC5R2QqUrQxUoPpTa5nYARWLu0r9/AS8T5yA=",
+      "last_login": null,
+      "is_superuser": true,
+      "username": "test",
+      "first_name": "",
+      "last_name": "",
+      "email": "test@test.test",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2017-02-23T14:21:12.371Z",
+      "groups": [],
+      "user_permissions": []
     }
   }
 ]

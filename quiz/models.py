@@ -3,7 +3,6 @@ from django.db import models
 
 # Create your models here.
 class Subject(models.Model):
-
     code = models.CharField(
         verbose_name="Subject",
         max_length=7,
@@ -11,30 +10,38 @@ class Subject(models.Model):
 
     title = models.CharField(
         verbose_name="Title",
-        max_length=100)
+        max_length=100,
+        blank=True,
+        null=True)
 
     class Meta:
         verbose_name = "Subject"
         verbose_name_plural = "Subjects"
 
-class Quiz(models.Model):
+    def __str__(self):
+        return self.code
 
+
+class Quiz(models.Model):
     hash = models.CharField(
         verbose_name="Hash",
         max_length=8,
-        unique=True)
+        blank=True,
+        null=True)
 
-    subject = models.ForeignKey(
-        'Subject'
-    )
+    subject = models.ForeignKey(Subject, related_name='quizes')
 
     title = models.CharField(
         verbose_name="Title",
-        max_length=60, blank=False)
+        max_length=60)
 
     description = models.TextField(
         verbose_name="Description",
-        blank=True, help_text="a description of the quiz")
+        blank=True,
+        null=True)
+
+    def __str__(self):
+        return self.title
 
     class Meta:
         verbose_name = "Quiz"
