@@ -1,60 +1,57 @@
 {% extends 'nidala/base.html' %}
 
 {% block content %}
-  <div class="container-fluid">
-    <h1 class="text-center">Quiz</h1>
-    <div class="container">
-      <div class="row">
-        <div class="col-xs-12 col-md-6 col-md-offset-3">
+    <div class="container-fluid">
+        <h1 class="text-center">Quiz</h1>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-md-6 col-md-offset-3">
 
-            <form action="/quiz/result/" method="POST">{% csrf_token %}
-              <input type=hidden name="question_id" value="{{ question.id }}">
+                    <form action="/quiz/result/" method="POST">{% csrf_token %}
+                        <input type=hidden name="question_id" value="{{ question.id }}">
 
-              <ul class="list-group"> {#Iterer gjennom alle spørsmålene#}
-                  <li class="list-group-item">
-                    <div>
-                      <h5>Spørsmål 1</h5>
-                    </div>
+                        <ul class="list-group"> {#Iterer gjennom alle spørsmålene#}
+                            <li class="list-group-item">
+                                <div>
+                                    <h5>Spørsmål 1</h5>
+                                </div>
 
-                    <div class="checkbox">
-                      <label><input type="checkbox" value="">Svar 1</label>
-                    </div>
-                    <div class="checkbox">
-                      <label><input type="checkbox" value="">Svar 2</label>
-                    </div>
-                    <div class="checkbox">
-                      <label><input type="checkbox" value="">Svar 3</label>
-                    </div>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" value="">Svar 1</label>
+                                </div>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" value="">Svar 2</label>
+                                </div>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" value="">Svar 3</label>
+                                </div>
 
-                  </li>
-                  <li class="list-group-item">
-                    <div>
-                      <h5>Spørsmål 2</h5>
-                    </div>
-
-
-                     <div class="radio">
-                      <label><input type="radio" name="optradio">Svar 1</label>
-                    </div>
-                    <div class="checkbox">
-                      <label><input type="radio" name="optradio">Svar 2</label>
-                    </div>
-                    <div class="checkbox">
-                      <label><input type="radio" name="optradio">Svar 3</label>
-                    </div>
-                  </li>
-
-              </ul>
-
-              <input type="submit" class="btn btn-large btn-block btn-warning" >
-            </form>
+                            </li>
+                            <li class="list-group-item">
+                                <div>
+                                    <h5>Spørsmål 2</h5>
+                                </div>
 
 
+                                <div class="radio">
+                                    <label><input type="radio" name="optradio">Svar 1</label>
+                                </div>
+                                <div class="checkbox">
+                                    <label><input type="radio" name="optradio">Svar 2</label>
+                                </div>
+                                <div class="checkbox">
+                                    <label><input type="radio" name="optradio">Svar 3</label>
+                                </div>
+                            </li>
+
+                        </ul>
+
+                        <input type="submit" class="btn btn-large btn-block btn-warning">
+                    </form>
+
+
+                </div>
+            </div>
         </div>
-      </div>
-  </div>
-</div>
-
-
-  </div>
+    </div>
 {% endblock content %}
