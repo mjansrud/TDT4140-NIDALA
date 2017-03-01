@@ -4,12 +4,6 @@
 
 NIDALA (NTNU Individually Dynamic Assigned Learning Assistant)
 
-Created by <br />
-Morten Jansrud <br />
-Kristian Haga <br />
-Martin Simensen <br />
-Håvard Opheim <br />
-
 NIDALA is a project that aims to improve upon the many exercise programs on NTNU. <br />
 Our idea of improvment is bade upon the concept of spaced repetition. <br />
 Questions from previous excersices will show up on current excersices when NIDALA believes you need them repeated. <br />
@@ -48,4 +42,14 @@ Run
 ```
 python manage.py runserver
 ```
-This command will run a local server that comes with Django. Be deafult the website will be running on your localhost (127.0.0.1:8000)
+This command will run a local server that comes with Django. Be deafult the website will be running on your localhost (127.0.0.1:8000)<br />
+##Authors
+Morten Jansrud <br />
+Kristian Haga <br />
+Martin Simensen <br />
+Håvard Opheim <br />
+
+##Acknowledgments
+* Pekka
+##Furhter reading
+We have a wiki. Should you have any further questions check our [wiki](https://github.com/mjansrud/TDT4140-NIDALA/wiki/)
