@@ -9,8 +9,7 @@
                     <ul class="list-group">
                         {% for quiz in quizes %}
                             <li class="list-group-item">
-                                <a href="{% url 'quizID' quiz.id %}"> {{ quiz.title }}</a>
-
+                                <a href="{% url 'quizHash' quiz.hash %}"> {{ quiz.title }}</a>
                             </li>
                         {% endfor %}
                     </ul>
