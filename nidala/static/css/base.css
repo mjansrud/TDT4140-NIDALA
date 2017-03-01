@@ -14,7 +14,30 @@ form .alert {
     margin-bottom: 50px;
 }
 
+.navbar-default{
+    background-color: #ffad33;
+    border-color: transparent;
+}
+.navbar-default .navbar-brand {
+    color: black;
+}
+
+
 .dropdown-header {
     font-weight: bold;
     font-size: 1.3rem;
 }
+
+.list-group-item:nth-child(odd) {
+	color: #fff;
+	background-color: #ffad33;
+	border-color: #e1e1d0;
+}
+a {
+    color: black;
+}
+
+
+
+
+
