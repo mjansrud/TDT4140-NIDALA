@@ -1,5 +1,5 @@
 :root {
-    --background-color: #EFEFF3;
+     --background-color: rgba(249, 249, 253, 0.33);
 }
 
 body {
@@ -11,13 +11,16 @@ body {
 }
 
 .navbar-default{
-    background-color: #ffad33;
-    border-color: transparent;
+    border-bottom: #fcfcfc;
+    border-bottom: 1px solid #d9981a;
+    -webkit-border-radius:0px;
+    -moz-border-radius:0px;
+    border-radius:0px;
+}
 }
 .navbar-default .navbar-brand {
-    color: black;
+    // color: black;
 }
-
 
 .dropdown-header {
     font-weight: bold;
@@ -25,15 +28,26 @@ body {
 }
 
 .list-group-item:nth-child(odd) {
-	color: #fff;
-	background-color: #ffad33;
-	border-color: #e1e1d0;
+	//color: #fff;
+	//background-color: rgba(239, 190, 0, 0.31);
+	//border-color: #e1e1d0;
 }
 a {
     color: black;
 }
 
+.title{
+    color:#d9981a !important;
+    display:inline;
+}
 
+.sub-title{
+    display:inline;
+}
+
+.jumbotron {
+    background-color: #fcfcfc;
+}
 
 
 
