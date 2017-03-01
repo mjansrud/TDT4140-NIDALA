@@ -79,6 +79,9 @@ class Question(models.Model):
                             choices=TYPE_CHOICES,
                             default="CHECKBOX")
 
+    #Used just for displaying which questions the user has correct
+    status = models.IntegerField(default=0, editable=False)
+
     # Foreign relations
     quiz = models.ForeignKey(Quiz, related_name='questions')
 

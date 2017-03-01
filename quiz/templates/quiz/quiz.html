@@ -13,11 +13,13 @@
                 <h5>Naviger</h5>
             </div>
             {% for question in questions %}
-
-                {% if question.correct %}
-                    <li class="list-group-item" style="background: rgba(0, 239, 10, 0.15);">
-                        {% else %}
+ 
+                {% if question.status == 0 %}
                     <li class="list-group-item">
+                        {% elif question.status == 1 %}
+                    <li class="list-group-item" style="background: rgba(0, 239, 37, 0.06);">
+                        {% elif question.status == 2 %}
+                    <li class="list-group-item" style="background: rgba(239, 0, 15, 0.05);">
                 {% endif %}
 
             <a href="{% url 'quiz' quiz.hash question.id %}"> {{ question.title }}</a>
@@ -65,7 +67,7 @@
 
                                         {% for alternative in alternative_boxes %}
                                             <div class="radio">
-                                                <label><input type="radio" name="answer[]" value="{{ alternative.id }}">{{ alternative.title }}</label>
+                                                <label><input type="radio" name="answer" value="{{ alternative.id }}">{{ alternative.title }}</label>
                                             </div>
                                         {% endfor %}
 
