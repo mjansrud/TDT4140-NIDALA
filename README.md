@@ -20,10 +20,10 @@ NIDALA is developed using the Django Framework for Python 3.6
 ##Getting started
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-**Optinal**
+**Optinal**<br />
 Many of our developers have isolated their python-packeges for this project using virtualenv [read more](http://docs.python-guide.org/en/latest/dev/virtualenvs/)
 
-Set your enviorment to be for Python 3.6+
+Set your enviorment to be for Python 3.6+<br />
 **/Optinal**
 
 Make sure you have [**Python 3.6**](https://www.python.org/downloads/) and [**PIP**](http://stackoverflow.com/questions/6587507/how-to-install-pip-with-python-3) installed. Activate your virtural enviorment (if you have one) from here.
@@ -37,11 +37,12 @@ If you do not have git installed do [click here](https://git-scm.com/book/en/v2/
 Navigate to the TDT4140-NIDALA folder
 ```
 cd your/folder/of/choice/TDT4140-NIDALA
-pip install -r requirements.txt
-
 ```
-The last pip command will install all the required python-packeges. There will most likely me some hangups here. Google is your friend.  
-
+Install the required packages
+```
+pip install -r requirments.txt
+```
+The last pip command will install all the required python-packeges. There will most likely me some hangups here. Google is your friend.  
 When this is done correctly, everything should be ready to go.
 Run
 ```
