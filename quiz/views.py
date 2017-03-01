@@ -13,9 +13,9 @@ def quizList(request, subject_id):
     return render(request, 'quiz/quizList.html', context)
 
 
-def quizID(request, quiz_id):
+def quizHash(request, quiz_hash):
     context = {
-        'quiz_id': quiz_id
+        'quiz_hash': quiz_hash
     }
     return render(request, 'quiz/quiz.html', context)
 
