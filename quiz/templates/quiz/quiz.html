@@ -1,57 +1,41 @@
 {% extends 'nidala/base.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/quiz.css' %}">
+{% endblock css %}
 
 {% block content %}
-    <div class="container-fluid">
-        <h1 class="text-center">Quiz</h1>
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12 col-md-6 col-md-offset-3">
-
-                    <form action="/quiz/result/" method="POST">{% csrf_token %}
-                        <input type=hidden name="question_id" value="{{ question.id }}">
-
-                        <ul class="list-group"> {#Iterer gjennom alle spørsmålene#}
-                            <li class="list-group-item">
-                                <div>
-                                    <h5>Spørsmål 1</h5>
-                                </div>
-
-                                <div class="checkbox">
-                                    <label><input type="checkbox" value="">Svar 1</label>
-                                </div>
-                                <div class="checkbox">
-                                    <label><input type="checkbox" value="">Svar 2</label>
-                                </div>
-                                <div class="checkbox">
-                                    <label><input type="checkbox" value="">Svar 3</label>
-                                </div>
-
-                            </li>
-                            <li class="list-group-item">
-                                <div>
-                                    <h5>Spørsmål 2</h5>
-                                </div>
-
-
-                                <div class="radio">
-                                    <label><input type="radio" name="optradio">Svar 1</label>
-                                </div>
-                                <div class="checkbox">
-                                    <label><input type="radio" name="optradio">Svar 2</label>
-                                </div>
-                                <div class="checkbox">
-                                    <label><input type="radio" name="optradio">Svar 3</label>
-                                </div>
-                            </li>
-
-                        </ul>
-
-                        <input type="submit" class="btn btn-large btn-block btn-warning">
-                    </form>
-
-
+<div class="container-fluid">
+  <h1 class="text-center">{{ quiz.title }} </h1>
+  <h4 class="text-center">{{ quiz.subject.code }} {{ quiz.subject.title }}</h4>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-md-6 col-md-offset-3">
+        <form action="/quiz/result/" method="POST">{% csrf_token %}
+          <input type=hidden name="question_id" value="{{ question.id }}">
+          <ul class="list-group"> {#Iterer gjennom alle spørsmålene#}
+            <li class="list-group-item">
+              <div>
+                <h5>Hva står HTML for?</h5>
+              </div>
+              <div class="form-group">
+                <div class="radio">
+                  <label><input type="radio" name="optradio">HyperTextMarkupLanguage</label>
                 </div>
-            </div>
-        </div>
+                <div class="radio">
+                  <label><input type="radio" name="optradio">Feil svar</label>
+                </div>
+                <div class="radio">
+                  <label><input type="radio" name="optradio">Feil svar</label>
+                </div>
+              </div>
+            </li>
+          </ul>
+          <button type="submit" class="btn btn-primary submit-button">Svar</button>
+        </form>
+      </div>
     </div>
+  </div>
+</div>
 {% endblock content %}
