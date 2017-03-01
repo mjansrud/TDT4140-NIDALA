@@ -9,7 +9,7 @@
                     <ul class="list-group">
                         {% for subject in subjects %}
                             <li class="list-group-item">
-                                <a href="{% url 'quizList' subject %}">{{ subject.code }} {{ subject.title }}</a>
+                                <a href="{% url 'quizList' subject.code %}">{{ subject.code }} {{ subject.title }}</a>
                             </li>
                         {% endfor %}
                     </ul>

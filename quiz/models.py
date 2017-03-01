@@ -25,7 +25,7 @@ class Subject(models.Model):
         verbose_name_plural = "Subjects"
 
     def __str__(self):
-        return self.code
+        return self.code + ' - ' + self.title
 
 class Quiz(models.Model):
 
@@ -76,8 +76,8 @@ class Question(models.Model):
     )
 
     type = models.CharField(max_length=9,
-                  choices=TYPE_CHOICES,
-                  default="CHECKBOX")
+                            choices=TYPE_CHOICES,
+                            default="CHECKBOX")
 
     # Foreign relations
     quiz = models.ForeignKey(Quiz, related_name='questions')
@@ -115,7 +115,7 @@ class Resource(models.Model):
     def __str__(self):
         return self.title
 
-class Alternative(models.Model):
+class Select(models.Model):
 
     title = models.CharField(
         verbose_name="Title",
@@ -126,49 +126,14 @@ class Alternative(models.Model):
         blank=True,
         null=True)
 
-    # Foreign relations
-    question = models.ForeignKey(Question, related_name='alternatives')
-
-    class Meta:
-        verbose_name = "Alternative"
-        verbose_name_plural = "Alternatives"
-
-    def __str__(self):
-        return self.title
-
-class Checkbox(models.Model):
-
-    title = models.CharField(
-        verbose_name="Title",
-        max_length=60)
-
-    correct = models.BooleanField
+    correct = models.BooleanField(default=False)
 
     # Foreign relations
-    alternative = models.ForeignKey(Alternative, related_name='checkboxes')
+    question = models.ForeignKey(Question, related_name='boxes')
 
     class Meta:
-        verbose_name = "Checkbox"
-        verbose_name_plural = "checkboxes"
-
-    def __str__(self):
-        return self.title
-
-
-class Radiobox(models.Model):
-
-    title = models.CharField(
-        verbose_name="Title",
-        max_length=60)
-
-    correct = models.BooleanField
-
-    # Foreign relations
-    alternative = models.ForeignKey(Alternative, related_name='radioboxes')
-
-    class Meta:
-        verbose_name = "Radiobox"
-        verbose_name_plural = "Radioboxes"
+        verbose_name = "Alternative: Selects"
+        verbose_name_plural = "Alternative: Selects"
 
     def __str__(self):
         return self.title
@@ -180,11 +145,14 @@ class Text(models.Model):
         max_length=200)
 
     # Foreign relations
-    alternative = models.ForeignKey(Alternative, related_name='texts')
+    question = models.ForeignKey(Question, related_name='text', unique=True)
 
     class Meta:
-        verbose_name = "Text"
-        verbose_name_plural = "Texts"
+        verbose_name = "Alternative: Text"
+        verbose_name_plural = "Alternative: Texts"
+
+    def __str__(self):
+        return self.answer
 
 class Code(models.Model):
 
@@ -192,24 +160,41 @@ class Code(models.Model):
         verbose_name="Answer",
         max_length=1000)
 
-    # Foreign relations
-    alternative = models.ForeignKey(Alternative, related_name='codes')
+    LANGUAGE_CHOICES = (
+        ("JAVASCRIPT", "Javascript"),
+        ("JAVA", "Java"),
+        ("PYTHON", "Python"),
+    )
+
+    language = models.CharField(max_length=9,
+                                choices=LANGUAGE_CHOICES,
+                                default="JAVASCRIPT")
+
+    # Foreign relationss
+    question = models.ForeignKey(Question, related_name='code', unique=True)
 
     class Meta:
-        verbose_name = "Code"
-        verbose_name_plural = "Codes"
+        verbose_name = "Alternative: Code"
+        verbose_name_plural = "Alternative: Codes"
+
+    def __str__(self):
+        return self.answer
 
 class Answer(models.Model):
-
-    correct = models.BooleanField
 
     # Foreign relations
     question = models.ForeignKey(Question, related_name='answers')
     user = models.ForeignKey(User, related_name='answers')
 
+    # Internal
+    correct = models.BooleanField(default=False)
+
     class Meta:
         verbose_name = "Answer"
         verbose_name_plural = "Answers"
+
+    def __str__(self):
+        return str(self.correct)
 
 
 

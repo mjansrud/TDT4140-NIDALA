@@ -6,10 +6,6 @@ body {
     background-color: var(--background-color);
 }
 
-form .alert {
-    display: none;
-}
-
 .navbar {
     margin-bottom: 50px;
 }
