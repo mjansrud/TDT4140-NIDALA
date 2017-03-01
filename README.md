@@ -44,12 +44,13 @@ python manage.py runserver
 ```
 This command will run a local server that comes with Django. Be deafult the website will be running on your localhost (127.0.0.1:8000)<br />
 ##Authors
-Morten Jansrud <br />
-Kristian Haga <br />
-Martin Simensen <br />
-Håvard Opheim <br />
+* Morten Jansrud <br />
+* Kristian Haga <br />
+* Martin Simensen <br />
+* Håvard Opheim <br />
 
 ##Acknowledgments
-* Pekka
+* Pekka <br />
+
 ##Furhter reading
 We have a wiki. Should you have any further questions check our [wiki](https://github.com/mjansrud/TDT4140-NIDALA/wiki/)
