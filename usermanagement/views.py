@@ -49,7 +49,7 @@ def signup_view(request):
                       sender=settings.DEFAULT_FROM_MAIL,
                       template='activation_email',
                       context={'request': request, 'user': user, 'token': token})
-            messages.add_message(request, messages.INFO, 'You will receive a confirmation email to verify you email address')
+            messages.add_message(request, messages.INFO, 'You will receive a confirmation email to verify your email address')
             return HttpResponseRedirect(reverse('index'))
 
     else:
