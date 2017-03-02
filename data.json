@@ -1,1 +1,304 @@
-[{"model": "contenttypes.contenttype", "pk": 21, "fields": {"app_label": "admin", "model": "logentry"}}, {"model": "contenttypes.contenttype", "pk": 22, "fields": {"app_label": "auth", "model": "permission"}}, {"model": "contenttypes.contenttype", "pk": 23, "fields": {"app_label": "auth", "model": "group"}}, {"model": "contenttypes.contenttype", "pk": 24, "fields": {"app_label": "auth", "model": "user"}}, {"model": "contenttypes.contenttype", "pk": 25, "fields": {"app_label": "contenttypes", "model": "contenttype"}}, {"model": "contenttypes.contenttype", "pk": 26, "fields": {"app_label": "sessions", "model": "session"}}, {"model": "contenttypes.contenttype", "pk": 27, "fields": {"app_label": "post_office", "model": "email"}}, {"model": "contenttypes.contenttype", "pk": 28, "fields": {"app_label": "post_office", "model": "log"}}, {"model": "contenttypes.contenttype", "pk": 29, "fields": {"app_label": "post_office", "model": "emailtemplate"}}, {"model": "contenttypes.contenttype", "pk": 30, "fields": {"app_label": "post_office", "model": "attachment"}}, {"model": "contenttypes.contenttype", "pk": 31, "fields": {"app_label": "usermanagement", "model": "usertoken"}}, {"model": "contenttypes.contenttype", "pk": 32, "fields": {"app_label": "quiz", "model": "subject"}}, {"model": "contenttypes.contenttype", "pk": 33, "fields": {"app_label": "quiz", "model": "quiz"}}, {"model": "contenttypes.contenttype", "pk": 34, "fields": {"app_label": "quiz", "model": "question"}}, {"model": "contenttypes.contenttype", "pk": 35, "fields": {"app_label": "quiz", "model": "resource"}}, {"model": "contenttypes.contenttype", "pk": 36, "fields": {"app_label": "quiz", "model": "select"}}, {"model": "contenttypes.contenttype", "pk": 37, "fields": {"app_label": "quiz", "model": "text"}}, {"model": "contenttypes.contenttype", "pk": 38, "fields": {"app_label": "quiz", "model": "code"}}, {"model": "contenttypes.contenttype", "pk": 39, "fields": {"app_label": "quiz", "model": "attempt"}}, {"model": "contenttypes.contenttype", "pk": 40, "fields": {"app_label": "quiz", "model": "answer"}}, {"model": "sessions.session", "pk": "opt3gn1glc74xzagv92ns9m5o5yuj2ce", "fields": {"session_data": "OTNmN2M0NDMwNjdmNjY0NTZiMzA1NjJjMDBmZjUyMDRmNWE3OWVmZjp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI1ZmFkYWI4MDY1Yjc1MmM0ZWIyZjE1NDU4N2E0OWUxYmNjN2M1OGMwIn0=", "expire_date": "2017-03-16T13:56:16.143Z"}}, {"model": "post_office.emailtemplate", "pk": 1, "fields": {"name": "activation_email", "description": "Email sent to users when they sign up. It containts a link so they can activate their email.", "created": "2017-01-15T13:46:00.780Z", "last_updated": "2017-01-15T14:29:53.974Z", "subject": "Confirmation of email", "content": "Hi, {{ user.first_name }}!\r\n\r\nBefore you can start you use our pages, you will need to confirm your email address. Click the link below to confirm.\r\n\r\nConfirm email: http://{{ request.get_host }}/user/activate/{{ token.key }}/\r\n\r\nKind regards,\r\nThe team at DSSCDB", "html_content": "<h2>Hi, {{ user.first_name }}!</h2>\r\n\r\n<p>Before you can start you use our pages, you will need to confirm your email address. Click the link below to confirm.</p>\r\n\r\n<p>Confirm here: <a href=\"http://{{ request.get_host }}/user/activate/{{ token.key }}/\">http://{{ request.get_host }}/user/activate/{{ token.key }}/</a></p>\r\n\r\n<p>Kind regards,</p>\r\n<p>The team at DSSCDB</p>", "language": "", "default_template": null}}, {"model": "post_office.emailtemplate", "pk": 2, "fields": {"name": "set_password_email", "description": "Email sent to users when they have forgot their password. Contains link to a page where they can set a new password.", "created": "2017-01-15T14:29:19.147Z", "last_updated": "2017-01-15T14:29:19.147Z", "subject": "Forgotten password", "content": "Here you have a link to reset your password:\r\n\r\nLink: http://{{ request.get_host }}/user/set-password/{{ token.key }}/\r\n\r\nKind regards,\r\nThe team at DSSCDB", "html_content": "<p>Here you have a link to reset your password:</p>\r\n\r\n<p>Link: <a href=\"http://{{ request.get_host }}/user/set-password/{{ token.key }}/\">http://{{ request.get_host }}/user/set-password/{{ token.key }}/</a></p>\r\n\r\n<p>Kind regards,</p>\r\n<p>The team at DSSCDB</p>", "language": "", "default_template": null}}, {"model": "quiz.subject", "pk": 1, "fields": {"code": "TDT4140", "title": "Programvareutvikling"}}, {"model": "quiz.subject", "pk": 2, "fields": {"code": "TTK4130", "title": "Modellering og simulering"}}, {"model": "quiz.quiz", "pk": 1, "fields": {"hash": "1b54373ade", "title": "Exercise 1 - Introduksjon", "description": "Bli kjent med Algdat!", "attempts": 3, "subject": 1}}, {"model": "quiz.quiz", "pk": 2, "fields": {"hash": "fdf7fe2ff3", "title": "Exercise 2 - Problemer og algoritmer", "description": "Du skal lage et program for \u00e5 finne ord i en tekst. For \u00e5 gj\u00f8re dette, kan du lage en funksjon som bygger et tre og en funksjon som bruker treet til \u00e5 s\u00f8ke. F\u00f8rste linje av input til programmet er en streng som best\u00e5r av tegnene [a-z] og mellomrom. \r\n\r\nDette representerer dokumentet det skal s\u00f8kes i. De neste linjene i input er sp\u00f8rringer etter ord. Programmet skal s\u00f8ke etter disse ordene i teksten, og returnere hvilke posisjoner ordet finnes p\u00e5. Tegnet ? brukes til \u00e5 angi at her kan det st\u00e5 en hvilket som helst bokstav fra alfabetet [a-z].", "attempts": 3, "subject": 1}}, {"model": "quiz.quiz", "pk": 3, "fields": {"hash": "6108a508de", "title": "Exercise 3 - Datastrukturer", "description": "I denne \u00f8vingen skal du flette sammen et sett med kortstokker. P\u00e5 hvert av disse kortene st\u00e5r det ett tall og en bokstav. Hver enkelt stokk er allerede sortert p\u00e5 tall. Oppgaven din er \u00e5 flette stokkene sammen slik at resultatet fremdeles er riktig sortert. Det er mange forskjellige m\u00e5ter \u00e5 l\u00f8se dette problemet p\u00e5, men det enkleste er nok \u00e5 flette sammen stokkene som du gj\u00f8r i merge-sort. Se Cormen side 32.", "attempts": 3, "subject": 1}}, {"model": "quiz.quiz", "pk": 4, "fields": {"hash": "c84cd55e6a", "title": "Exercise 1 - Modeling, linearization", "description": "An iron ball of radius R and mass m is lifted by a magnet with a coil of N turns and a current i around\r\na core of length lc and cross section A = \u03c0R. The vertical position of the ball is z, which is positive\r\nin the downwards direction. The flux \u03c6 flows through the iron core, then over the airgap, through the\r\nball, and finally along the return path through the open air as shown in Figure 1.", "attempts": 3, "subject": 2}}, {"model": "quiz.quiz", "pk": 5, "fields": {"hash": "a20fb38ea6", "title": "Exercise 2 - Modelica, Dymola, simple two-tank model)", "description": "In this problem, we will implement a model of a two-tank system coupled with a pipe with laminar\r\nflow.", "attempts": 3, "subject": 2}}, {"model": "quiz.question", "pk": 1, "fields": {"title": "Sp\u00f8rsm\u00e5l 1 - Hva er PU?", "description": "", "type": "CHECKBOX", "order": 0, "attempts": 3, "status": 0, "quiz": 1}}, {"model": "quiz.question", "pk": 2, "fields": {"title": "Sp\u00f8rsm\u00e5l 2 - Skriv en for-l\u00f8kke i python", "description": "", "type": "CODE", "order": 0, "attempts": 3, "status": 0, "quiz": 1}}, {"model": "quiz.question", "pk": 3, "fields": {"title": "Sp\u00f8rsm\u00e5l 3 - Hva heter professoren?", "description": "", "type": "TEXT", "order": 0, "attempts": 3, "status": 0, "quiz": 1}}, {"model": "quiz.question", "pk": 4, "fields": {"title": "Sp\u00f8rsm\u00e5l 4 - Hva er best?", "description": "", "type": "RADIOBOX", "order": 0, "attempts": 3, "status": 0, "quiz": 1}}, {"model": "quiz.question", "pk": 5, "fields": {"title": "Sp\u00f8rsm\u00e5l 1 - Hvilken farge p\u00e5 boksen?", "description": "", "type": "RADIOBOX", "order": 0, "attempts": 3, "status": 0, "quiz": 4}}, {"model": "quiz.question", "pk": 6, "fields": {"title": "Sp\u00f8rsm\u00e5l 2 - Hva er navnet p\u00e5 landet vi bor i?", "description": "", "type": "TEXT", "order": 0, "attempts": 3, "status": 0, "quiz": 4}}, {"model": "quiz.select", "pk": 1, "fields": {"title": "En professor", "description": "", "correct": false, "question": 1}}, {"model": "quiz.select", "pk": 2, "fields": {"title": "Et fag", "description": "", "correct": false, "question": 1}}, {"model": "quiz.select", "pk": 3, "fields": {"title": "Bare tull", "description": "", "correct": true, "question": 1}}, {"model": "quiz.select", "pk": 4, "fields": {"title": "Vann", "description": "", "correct": false, "question": 4}}, {"model": "quiz.select", "pk": 5, "fields": {"title": "Melk", "description": "", "correct": false, "question": 4}}, {"model": "quiz.select", "pk": 6, "fields": {"title": "\u00d8l", "description": "", "correct": true, "question": 4}}, {"model": "quiz.select", "pk": 7, "fields": {"title": "Bl\u00e5", "description": "", "correct": false, "question": 5}}, {"model": "quiz.select", "pk": 8, "fields": {"title": "R\u00f8d", "description": "", "correct": true, "question": 5}}, {"model": "quiz.text", "pk": 1, "fields": {"answer": "Pekka", "question": 3}}, {"model": "quiz.text", "pk": 2, "fields": {"answer": "Norge", "question": 6}}, {"model": "quiz.code", "pk": 1, "fields": {"answer": "for x in range(0, 3):", "language": "PYTHON", "question": 2}}, {"model": "auth.permission", "pk": 61, "fields": {"name": "Can add log entry", "content_type": 21, "codename": "add_logentry"}}, {"model": "auth.permission", "pk": 62, "fields": {"name": "Can change log entry", "content_type": 21, "codename": "change_logentry"}}, {"model": "auth.permission", "pk": 63, "fields": {"name": "Can delete log entry", "content_type": 21, "codename": "delete_logentry"}}, {"model": "auth.permission", "pk": 64, "fields": {"name": "Can add permission", "content_type": 22, "codename": "add_permission"}}, {"model": "auth.permission", "pk": 65, "fields": {"name": "Can change permission", "content_type": 22, "codename": "change_permission"}}, {"model": "auth.permission", "pk": 66, "fields": {"name": "Can delete permission", "content_type": 22, "codename": "delete_permission"}}, {"model": "auth.permission", "pk": 67, "fields": {"name": "Can add group", "content_type": 23, "codename": "add_group"}}, {"model": "auth.permission", "pk": 68, "fields": {"name": "Can change group", "content_type": 23, "codename": "change_group"}}, {"model": "auth.permission", "pk": 69, "fields": {"name": "Can delete group", "content_type": 23, "codename": "delete_group"}}, {"model": "auth.permission", "pk": 70, "fields": {"name": "Can add user", "content_type": 24, "codename": "add_user"}}, {"model": "auth.permission", "pk": 71, "fields": {"name": "Can change user", "content_type": 24, "codename": "change_user"}}, {"model": "auth.permission", "pk": 72, "fields": {"name": "Can delete user", "content_type": 24, "codename": "delete_user"}}, {"model": "auth.permission", "pk": 73, "fields": {"name": "Can add content type", "content_type": 25, "codename": "add_contenttype"}}, {"model": "auth.permission", "pk": 74, "fields": {"name": "Can change content type", "content_type": 25, "codename": "change_contenttype"}}, {"model": "auth.permission", "pk": 75, "fields": {"name": "Can delete content type", "content_type": 25, "codename": "delete_contenttype"}}, {"model": "auth.permission", "pk": 76, "fields": {"name": "Can add session", "content_type": 26, "codename": "add_session"}}, {"model": "auth.permission", "pk": 77, "fields": {"name": "Can change session", "content_type": 26, "codename": "change_session"}}, {"model": "auth.permission", "pk": 78, "fields": {"name": "Can delete session", "content_type": 26, "codename": "delete_session"}}, {"model": "auth.permission", "pk": 79, "fields": {"name": "Can add Email", "content_type": 27, "codename": "add_email"}}, {"model": "auth.permission", "pk": 80, "fields": {"name": "Can change Email", "content_type": 27, "codename": "change_email"}}, {"model": "auth.permission", "pk": 81, "fields": {"name": "Can delete Email", "content_type": 27, "codename": "delete_email"}}, {"model": "auth.permission", "pk": 82, "fields": {"name": "Can add Log", "content_type": 28, "codename": "add_log"}}, {"model": "auth.permission", "pk": 83, "fields": {"name": "Can change Log", "content_type": 28, "codename": "change_log"}}, {"model": "auth.permission", "pk": 84, "fields": {"name": "Can delete Log", "content_type": 28, "codename": "delete_log"}}, {"model": "auth.permission", "pk": 85, "fields": {"name": "Can add Email Template", "content_type": 29, "codename": "add_emailtemplate"}}, {"model": "auth.permission", "pk": 86, "fields": {"name": "Can change Email Template", "content_type": 29, "codename": "change_emailtemplate"}}, {"model": "auth.permission", "pk": 87, "fields": {"name": "Can delete Email Template", "content_type": 29, "codename": "delete_emailtemplate"}}, {"model": "auth.permission", "pk": 88, "fields": {"name": "Can add Attachment", "content_type": 30, "codename": "add_attachment"}}, {"model": "auth.permission", "pk": 89, "fields": {"name": "Can change Attachment", "content_type": 30, "codename": "change_attachment"}}, {"model": "auth.permission", "pk": 90, "fields": {"name": "Can delete Attachment", "content_type": 30, "codename": "delete_attachment"}}, {"model": "auth.permission", "pk": 91, "fields": {"name": "Can add user token", "content_type": 31, "codename": "add_usertoken"}}, {"model": "auth.permission", "pk": 92, "fields": {"name": "Can change user token", "content_type": 31, "codename": "change_usertoken"}}, {"model": "auth.permission", "pk": 93, "fields": {"name": "Can delete user token", "content_type": 31, "codename": "delete_usertoken"}}, {"model": "auth.permission", "pk": 94, "fields": {"name": "Can add Subject", "content_type": 32, "codename": "add_subject"}}, {"model": "auth.permission", "pk": 95, "fields": {"name": "Can change Subject", "content_type": 32, "codename": "change_subject"}}, {"model": "auth.permission", "pk": 96, "fields": {"name": "Can delete Subject", "content_type": 32, "codename": "delete_subject"}}, {"model": "auth.permission", "pk": 97, "fields": {"name": "Can add Quiz", "content_type": 33, "codename": "add_quiz"}}, {"model": "auth.permission", "pk": 98, "fields": {"name": "Can change Quiz", "content_type": 33, "codename": "change_quiz"}}, {"model": "auth.permission", "pk": 99, "fields": {"name": "Can delete Quiz", "content_type": 33, "codename": "delete_quiz"}}, {"model": "auth.permission", "pk": 100, "fields": {"name": "Can add Question", "content_type": 34, "codename": "add_question"}}, {"model": "auth.permission", "pk": 101, "fields": {"name": "Can change Question", "content_type": 34, "codename": "change_question"}}, {"model": "auth.permission", "pk": 102, "fields": {"name": "Can delete Question", "content_type": 34, "codename": "delete_question"}}, {"model": "auth.permission", "pk": 103, "fields": {"name": "Can add Resource", "content_type": 35, "codename": "add_resource"}}, {"model": "auth.permission", "pk": 104, "fields": {"name": "Can change Resource", "content_type": 35, "codename": "change_resource"}}, {"model": "auth.permission", "pk": 105, "fields": {"name": "Can delete Resource", "content_type": 35, "codename": "delete_resource"}}, {"model": "auth.permission", "pk": 106, "fields": {"name": "Can add Alternative: Selects", "content_type": 36, "codename": "add_select"}}, {"model": "auth.permission", "pk": 107, "fields": {"name": "Can change Alternative: Selects", "content_type": 36, "codename": "change_select"}}, {"model": "auth.permission", "pk": 108, "fields": {"name": "Can delete Alternative: Selects", "content_type": 36, "codename": "delete_select"}}, {"model": "auth.permission", "pk": 109, "fields": {"name": "Can add Alternative: Text", "content_type": 37, "codename": "add_text"}}, {"model": "auth.permission", "pk": 110, "fields": {"name": "Can change Alternative: Text", "content_type": 37, "codename": "change_text"}}, {"model": "auth.permission", "pk": 111, "fields": {"name": "Can delete Alternative: Text", "content_type": 37, "codename": "delete_text"}}, {"model": "auth.permission", "pk": 112, "fields": {"name": "Can add Alternative: Code", "content_type": 38, "codename": "add_code"}}, {"model": "auth.permission", "pk": 113, "fields": {"name": "Can change Alternative: Code", "content_type": 38, "codename": "change_code"}}, {"model": "auth.permission", "pk": 114, "fields": {"name": "Can delete Alternative: Code", "content_type": 38, "codename": "delete_code"}}, {"model": "auth.permission", "pk": 115, "fields": {"name": "Can add Attempt", "content_type": 39, "codename": "add_attempt"}}, {"model": "auth.permission", "pk": 116, "fields": {"name": "Can change Attempt", "content_type": 39, "codename": "change_attempt"}}, {"model": "auth.permission", "pk": 117, "fields": {"name": "Can delete Attempt", "content_type": 39, "codename": "delete_attempt"}}, {"model": "auth.permission", "pk": 118, "fields": {"name": "Can add Answer", "content_type": 40, "codename": "add_answer"}}, {"model": "auth.permission", "pk": 119, "fields": {"name": "Can change Answer", "content_type": 40, "codename": "change_answer"}}, {"model": "auth.permission", "pk": 120, "fields": {"name": "Can delete Answer", "content_type": 40, "codename": "delete_answer"}}, {"model": "auth.user", "pk": 1, "fields": {"password": "pbkdf2_sha256$30000$v9f5EFnFOEOE$I642AW4OC5R2QqUrQxUoPpTa5nYARWLu0r9/AS8T5yA=", "last_login": "2017-03-02T13:56:16.140Z", "is_superuser": true, "username": "test", "first_name": "", "last_name": "", "email": "test@test.test", "is_staff": true, "is_active": true, "date_joined": "2017-02-23T14:21:12.371Z", "groups": [], "user_permissions": []}}, {"model": "quiz.attempt", "pk": 30, "fields": {"hash": "5e5de55033", "quiz": 1, "user": 1, "status": 0, "updated": "2017-03-02T16:24:28.972Z"}}, {"model": "quiz.attempt", "pk": 31, "fields": {"hash": "fda99bb79c", "quiz": 2, "user": 1, "status": 0, "updated": "2017-03-02T16:26:39.107Z"}}, {"model": "quiz.attempt", "pk": 32, "fields": {"hash": "8797814666", "quiz": 2, "user": 1, "status": 0, "updated": "2017-03-02T16:26:53.099Z"}}, {"model": "quiz.attempt", "pk": 33, "fields": {"hash": "05b406a758", "quiz": 2, "user": 1, "status": 0, "updated": "2017-03-02T16:28:34.302Z"}}, {"model": "quiz.attempt", "pk": 34, "fields": {"hash": "6d215c1719", "quiz": 1, "user": 1, "status": 0, "updated": "2017-03-02T16:28:53.318Z"}}, {"model": "quiz.attempt", "pk": 35, "fields": {"hash": "48a7dfd379", "quiz": 1, "user": 1, "status": 0, "updated": "2017-03-02T16:29:06.179Z"}}, {"model": "quiz.attempt", "pk": 36, "fields": {"hash": "e09bdb7c53", "quiz": 4, "user": 1, "status": 0, "updated": "2017-03-02T17:47:49.967Z"}}, {"model": "quiz.attempt", "pk": 37, "fields": {"hash": "7cb5b8f622", "quiz": 4, "user": 1, "status": 0, "updated": "2017-03-02T17:57:02.995Z"}}, {"model": "quiz.answer", "pk": 1, "fields": {"question": 1, "attempt": 30, "user": 1, "correct": true, "updated": "2017-03-02T16:32:01.217Z"}}, {"model": "quiz.answer", "pk": 2, "fields": {"question": 3, "attempt": 30, "user": 1, "correct": true, "updated": "2017-03-02T16:33:14.283Z"}}, {"model": "quiz.answer", "pk": 3, "fields": {"question": 4, "attempt": 30, "user": 1, "correct": true, "updated": "2017-03-02T16:33:17.123Z"}}, {"model": "quiz.answer", "pk": 4, "fields": {"question": 2, "attempt": 30, "user": 1, "correct": false, "updated": "2017-03-02T16:33:19.862Z"}}, {"model": "quiz.answer", "pk": 5, "fields": {"question": 1, "attempt": 35, "user": 1, "correct": true, "updated": "2017-03-02T17:19:52.765Z"}}, {"model": "quiz.answer", "pk": 6, "fields": {"question": 3, "attempt": 35, "user": 1, "correct": true, "updated": "2017-03-02T17:20:00.889Z"}}, {"model": "quiz.answer", "pk": 7, "fields": {"question": 5, "attempt": 36, "user": 1, "correct": false, "updated": "2017-03-02T17:55:20.985Z"}}, {"model": "quiz.answer", "pk": 8, "fields": {"question": 5, "attempt": 36, "user": 1, "correct": true, "updated": "2017-03-02T17:55:22.710Z"}}, {"model": "quiz.answer", "pk": 9, "fields": {"question": 5, "attempt": 36, "user": 1, "correct": true, "updated": "2017-03-02T17:55:26.755Z"}}, {"model": "quiz.answer", "pk": 10, "fields": {"question": 5, "attempt": 36, "user": 1, "correct": false, "updated": "2017-03-02T17:56:04.794Z"}}, {"model": "quiz.answer", "pk": 11, "fields": {"question": 5, "attempt": 36, "user": 1, "correct": true, "updated": "2017-03-02T17:56:06.949Z"}}, {"model": "quiz.answer", "pk": 12, "fields": {"question": 6, "attempt": 37, "user": 1, "correct": true, "updated": "2017-03-02T17:59:46.189Z"}}, {"model": "quiz.answer", "pk": 13, "fields": {"question": 5, "attempt": 36, "user": 1, "correct": false, "updated": "2017-03-02T18:32:36.162Z"}}, {"model": "admin.logentry", "pk": 4, "fields": {"action_time": "2017-03-02T14:00:44.685Z", "user": 1, "content_type": 39, "object_id": "2", "object_repr": "test : TDT4140 -> Exercise 1 - Introduksjon -> Fors\u00f8k 2", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}, {"model": "admin.logentry", "pk": 5, "fields": {"action_time": "2017-03-02T14:00:52.569Z", "user": 1, "content_type": 39, "object_id": "2", "object_repr": "test : TDT4140 -> Exercise 1 - Introduksjon -> Fors\u00f8k 2", "action_flag": 2, "change_message": "[]"}}, {"model": "admin.logentry", "pk": 6, "fields": {"action_time": "2017-03-02T14:01:31.523Z", "user": 1, "content_type": 40, "object_id": "7", "object_repr": "test : TDT4140 -> Exercise 1 - Introduksjon -> Sp\u00f8rsm\u00e5l 1 - Hva er PU? -> Fors\u00f8k 2 -> Resultat True", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}, {"model": "admin.logentry", "pk": 7, "fields": {"action_time": "2017-03-02T14:06:49.033Z", "user": 1, "content_type": 37, "object_id": "1", "object_repr": "Pekka", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}, {"model": "admin.logentry", "pk": 8, "fields": {"action_time": "2017-03-02T14:07:14.197Z", "user": 1, "content_type": 38, "object_id": "1", "object_repr": "for x in range(0, 3):", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}, {"model": "admin.logentry", "pk": 9, "fields": {"action_time": "2017-03-02T15:40:07.878Z", "user": 1, "content_type": 39, "object_id": "5", "object_repr": "test : TDT4140 -> Exercise 1 - Introduksjon -> Fors\u00f8k ecec1d8cc2", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 10, "fields": {"action_time": "2017-03-02T15:40:07.888Z", "user": 1, "content_type": 39, "object_id": "4", "object_repr": "test : TDT4140 -> Exercise 1 - Introduksjon -> Fors\u00f8k ff1bbaee82", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 11, "fields": {"action_time": "2017-03-02T15:40:07.891Z", "user": 1, "content_type": 39, "object_id": "3", "object_repr": "test : TDT4140 -> Exercise 1 - Introduksjon -> Fors\u00f8k 7da329e0cc", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 12, "fields": {"action_time": "2017-03-02T15:40:07.894Z", "user": 1, "content_type": 39, "object_id": "2", "object_repr": "test : TDT4140 -> Exercise 1 - Introduksjon -> Fors\u00f8k 0d77a74db1", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 13, "fields": {"action_time": "2017-03-02T15:42:31.128Z", "user": 1, "content_type": 40, "object_id": "14", "object_repr": "test : TDT4140 -> Exercise 1 - Introduksjon -> Sp\u00f8rsm\u00e5l 1 - Hva er PU? -> Fors\u00f8k d11710b64b -> Resultat False", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 14, "fields": {"action_time": "2017-03-02T15:42:31.138Z", "user": 1, "content_type": 40, "object_id": "13", "object_repr": "test : TDT4140 -> Exercise 1 - Introduksjon -> Sp\u00f8rsm\u00e5l 1 - Hva er PU? -> Fors\u00f8k d11710b64b -> Resultat True", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 15, "fields": {"action_time": "2017-03-02T15:42:31.140Z", "user": 1, "content_type": 40, "object_id": "12", "object_repr": "test : TDT4140 -> Exercise 1 - Introduksjon -> Sp\u00f8rsm\u00e5l 1 - Hva er PU? -> Fors\u00f8k d11710b64b -> Resultat False", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 16, "fields": {"action_time": "2017-03-02T15:42:41.160Z", "user": 1, "content_type": 39, "object_id": "9", "object_repr": "test : TDT4140 -> Exercise 1 - Introduksjon -> Fors\u00f8k 359e7cae27", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 17, "fields": {"action_time": "2017-03-02T15:42:41.170Z", "user": 1, "content_type": 39, "object_id": "8", "object_repr": "test : TDT4140 -> Exercise 1 - Introduksjon -> Fors\u00f8k 674fbac94b", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 18, "fields": {"action_time": "2017-03-02T15:42:41.172Z", "user": 1, "content_type": 39, "object_id": "7", "object_repr": "test : TDT4140 -> Exercise 1 - Introduksjon -> Fors\u00f8k d11710b64b", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 19, "fields": {"action_time": "2017-03-02T15:42:41.174Z", "user": 1, "content_type": 39, "object_id": "6", "object_repr": "test : TDT4140 -> Exercise 1 - Introduksjon -> Fors\u00f8k 2c0c24053c", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 20, "fields": {"action_time": "2017-03-02T15:43:28.130Z", "user": 1, "content_type": 39, "object_id": "13", "object_repr": "test : TDT4140 -> Exercise 1 - Introduksjon -> Fors\u00f8k e67c3f747d", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 21, "fields": {"action_time": "2017-03-02T15:43:28.140Z", "user": 1, "content_type": 39, "object_id": "12", "object_repr": "test : TDT4140 -> Exercise 1 - Introduksjon -> Fors\u00f8k 4ab3e40abf", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 22, "fields": {"action_time": "2017-03-02T15:43:28.143Z", "user": 1, "content_type": 39, "object_id": "11", "object_repr": "test : TDT4140 -> Exercise 1 - Introduksjon -> Fors\u00f8k 215d2975ec", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 23, "fields": {"action_time": "2017-03-02T15:43:28.146Z", "user": 1, "content_type": 39, "object_id": "10", "object_repr": "test : TDT4140 -> Exercise 1 - Introduksjon -> Fors\u00f8k 19e29b897a", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 24, "fields": {"action_time": "2017-03-02T16:07:52.170Z", "user": 1, "content_type": 39, "object_id": "22", "object_repr": "test : TDT4140 -> Exercise 2 - Problemer og algoritmer -> Fors\u00f8k 0d27b43bd0", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 25, "fields": {"action_time": "2017-03-02T16:07:52.182Z", "user": 1, "content_type": 39, "object_id": "21", "object_repr": "test : TDT4140 -> Exercise 3 - Datastrukturer -> Fors\u00f8k f1605c78d0", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 26, "fields": {"action_time": "2017-03-02T16:07:52.187Z", "user": 1, "content_type": 39, "object_id": "20", "object_repr": "test : TDT4140 -> Exercise 3 - Datastrukturer -> Fors\u00f8k c1f09163c8", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 27, "fields": {"action_time": "2017-03-02T16:07:52.192Z", "user": 1, "content_type": 39, "object_id": "19", "object_repr": "test : TDT4140 -> Exercise 3 - Datastrukturer -> Fors\u00f8k 05873338b5", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 28, "fields": {"action_time": "2017-03-02T16:07:52.197Z", "user": 1, "content_type": 39, "object_id": "18", "object_repr": "test : TDT4140 -> Exercise 2 - Problemer og algoritmer -> Fors\u00f8k 364a6870fa", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 29, "fields": {"action_time": "2017-03-02T16:07:52.202Z", "user": 1, "content_type": 39, "object_id": "17", "object_repr": "test : TDT4140 -> Exercise 1 - Introduksjon -> Fors\u00f8k 62f6a851ad", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 30, "fields": {"action_time": "2017-03-02T16:07:52.206Z", "user": 1, "content_type": 39, "object_id": "16", "object_repr": "test : TDT4140 -> Exercise 2 - Problemer og algoritmer -> Fors\u00f8k dc44ce3851", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 31, "fields": {"action_time": "2017-03-02T16:07:52.212Z", "user": 1, "content_type": 39, "object_id": "15", "object_repr": "test : TDT4140 -> Exercise 1 - Introduksjon -> Fors\u00f8k 7d3de79ac5", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 32, "fields": {"action_time": "2017-03-02T16:07:52.219Z", "user": 1, "content_type": 39, "object_id": "14", "object_repr": "test : TDT4140 -> Exercise 1 - Introduksjon -> Fors\u00f8k 4b75eb2672", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 33, "fields": {"action_time": "2017-03-02T16:13:45.298Z", "user": 1, "content_type": 39, "object_id": "26", "object_repr": "test : TDT4140 -> Exercise 2 - Problemer og algoritmer -> Fors\u00f8k 0f01839b8f", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 34, "fields": {"action_time": "2017-03-02T16:13:45.311Z", "user": 1, "content_type": 39, "object_id": "25", "object_repr": "test : TDT4140 -> Exercise 1 - Introduksjon -> Fors\u00f8k 3c9dafca42", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 35, "fields": {"action_time": "2017-03-02T16:13:45.316Z", "user": 1, "content_type": 39, "object_id": "24", "object_repr": "test : TDT4140 -> Exercise 1 - Introduksjon -> Fors\u00f8k e0f43bb603", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 36, "fields": {"action_time": "2017-03-02T16:13:45.322Z", "user": 1, "content_type": 39, "object_id": "23", "object_repr": "test : TDT4140 -> Exercise 1 - Introduksjon -> Fors\u00f8k af10733a27", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 37, "fields": {"action_time": "2017-03-02T16:24:25.959Z", "user": 1, "content_type": 39, "object_id": "29", "object_repr": "test : TDT4140 -> Exercise 1 - Introduksjon -> Fors\u00f8k f459556eab", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 38, "fields": {"action_time": "2017-03-02T16:24:25.970Z", "user": 1, "content_type": 39, "object_id": "28", "object_repr": "test : TDT4140 -> Exercise 1 - Introduksjon -> Fors\u00f8k 1ccf6147c4", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 39, "fields": {"action_time": "2017-03-02T16:24:25.974Z", "user": 1, "content_type": 39, "object_id": "27", "object_repr": "test : TDT4140 -> Exercise 1 - Introduksjon -> Fors\u00f8k abeaa50a86", "action_flag": 3, "change_message": ""}}, {"model": "admin.logentry", "pk": 40, "fields": {"action_time": "2017-03-02T17:47:28.439Z", "user": 1, "content_type": 34, "object_id": "5", "object_repr": "Which color on the box?", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}, {"model": "admin.logentry", "pk": 41, "fields": {"action_time": "2017-03-02T17:47:37.713Z", "user": 1, "content_type": 34, "object_id": "5", "object_repr": "Sp\u00f8rsm\u00e5l 1: Which color on the box?", "action_flag": 2, "change_message": "[{\"changed\": {\"fields\": [\"title\"]}}]"}}, {"model": "admin.logentry", "pk": 42, "fields": {"action_time": "2017-03-02T17:47:40.733Z", "user": 1, "content_type": 34, "object_id": "5", "object_repr": "Sp\u00f8rsm\u00e5l 1 - Which color on the box?", "action_flag": 2, "change_message": "[{\"changed\": {\"fields\": [\"title\"]}}]"}}, {"model": "admin.logentry", "pk": 43, "fields": {"action_time": "2017-03-02T17:53:00.736Z", "user": 1, "content_type": 36, "object_id": "7", "object_repr": "Bl\u00e5", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}, {"model": "admin.logentry", "pk": 44, "fields": {"action_time": "2017-03-02T17:53:06.039Z", "user": 1, "content_type": 36, "object_id": "8", "object_repr": "R\u00f8d", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}, {"model": "admin.logentry", "pk": 45, "fields": {"action_time": "2017-03-02T17:53:35.201Z", "user": 1, "content_type": 34, "object_id": "5", "object_repr": "Sp\u00f8rsm\u00e5l 1 - Hvilken farge p\u00e5 boksen?", "action_flag": 2, "change_message": "[{\"changed\": {\"fields\": [\"title\"]}}]"}}, {"model": "admin.logentry", "pk": 46, "fields": {"action_time": "2017-03-02T17:54:48.354Z", "user": 1, "content_type": 34, "object_id": "6", "object_repr": "Sp\u00f8rsm\u00e5l 2 - Hva er navnet p\u00e5 landet vi bor i?", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}, {"model": "admin.logentry", "pk": 47, "fields": {"action_time": "2017-03-02T17:56:01.791Z", "user": 1, "content_type": 36, "object_id": "8", "object_repr": "R\u00f8d", "action_flag": 2, "change_message": "[{\"changed\": {\"fields\": [\"correct\"]}}]"}}, {"model": "admin.logentry", "pk": 48, "fields": {"action_time": "2017-03-02T17:59:37.215Z", "user": 1, "content_type": 37, "object_id": "2", "object_repr": "Norge", "action_flag": 1, "change_message": "[{\"added\": {}}]"}}]
+[
+  {
+    "model": "post_office.emailtemplate",
+    "pk": 1,
+    "fields": {
+      "name": "activation_email",
+      "description": "Email sent to users when they sign up. It containts a link so they can activate their email.",
+      "created": "2017-01-15T13:46:00.780Z",
+      "last_updated": "2017-01-15T14:29:53.974Z",
+      "subject": "Confirmation of email",
+      "content": "Hi, {{ user.first_name }}!\r\n\r\nBefore you can start you use our pages, you will need to confirm your email address. Click the link below to confirm.\r\n\r\nConfirm email: http://{{ request.get_host }}/user/activate/{{ token.key }}/\r\n\r\nKind regards,\r\nThe team at DSSCDB",
+      "html_content": "<h2>Hi, {{ user.first_name }}!</h2>\r\n\r\n<p>Before you can start you use our pages, you will need to confirm your email address. Click the link below to confirm.</p>\r\n\r\n<p>Confirm here: <a href=\"http://{{ request.get_host }}/user/activate/{{ token.key }}/\">http://{{ request.get_host }}/user/activate/{{ token.key }}/</a></p>\r\n\r\n<p>Kind regards,</p>\r\n<p>The team at DSSCDB</p>",
+      "language": "",
+      "default_template": null
+    }
+  },
+  {
+    "model": "post_office.emailtemplate",
+    "pk": 2,
+    "fields": {
+      "name": "set_password_email",
+      "description": "Email sent to users when they have forgot their password. Contains link to a page where they can set a new password.",
+      "created": "2017-01-15T14:29:19.147Z",
+      "last_updated": "2017-01-15T14:29:19.147Z",
+      "subject": "Forgotten password",
+      "content": "Here you have a link to reset your password:\r\n\r\nLink: http://{{ request.get_host }}/user/set-password/{{ token.key }}/\r\n\r\nKind regards,\r\nThe team at DSSCDB",
+      "html_content": "<p>Here you have a link to reset your password:</p>\r\n\r\n<p>Link: <a href=\"http://{{ request.get_host }}/user/set-password/{{ token.key }}/\">http://{{ request.get_host }}/user/set-password/{{ token.key }}/</a></p>\r\n\r\n<p>Kind regards,</p>\r\n<p>The team at DSSCDB</p>",
+      "language": "",
+      "default_template": null
+    }
+  },
+  {
+    "model": "quiz.subject",
+    "pk": 1,
+    "fields": {
+      "code": "TDT4140",
+      "title": "Programvareutvikling"
+    }
+  },
+  {
+    "model": "quiz.subject",
+    "pk": 2,
+    "fields": {
+      "code": "TTK4130",
+      "title": "Modellering og simulering"
+    }
+  },
+  {
+    "model": "quiz.quiz",
+    "pk": 1,
+    "fields": {
+      "hash": "1b54373ade",
+      "title": "Exercise 1 - Introduksjon",
+      "description": "Bli kjent med Algdat!",
+      "attempts": 3,
+      "subject": 1
+    }
+  },
+  {
+    "model": "quiz.quiz",
+    "pk": 2,
+    "fields": {
+      "hash": "fdf7fe2ff3",
+      "title": "Exercise 2 - Problemer og algoritmer",
+      "description": "Du skal lage et program for \u00e5 finne ord i en tekst. For \u00e5 gj\u00f8re dette, kan du lage en funksjon som bygger et tre og en funksjon som bruker treet til \u00e5 s\u00f8ke. F\u00f8rste linje av input til programmet er en streng som best\u00e5r av tegnene [a-z] og mellomrom. \r\n\r\nDette representerer dokumentet det skal s\u00f8kes i. De neste linjene i input er sp\u00f8rringer etter ord. Programmet skal s\u00f8ke etter disse ordene i teksten, og returnere hvilke posisjoner ordet finnes p\u00e5. Tegnet ? brukes til \u00e5 angi at her kan det st\u00e5 en hvilket som helst bokstav fra alfabetet [a-z].",
+      "attempts": 3,
+      "subject": 1
+    }
+  },
+  {
+    "model": "quiz.quiz",
+    "pk": 3,
+    "fields": {
+      "hash": "6108a508de",
+      "title": "Exercise 3 - Datastrukturer",
+      "description": "I denne \u00f8vingen skal du flette sammen et sett med kortstokker. P\u00e5 hvert av disse kortene st\u00e5r det ett tall og en bokstav. Hver enkelt stokk er allerede sortert p\u00e5 tall. Oppgaven din er \u00e5 flette stokkene sammen slik at resultatet fremdeles er riktig sortert. Det er mange forskjellige m\u00e5ter \u00e5 l\u00f8se dette problemet p\u00e5, men det enkleste er nok \u00e5 flette sammen stokkene som du gj\u00f8r i merge-sort. Se Cormen side 32.",
+      "attempts": 3,
+      "subject": 1
+    }
+  },
+  {
+    "model": "quiz.quiz",
+    "pk": 4,
+    "fields": {
+      "hash": "c84cd55e6a",
+      "title": "Exercise 1 - Modeling, linearization",
+      "description": "An iron ball of radius R and mass m is lifted by a magnet with a coil of N turns and a current i around\r\na core of length lc and cross section A = \u03c0R. The vertical position of the ball is z, which is positive\r\nin the downwards direction. The flux \u03c6 flows through the iron core, then over the airgap, through the\r\nball, and finally along the return path through the open air as shown in Figure 1.",
+      "attempts": 3,
+      "subject": 2
+    }
+  },
+  {
+    "model": "quiz.quiz",
+    "pk": 5,
+    "fields": {
+      "hash": "a20fb38ea6",
+      "title": "Exercise 2 - Modelica, Dymola, simple two-tank model)",
+      "description": "In this problem, we will implement a model of a two-tank system coupled with a pipe with laminar\r\nflow.",
+      "attempts": 3,
+      "subject": 2
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 1,
+    "fields": {
+      "title": "Sp\u00f8rsm\u00e5l 1 - Hva er PU?",
+      "description": "",
+      "type": "CHECKBOX",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 1
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 2,
+    "fields": {
+      "title": "Sp\u00f8rsm\u00e5l 2 - Skriv en for-l\u00f8kke i python",
+      "description": "",
+      "type": "CODE",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 1
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 3,
+    "fields": {
+      "title": "Sp\u00f8rsm\u00e5l 3 - Hva heter professoren?",
+      "description": "",
+      "type": "TEXT",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 1
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 4,
+    "fields": {
+      "title": "Sp\u00f8rsm\u00e5l 4 - Hva er best?",
+      "description": "",
+      "type": "RADIOBOX",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 1
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 5,
+    "fields": {
+      "title": "Sp\u00f8rsm\u00e5l 1 - Hvilken farge p\u00e5 boksen?",
+      "description": "",
+      "type": "RADIOBOX",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 4
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 6,
+    "fields": {
+      "title": "Sp\u00f8rsm\u00e5l 2 - Hva er navnet p\u00e5 landet vi bor i?",
+      "description": "",
+      "type": "TEXT",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 4
+    }
+  },
+  {
+    "model": "quiz.select",
+    "pk": 1,
+    "fields": {
+      "title": "En professor",
+      "description": "",
+      "correct": false,
+      "question": 1
+    }
+  },
+  {
+    "model": "quiz.select",
+    "pk": 2,
+    "fields": {
+      "title": "Et fag",
+      "description": "",
+      "correct": false,
+      "question": 1
+    }
+  },
+  {
+    "model": "quiz.select",
+    "pk": 3,
+    "fields": {
+      "title": "Bare tull",
+      "description": "",
+      "correct": true,
+      "question": 1
+    }
+  },
+  {
+    "model": "quiz.select",
+    "pk": 4,
+    "fields": {
+      "title": "Vann",
+      "description": "",
+      "correct": false,
+      "question": 4
+    }
+  },
+  {
+    "model": "quiz.select",
+    "pk": 5,
+    "fields": {
+      "title": "Melk",
+      "description": "",
+      "correct": false,
+      "question": 4
+    }
+  },
+  {
+    "model": "quiz.select",
+    "pk": 6,
+    "fields": {
+      "title": "\u00d8l",
+      "description": "",
+      "correct": true,
+      "question": 4
+    }
+  },
+  {
+    "model": "quiz.select",
+    "pk": 7,
+    "fields": {
+      "title": "Bl\u00e5",
+      "description": "",
+      "correct": false,
+      "question": 5
+    }
+  },
+  {
+    "model": "quiz.select",
+    "pk": 8,
+    "fields": {
+      "title": "R\u00f8d",
+      "description": "",
+      "correct": true,
+      "question": 5
+    }
+  },
+  {
+    "model": "quiz.text",
+    "pk": 1,
+    "fields": {
+      "answer": "Pekka",
+      "question": 3
+    }
+  },
+  {
+    "model": "quiz.text",
+    "pk": 2,
+    "fields": {
+      "answer": "Norge",
+      "question": 6
+    }
+  },
+  {
+    "model": "quiz.code",
+    "pk": 1,
+    "fields": {
+      "answer": "for x in range(0, 3):",
+      "language": "PYTHON",
+      "question": 2
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$30000$v9f5EFnFOEOE$I642AW4OC5R2QqUrQxUoPpTa5nYARWLu0r9/AS8T5yA=",
+      "last_login": "2017-03-02T13:56:16.140Z",
+      "is_superuser": true,
+      "username": "test",
+      "first_name": "",
+      "last_name": "",
+      "email": "test@test.test",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2017-02-23T14:21:12.371Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  }
+]
