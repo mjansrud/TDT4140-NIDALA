@@ -1,29 +1,70 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
+from django.db.models import Q
+from django import template
+register = template.Library()
+
 
 from .models import *
-
 
 @login_required
 def quizList(request, subject_id):
 
     subject = Subject.objects.get(code=subject_id)
-    quizes = Quiz.objects.filter(subject=subject)
+    quizes = Quiz.objects.distinct().filter(subject=subject, questions__isnull  = False)
+    attempts = Attempt.objects.filter(user=request.user)
+
     context = {
         'subject': subject,
-        'quizes': quizes
+        'quizes': quizes,
+        'attempts': attempts
     }
 
     return render(request, 'quiz/quizList.html', context)
 
+
 @login_required
-def quiz(request, quiz_hash, quiz_question):
+def quizFindQuestion(request, quiz_hash, quiz_attempt):
+
+    quiz = Quiz.objects.filter(hash=quiz_hash)
+    attempt = Attempt.objects.filter(hash=quiz_attempt)
+    question = Question.objects.filter(quiz=quiz).order_by('order').first()
+    answers = Answer.objects.filter(attempt=attempt, user=request.user)
+
+    if(answers.count() > 0):
+        return redirect('quiz', quiz_hash, quiz_attempt, answers.last().question.id)
+
+    return redirect('quiz', quiz_hash, quiz_attempt, question.id)
+
+
+@login_required
+def quizRequestAttempt(request, quiz_hash):
+
+    #Fetch from database
+    quiz = Quiz.objects.get(hash=quiz_hash)
+    attempts = Attempt.objects.filter(quiz=quiz, user=request.user)
+
+    if attempts.count() <= quiz.attempts - 1:
+
+        question = Question.objects.filter(quiz=quiz).order_by('order').first()
+
+        #Register that the user has answered a question
+        Attempt.objects.create(quiz=quiz, user=request.user)
+        return redirect('quiz', quiz_hash, Attempt.objects.latest('id').hash, question.id)
+
+    #Find quiz
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+@login_required
+def quiz(request, quiz_hash, quiz_attempt, quiz_question):
 
     #Fetch from database
     quiz = Quiz.objects.get(hash=quiz_hash)
     question = Question.objects.get(id=quiz_question)
-    questions = Question.objects.filter(quiz=quiz)
-
+    questions = Question.objects.distinct().filter(Q(quiz=quiz) & (Q(boxes__isnull = False) | Q(text__isnull = False) | Q(code__isnull = False)))
+    attempt = Attempt.objects.get(quiz=quiz, hash=quiz_attempt, user=request.user)
 
     #For each question
     alternative_boxes = Select.objects.filter(question=question.id)
@@ -34,6 +75,7 @@ def quiz(request, quiz_hash, quiz_question):
         'quiz': quiz,
         'question': question,
         'questions': questions,
+        'attempt': attempt,
         'alternative_boxes': alternative_boxes,
         'alternative_text': alternative_text,
         'alternative_code': alternative_code,
@@ -90,10 +132,10 @@ def quiz(request, quiz_hash, quiz_question):
         context['user_current_answer_correct'] = user_current_answer_correct
 
         #Register that the user has answered a question
-        Answer.objects.create(question=question, user=request.user, correct=user_current_answer_correct)
+        Answer.objects.create(attempt=attempt, question=question, user=request.user, correct=user_current_answer_correct)
 
     # Get users answers only for this specific quiz
-    user_quiz_answers = Answer.objects.filter(question__in=questions, user=request.user)
+    user_quiz_answers = Answer.objects.filter(attempt=attempt, question__in=questions, user=request.user)
 
     # Check which questions the user has answered correct
     for user_quiz_answer in user_quiz_answers:
@@ -114,8 +156,11 @@ def quizResult(request, quiz_hash):
 
 @login_required
 def subjects(request):
+
+    subjects = Subject.objects.distinct().filter(Q(quizes__isnull  = False) & Q(quizes__questions__isnull = False) & (Q(quizes__questions__boxes__isnull = False) | Q(quizes__questions__text__isnull = False) | Q(quizes__questions__code__isnull = False)))
+
     context = {
-        'subjects': Subject.objects.all()
+        'subjects': subjects
     }
 
     return render(request, 'quiz/subjects.html', context)

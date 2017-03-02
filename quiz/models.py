@@ -47,6 +47,8 @@ class Quiz(models.Model):
         blank=True,
         null=True)
 
+    attempts = models.IntegerField(default=3)
+
     #Foreign relations
     subject = models.ForeignKey(Subject, related_name='quizes')
 
@@ -59,6 +61,7 @@ class Quiz(models.Model):
 
 class Question(models.Model):
 
+    #Internal information
     title = models.CharField(
         verbose_name="Title",
         max_length=60)
@@ -78,6 +81,9 @@ class Question(models.Model):
     type = models.CharField(max_length=9,
                             choices=TYPE_CHOICES,
                             default="CHECKBOX")
+
+    order = models.IntegerField(default=0)
+    attempts = models.IntegerField(default=3)
 
     #Used just for displaying which questions the user has correct
     status = models.IntegerField(default=0, editable=False)
@@ -183,21 +189,49 @@ class Code(models.Model):
     def __str__(self):
         return self.answer
 
-class Answer(models.Model):
+class Attempt(models.Model):
+
+    # Internal information
+    hash = models.CharField(
+        verbose_name="Hash",
+        max_length=8,
+        unique=True,
+        default=hash_generate,
+        editable=False
+    )
 
     # Foreign relations
-    question = models.ForeignKey(Question, related_name='answers')
+    quiz = models.ForeignKey(Quiz, related_name='quizes')
     user = models.ForeignKey(User, related_name='answers')
 
     # Internal
+    status = models.IntegerField(default=0)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Attempt"
+        verbose_name_plural = "Attempts"
+
+    def __str__(self):
+        return str(self.user.username + ' : ' + str(self.quiz.subject.code) + ' -> ' + str(self.quiz.title)  + ' -> Forsøk '+ str(self.hash))
+
+class Answer(models.Model):
+
+    # Foreign relations
+    question = models.ForeignKey(Question, related_name='questions')
+    attempt = models.ForeignKey(Attempt, related_name='attempts')
+    user = models.ForeignKey(User, related_name='attempts')
+
+    # Internal
     correct = models.BooleanField(default=False)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = "Answer"
         verbose_name_plural = "Answers"
 
     def __str__(self):
-        return str(self.correct)
+        return str(self.user.username + ' : ' + str(self.question.quiz.subject.code) + ' -> ' + str(self.question.quiz.title) + ' -> ' + str(self.question.title) + ' -> Forsøk '+ str(self.attempt.hash) + ' -> Resultat ' + str(self.correct))
 
 
 

@@ -15,15 +15,14 @@
             {% for question in questions %}
  
                 {% if question.status == 0 %}
-                    <li class="list-group-item">
+                    <a href="{% url 'quiz' quiz.hash attempt.hash question.id %}" class="list-group-item">
                         {% elif question.status == 1 %}
-                    <li class="list-group-item" style="background: rgba(0, 239, 37, 0.06);">
+                    <a href="{% url 'quiz' quiz.hash attempt.hash question.id %}" class="list-group-item correct">
                         {% elif question.status == 2 %}
-                    <li class="list-group-item" style="background: rgba(239, 0, 15, 0.05);">
+                    <a href="{% url 'quiz' quiz.hash attempt.hash question.id %}" class="list-group-item uncorrect">
                 {% endif %}
-
-            <a href="{% url 'quiz' quiz.hash question.id %}"> {{ question.title }}</a>
-            </li>
+            {{ question.title }}
+            </a>
             {% endfor %}
             <br>
             <a href="{% url 'quizResult' quiz.hash %}" class="btn btn-primary submit-button">Gå til resultat</a>

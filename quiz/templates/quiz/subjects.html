@@ -8,9 +8,9 @@
                 <div class="col-xs-12 col-md-8 col-md-offset-2">
                     <ul class="list-group">
                         {% for subject in subjects %}
-                            <li class="list-group-item">
-                                <a href="{% url 'quizList' subject.code %}">{{ subject.code }} {{ subject.title }}</a>
-                            </li>
+                            <a href="{% url 'quizList' subject.code %}" class="list-group-item">
+                                {{ subject.code }} {{ subject.title }}
+                            </a>
                         {% endfor %}
                     </ul>
                 </div>

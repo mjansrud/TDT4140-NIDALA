@@ -1,20 +1,77 @@
 {% extends 'nidala/base.html' %}
 
 {% block content %}
-    <div class="container-fluid">
-        <h1 class="text-center">{{ subject.code }}</h1>
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12 col-md-8 col-md-offset-2">
-                    <ul class="list-group">
-                        {% for quiz in quizes %}
-                            <li class="list-group-item">
-                                <a href="{% url 'quiz' quiz.hash 1 %}"> {{ quiz.title }}</a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
+    <div class="col-md-4">
+        <ul class="list-group ">
+            <div>
+                <h5>{{ subject.code }}</h5>
             </div>
+            {% for quiz in quizes %}
+                <a href="{% url 'quizRequestAttempt' quiz.hash %}" class="list-group-item menu new-attempt" data-hash="{{ quiz.hash }}">
+                    {{ quiz.title }}</a>
+                </a>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="col-md-8">
+        <div>
+            <h5>Forsøk</h5>
+        </div>
+        {% for quiz in quizes %}
+            <ul class="list-group attempt" id="{{ quiz.hash }}" style="display:none">
+                <div>
+                    <h6>{{ quiz.title }} </h6>
+                </div>
+                    <a href="{% url 'quizRequestAttempt' quiz.hash %}" class="list-group-item new-attempt" data-toggle="modal" data-target="#confirm-delete">
+                        Nytt forsøk
+                    </a>
+                {% for attempt in attempts %}
+                    {% if attempt.quiz == quiz %}
+                        <a href="{% url 'quizFindQuestion' quiz.hash attempt.hash %}" class="list-group-item">
+                            Fortsett på {{ attempt.hash }}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </div>
+    <div id="confirm" class="modal fade">
+        <div class="modal-body">
+            Are you sure?
+        </div>
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Delete</button>
+            <button type="button" data-dismiss="modal" class="btn">Cancel</button>
         </div>
     </div>
+    <script>
+        $( ".menu" ).mouseover(function() {
+            var id = $(this).data("hash");
+            $(".attempt").each(function() {
+                $(this).hide();
+            })
+            $( "#" + id ).show();
+        } );
+        $( ".new-attempt" ).click(function(e) {
+            e.preventDefault();
+            var link = this;
+            bootbox.confirm({
+                title: "Nytt forsøk?",
+                message: "Du kan maks ha 3 forsøk pr øving.",
+                buttons: {
+                    cancel: {
+                        label: '<i class="fa fa-times"></i> Avbryt'
+                    },
+                    confirm: {
+                        label: '<i class="fa fa-check"></i> Bekreft'
+                    }
+                },
+                callback: function (confirmed) {
+                    if (confirmed) {
+                        window.location.href = link.href; // similar behavior as clicking on a link (Increments browser history)
+                    }
+                }
+            });
+        } );
+    </script>
 {% endblock content %}

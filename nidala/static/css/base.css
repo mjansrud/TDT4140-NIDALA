@@ -17,7 +17,7 @@ body {
     -moz-border-radius:0px;
     border-radius:0px;
 }
-}
+
 .navbar-default .navbar-brand {
     // color: black;
 }
@@ -49,5 +49,8 @@ a {
     background-color: #fcfcfc;
 }
 
+.btn-primary {
+    background-color: #d9981a !important;
+}
 
 

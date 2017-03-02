@@ -8,5 +8,6 @@ admin.site.register(Resource)
 admin.site.register(Select)
 admin.site.register(Text)
 admin.site.register(Code)
+admin.site.register(Attempt)
 admin.site.register(Answer)
 # Register your models here.
