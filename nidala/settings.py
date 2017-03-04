@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'ckeditor',
     'bootstrap3',
     'post_office',
     'nidala',
@@ -154,3 +155,23 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+#Custom constants
+class STATUS_QUESTIONS:
+    UNANSWERED = 0
+    CORRECT = 1
+    UNCORRECT = 2
+
+class STATUS_ATTEMPT:
+    STARTED = 0
+    PASSED = 1
+    FAILED = 2
+
+#Custom editors
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'width': '100%',
+    }
+}

@@ -14,3 +14,12 @@
 .uncorrect{
     background: rgba(239, 0, 15, 0.05);
 }
+
+#editor{
+    min-height:400px;
+    border-radius: 5px !important;
+}
+
+.description{
+    padding:18px;
+}

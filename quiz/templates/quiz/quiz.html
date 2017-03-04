@@ -6,6 +6,7 @@
 {% endblock css %}
 
 {% block content %}
+    {% load quizFilters %}
 
     <div class="col-md-4">
         <ul class="list-group">
@@ -13,19 +14,10 @@
                 <h5>Naviger</h5>
             </div>
             {% for question in questions %}
- 
-                {% if question.status == 0 %}
-                    <a href="{% url 'quiz' quiz.hash attempt.hash question.id %}" class="list-group-item">
-                        {% elif question.status == 1 %}
-                    <a href="{% url 'quiz' quiz.hash attempt.hash question.id %}" class="list-group-item correct">
-                        {% elif question.status == 2 %}
-                    <a href="{% url 'quiz' quiz.hash attempt.hash question.id %}" class="list-group-item uncorrect">
-                {% endif %}
-            {{ question.title }}
-            </a>
+                <a href="{% url 'quiz' quiz.hash attempt.hash question.id %}" class="list-group-item {% if user_quiz_answers|filterAnswersGetStatus:question == STATUS_QUESTIONS.CORRECT %} correct {% endif %} {% if user_quiz_answers|filterAnswersGetStatus:question == STATUS_QUESTIONS.UNCORRECT %} uncorrect {% endif %}">{{ question.title }}</a>
             {% endfor %}
             <br>
-            <a href="{% url 'quizResult' quiz.hash %}" class="btn btn-primary submit-button">Gå til resultat</a>
+            <a href="{% url 'quizResult' quiz.hash attempt.hash %}" class="btn btn-primary submit-button result" data-pass-percent="{{ quiz.pass_percent }}">Gå til resultat</a>
         </ul>
     </div>
     <div class="col-md-8">
@@ -34,23 +26,34 @@
                 <div class="col-md-12">
                     <form method="POST">{% csrf_token %}
                         <input type=hidden name="question_id" value="{{ question.id }}">
-                        <div>
-                            <h5>{{ question.title }}</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>{{ question.title }}</h5>
+                            </div>
+                            <div class="col-md-6" align="right">
+                                <h5>Forsøk {{ attempt.attemptAnswers|filterAnswersByQuestion:question }} av {{ question.attempts }}</h5>
+                            </div>
                         </div>
-                        {% if user_answered and user_current_answer_correct %}
-                            <div class="alert alert-success" role="alert">
-                                <span class="glyphicon glyphicon glyphicon-check" aria-hidden="true"></span>
-                                <span class="sr-only">Riktig:</span>
-                                Svaret var korrekt!
-                            </div>
+                        {% if user_answered%}
+                            {% if user_current_answer_correct %}
+                                <div class="alert alert-success" role="alert">
+                                    <span class="glyphicon glyphicon glyphicon-check" aria-hidden="true"></span>
+                                    <span class="sr-only">Riktig:</span>
+                                    Svaret var korrekt!
+                                </div>
+                            {% else %}
+                                <div class="alert alert-danger" role="alert">
+                                    <span class="glyphicon glyphicon glyphicon-check" aria-hidden="true"></span>
+                                    <span class="sr-only">Feil:</span>
+                                    Dette var ikke helt riktig dessverre!
+                                </div>
+                            {% endif %}
                         {% endif %}
-                        {% if user_answered and not user_current_answer_correct %}
-                            <div class="alert alert-danger" role="alert">
-                                <span class="glyphicon glyphicon glyphicon-check" aria-hidden="true"></span>
-                                <span class="sr-only">Feil:</span>
-                                Dette var ikke helt riktig dessverre!
+                        <div class="row">
+                            <div class="col-md-12 description">
+                                    {{ question.description|safe }}
                             </div>
-                        {% endif %}
+                        </div>
                         <ul class="list-group"> {#Iterer gjennom alle spørsmålene#}
                             <li class="list-group-item">
                                 <div class="form-group">
@@ -58,7 +61,7 @@
 
                                         {% for alternative in alternative_boxes %}
                                             <div class="radio">
-                                                <label><input type="checkbox" name="answer" value="{{ alternative.id }}">{{ alternative.title }}</label>
+                                                <label><input type="checkbox" name="answer" value="{{ alternative.id }}" {% if attempt.attemptAnswers|filterAnswersByQuestion:question > question.attempts or user_quiz_answers|filterAnswersGetStatus:question == STATUS_QUESTIONS.CORRECT %} {% if alternative.correct %} checked {% endif %} class="disabled" disabled {% endif %}>{{ alternative.title }}</label>
                                             </div>
                                         {% endfor %}
 
@@ -66,30 +69,41 @@
 
                                         {% for alternative in alternative_boxes %}
                                             <div class="radio">
-                                                <label><input type="radio" name="answer" value="{{ alternative.id }}">{{ alternative.title }}</label>
+                                                <label><input type="radio" name="answer" value="{{ alternative.id }}" {% if user_quiz_answers|filterAnswersByQuestion:question > question.attempts or user_quiz_answers|filterAnswersGetStatus:question == STATUS_QUESTIONS.CORRECT  %} {% if alternative.correct %} checked {% endif %} class="disabled" disabled {% endif %}>{{ alternative.title }}</label>
                                             </div>
                                         {% endfor %}
 
                                     {% elif question.type == "TEXT" %}
 
                                         <label for="text" class="col-2 col-form-label">Skriv inn svaret i boksen under</label>
-                                        <div class="col-10">
-                                            <input class="form-control" type="text" name="answer" value="{{ alternative_text.answer }}" id="text">
-                                        </div>
+                                        {% for alternative in alternative_text %}
+                                            <div class="col-10">
+                                                <input class="form-control" type="text" name="answer" id="text" {% if attempt.attemptAnswers|filterAnswersByQuestion:question > question.attempts or user_quiz_answers|filterAnswersGetStatus:question == STATUS_QUESTIONS.CORRECT %} value="{{ alternative.answer }}" class="disabled" disabled {% endif %}}
+                                            </div>
+                                        {% endfor %}
 
                                     {% elif question.type == "CODE" %}
 
                                         <label for="editor" class="col-2 col-form-label">Skriv inn koden i boksen under</label>
-                                        <div id="editor" style="min-height:400px; border-radius: 5px !important;"></div>
+                                        {% for alternative in alternative_code %}
+                                            <div id="editor">{% if user_quiz_answers|filterAnswersByQuestion:question > question.attempts or user_quiz_answers|filterAnswersGetStatus:question == STATUS_QUESTIONS.CORRECT  %}{{ alternative.answer }}{% endif %}</div>
+                                        {% endfor %}
                                         <textarea name="answer" style="display:none"></textarea>
                                         <script src="https://cdn.jsdelivr.net/ace/1.2.6/min/ace.js" type="text/javascript" charset="utf-8"></script>
                                         <script>
-                                            var editor = ace.edit("editor");
-                                            var textarea = $('textarea[name="answer"]');
+                                            editor = ace.edit("editor");
+                                            {% if user_quiz_answers|filterAnswersByQuestion:question > question.attempts or user_quiz_answers|filterAnswersGetStatus:question == STATUS_QUESTIONS.CORRECT  %}
+                                                editor.container.style.pointerEvents="none"
+                                                editor.container.style.opacity=0.8 // or use svg filter to make it gray
+                                                editor.renderer.setStyle("disabled", true)
+                                                editor.blur()
+                                            {% else %}
+                                                textarea = $('textarea[name="answer"]');
+                                                editor.getSession().on("change", function () {
+                                                    textarea.html($.trim(editor.getSession().getValue()));
+                                                });
+                                            {% endif %}
                                             editor.getSession().setMode("ace/mode/javascript");
-                                            editor.getSession().on("change", function () {
-                                                textarea.html($.trim(editor.getSession().getValue()));
-                                            });
                                         </script>
 
                                     {% else %}
@@ -100,10 +114,60 @@
                                 </div>
                             </li>
                         </ul>
-                        <button type="submit" class="btn btn-primary submit-button">Svar</button>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <button class="btn btn-primary submit-button" {% if user_quiz_answers|filterAnswersByQuestion:question > question.attempts or user_quiz_answers|filterAnswersGetStatus:question == STATUS_QUESTIONS.CORRECT %} disabled {% endif %}> {% if user_quiz_answers|filterAnswersGetStatus:question == STATUS_QUESTIONS.CORRECT %}Du har svart riktig{% elif user_quiz_answers|filterAnswersByQuestion:question > question.attempts %}For mange forsøk{% else %}Svar{% endif %} </button>
+                            </div>
+                            <div class="col-md-4">
+                                {% if questions|filterQuestionsFetchNext:question != False %}
+                                    <a href="{% url 'quiz' quiz.hash attempt.hash questions|filterQuestionsFetchNext:question %}" class="btn btn-primary btn-block">Neste spørsmål</a>
+                                {% else %}
+                                    <a href="{% url 'quizResult' quiz.hash attempt.hash %}" class="btn btn-primary submit-button result" data-pass-percent="{{ quiz.pass_percent }}">Gå til resultat</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="resources-padding">
+                            <h5>Ressurser</h5>
+                        </div>
+                        <ul class="list-group" >
+                            {% if resources.count > 0 %}
+                                {% for resource in resources %}
+                                    <a href="{{ resource.url }}" target="_blank" class="list-group-item">
+                                        {{ resource.title }}
+                                    </a>
+                                {% endfor %}
+                            {% else %}
+                                <li class="list-group-item">
+                                    Ingen ressurser tilgjengelig
+                                </li>
+                            {% endif %}
+                        </ul>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        $( ".result" ).click(function(e) {
+            e.preventDefault();
+            var link = this;
+            bootbox.confirm({
+                title: "Avslutt?",
+                message: "Er du sikker på at du ønsker å avslutte? Du trenger minimum " + $(link).data("pass-percent") + "% riktig for å bestå.",
+                buttons: {
+                    cancel: {
+                        label: '<i class="fa fa-times"></i> Avbryt'
+                    },
+                    confirm: {
+                        label: '<i class="fa fa-check"></i> Bekreft'
+                    }
+                },
+                callback: function (confirmed) {
+                    if (confirmed) {
+                        window.location.href = link.href; // similar behavior as clicking on a link (Increments browser history)
+                    }
+                }
+            });
+        } );
+    </script>
 {% endblock content %}

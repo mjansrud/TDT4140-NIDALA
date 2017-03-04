@@ -1,6 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.conf import settings
+from ckeditor.fields import RichTextField
 from uuid import uuid4
+
+#Constants
+STATUS_QUESTIONS = settings.STATUS_QUESTIONS;
+STATUS_ATTEMPT = settings.STATUS_ATTEMPT;
 
 # Creates unique URLS
 def hash_generate():
@@ -19,6 +25,8 @@ class Subject(models.Model):
         max_length=100,
         blank=True,
         null=True)
+
+    syllabus = RichTextField()
 
     class Meta:
         verbose_name = "Subject"
@@ -48,9 +56,10 @@ class Quiz(models.Model):
         null=True)
 
     attempts = models.IntegerField(default=3)
+    pass_percent = models.IntegerField(default=40)
 
     #Foreign relations
-    subject = models.ForeignKey(Subject, related_name='quizes')
+    subject = models.ForeignKey(Subject, related_name='subjectQuizes')
 
     class Meta:
         verbose_name = "Quiz"
@@ -66,10 +75,7 @@ class Question(models.Model):
         verbose_name="Title",
         max_length=60)
 
-    description = models.TextField(
-        verbose_name="Description",
-        blank=True,
-        null=True)
+    description = RichTextField()
 
     TYPE_CHOICES = (
         ("CHECKBOX", "Checkbox"),
@@ -86,10 +92,10 @@ class Question(models.Model):
     attempts = models.IntegerField(default=3)
 
     #Used just for displaying which questions the user has correct
-    status = models.IntegerField(default=0, editable=False)
+    status = models.IntegerField(default=STATUS_QUESTIONS.UNANSWERED, editable=False)
 
     # Foreign relations
-    quiz = models.ForeignKey(Quiz, related_name='questions')
+    quiz = models.ForeignKey(Quiz, related_name='quizQuestions')
 
     class Meta:
         verbose_name = "Question"
@@ -115,7 +121,12 @@ class Resource(models.Model):
         null=True)
 
     # Foreign relations
-    question = models.ForeignKey(Question, related_name='resources')
+    question = models.ForeignKey(Question, related_name='questionResources')
+
+    # Functions
+    def getResourcesByQuiz(self, quiz):
+        questions = Question.filter(quiz=quiz);
+        return self.filter(question__in=questions);
 
     class Meta:
         verbose_name = "Resource"
@@ -138,7 +149,7 @@ class Select(models.Model):
     correct = models.BooleanField(default=False)
 
     # Foreign relations
-    question = models.ForeignKey(Question, related_name='boxes')
+    question = models.ForeignKey(Question, related_name='questionBoxes')
 
     class Meta:
         verbose_name = "Alternative: Selects"
@@ -154,7 +165,7 @@ class Text(models.Model):
         max_length=200)
 
     # Foreign relations
-    question = models.ForeignKey(Question, related_name='text', unique=True)
+    question = models.ForeignKey(Question, related_name='questionTexts', unique=True)
 
     class Meta:
         verbose_name = "Alternative: Text"
@@ -180,7 +191,7 @@ class Code(models.Model):
                                 default="JAVASCRIPT")
 
     # Foreign relationss
-    question = models.ForeignKey(Question, related_name='code', unique=True)
+    question = models.ForeignKey(Question, related_name='questionCodes', unique=True)
 
     class Meta:
         verbose_name = "Alternative: Code"
@@ -201,11 +212,11 @@ class Attempt(models.Model):
     )
 
     # Foreign relations
-    quiz = models.ForeignKey(Quiz, related_name='quizes')
-    user = models.ForeignKey(User, related_name='answers')
+    quiz = models.ForeignKey(Quiz, related_name='quizAttempts')
+    user = models.ForeignKey(User, related_name='userAttempts')
 
     # Internal
-    status = models.IntegerField(default=0)
+    status = models.IntegerField(default=STATUS_ATTEMPT.STARTED)
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -218,9 +229,9 @@ class Attempt(models.Model):
 class Answer(models.Model):
 
     # Foreign relations
-    question = models.ForeignKey(Question, related_name='questions')
-    attempt = models.ForeignKey(Attempt, related_name='attempts')
-    user = models.ForeignKey(User, related_name='attempts')
+    question = models.ForeignKey(Question, related_name='questionAnswers')
+    attempt = models.ForeignKey(Attempt, related_name='attemptAnswers')
+    user = models.ForeignKey(User, related_name='userAnswers')
 
     # Internal
     correct = models.BooleanField(default=False)

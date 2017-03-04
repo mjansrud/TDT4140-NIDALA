@@ -45,12 +45,20 @@ a {
     display:inline;
 }
 
+.title-padding{
+    padding:15px;
+}
+
 .jumbotron {
     background-color: #fcfcfc;
 }
 
 .btn-primary {
     background-color: #d9981a !important;
+}
+
+.resources-padding{
+    padding-top:20px;
 }
 
 
