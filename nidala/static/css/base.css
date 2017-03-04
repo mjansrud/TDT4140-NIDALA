@@ -61,4 +61,11 @@ a {
     padding-top:20px;
 }
 
+.correct{
+    background: rgba(0, 239, 37, 0.06);
+}
+
+.uncorrect{
+    background: rgba(239, 0, 15, 0.05);
+}
 

@@ -14,7 +14,7 @@
                 <h5>Naviger</h5>
             </div>
             {% for question in questions %}
-                <a href="{% url 'quiz' quiz.hash attempt.hash question.id %}" class="list-group-item {% if user_quiz_answers|filterAnswersGetStatus:question == STATUS_QUESTIONS.CORRECT %} correct {% endif %} {% if user_quiz_answers|filterAnswersGetStatus:question == STATUS_QUESTIONS.UNCORRECT %} uncorrect {% endif %}">{{ question.title }}</a>
+                <a href="{% url 'quiz' quiz.hash attempt.hash question.id %}" class="list-group-item {% if user_quiz_answers|filterAnswersGetStatus:question == STATUS_QUESTION.CORRECT %} correct {% endif %} {% if user_quiz_answers|filterAnswersGetStatus:question == STATUS_QUESTION.UNCORRECT %} uncorrect {% endif %}">{{ question.title }}</a>
             {% endfor %}
             <br>
             <a href="{% url 'quizResult' quiz.hash attempt.hash %}" class="btn btn-primary submit-button result" data-pass-percent="{{ quiz.pass_percent }}">Gå til resultat</a>
@@ -49,11 +49,7 @@
                                 </div>
                             {% endif %}
                         {% endif %}
-                        <div class="row">
-                            <div class="col-md-12 description">
-                                    {{ question.description|safe }}
-                            </div>
-                        </div>
+                        {{ question.description|safe }}
                         <ul class="list-group"> {#Iterer gjennom alle spørsmålene#}
                             <li class="list-group-item">
                                 <div class="form-group">
@@ -61,7 +57,7 @@
 
                                         {% for alternative in alternative_boxes %}
                                             <div class="radio">
-                                                <label><input type="checkbox" name="answer" value="{{ alternative.id }}" {% if attempt.attemptAnswers|filterAnswersByQuestion:question > question.attempts or user_quiz_answers|filterAnswersGetStatus:question == STATUS_QUESTIONS.CORRECT %} {% if alternative.correct %} checked {% endif %} class="disabled" disabled {% endif %}>{{ alternative.title }}</label>
+                                                <label><input type="checkbox" name="answer" value="{{ alternative.id }}" {% if attempt.attemptAnswers|filterAnswersByQuestion:question > question.attempts or user_quiz_answers|filterAnswersGetStatus:question == STATUS_QUESTION.CORRECT %} {% if alternative.correct %} checked {% endif %} class="disabled" disabled {% endif %}>{{ alternative.title }}</label>
                                             </div>
                                         {% endfor %}
 
@@ -69,7 +65,7 @@
 
                                         {% for alternative in alternative_boxes %}
                                             <div class="radio">
-                                                <label><input type="radio" name="answer" value="{{ alternative.id }}" {% if user_quiz_answers|filterAnswersByQuestion:question > question.attempts or user_quiz_answers|filterAnswersGetStatus:question == STATUS_QUESTIONS.CORRECT  %} {% if alternative.correct %} checked {% endif %} class="disabled" disabled {% endif %}>{{ alternative.title }}</label>
+                                                <label><input type="radio" name="answer" value="{{ alternative.id }}" {% if user_quiz_answers|filterAnswersByQuestion:question > question.attempts or user_quiz_answers|filterAnswersGetStatus:question == STATUS_QUESTION.CORRECT  %} {% if alternative.correct %} checked {% endif %} class="disabled" disabled {% endif %}>{{ alternative.title }}</label>
                                             </div>
                                         {% endfor %}
 
@@ -78,7 +74,7 @@
                                         <label for="text" class="col-2 col-form-label">Skriv inn svaret i boksen under</label>
                                         {% for alternative in alternative_text %}
                                             <div class="col-10">
-                                                <input class="form-control" type="text" name="answer" id="text" {% if attempt.attemptAnswers|filterAnswersByQuestion:question > question.attempts or user_quiz_answers|filterAnswersGetStatus:question == STATUS_QUESTIONS.CORRECT %} value="{{ alternative.answer }}" class="disabled" disabled {% endif %}}
+                                                <input class="form-control" type="text" name="answer" id="text" {% if attempt.attemptAnswers|filterAnswersByQuestion:question > question.attempts or user_quiz_answers|filterAnswersGetStatus:question == STATUS_QUESTION.CORRECT %} value="{{ alternative.answer }}" class="disabled" disabled {% endif %}}
                                             </div>
                                         {% endfor %}
 
@@ -86,13 +82,13 @@
 
                                         <label for="editor" class="col-2 col-form-label">Skriv inn koden i boksen under</label>
                                         {% for alternative in alternative_code %}
-                                            <div id="editor">{% if user_quiz_answers|filterAnswersByQuestion:question > question.attempts or user_quiz_answers|filterAnswersGetStatus:question == STATUS_QUESTIONS.CORRECT  %}{{ alternative.answer }}{% endif %}</div>
+                                            <div id="editor">{% if user_quiz_answers|filterAnswersByQuestion:question > question.attempts or user_quiz_answers|filterAnswersGetStatus:question == STATUS_QUESTION.CORRECT  %}{{ alternative.answer }}{% endif %}</div>
                                         {% endfor %}
                                         <textarea name="answer" style="display:none"></textarea>
                                         <script src="https://cdn.jsdelivr.net/ace/1.2.6/min/ace.js" type="text/javascript" charset="utf-8"></script>
                                         <script>
                                             editor = ace.edit("editor");
-                                            {% if user_quiz_answers|filterAnswersByQuestion:question > question.attempts or user_quiz_answers|filterAnswersGetStatus:question == STATUS_QUESTIONS.CORRECT  %}
+                                            {% if user_quiz_answers|filterAnswersByQuestion:question > question.attempts or user_quiz_answers|filterAnswersGetStatus:question == STATUS_QUESTION.CORRECT  %}
                                                 editor.container.style.pointerEvents="none"
                                                 editor.container.style.opacity=0.8 // or use svg filter to make it gray
                                                 editor.renderer.setStyle("disabled", true)
@@ -116,7 +112,7 @@
                         </ul>
                         <div class="row">
                             <div class="col-md-8">
-                                <button class="btn btn-primary submit-button" {% if user_quiz_answers|filterAnswersByQuestion:question > question.attempts or user_quiz_answers|filterAnswersGetStatus:question == STATUS_QUESTIONS.CORRECT %} disabled {% endif %}> {% if user_quiz_answers|filterAnswersGetStatus:question == STATUS_QUESTIONS.CORRECT %}Du har svart riktig{% elif user_quiz_answers|filterAnswersByQuestion:question > question.attempts %}For mange forsøk{% else %}Svar{% endif %} </button>
+                                <button class="btn btn-primary submit-button" {% if user_quiz_answers|filterAnswersByQuestion:question > question.attempts or user_quiz_answers|filterAnswersGetStatus:question == STATUS_QUESTION.CORRECT %} disabled {% endif %}> {% if user_quiz_answers|filterAnswersGetStatus:question == STATUS_QUESTION.CORRECT %}Du har svart riktig{% elif user_quiz_answers|filterAnswersByQuestion:question > question.attempts %}For mange forsøk{% else %}Svar{% endif %} </button>
                             </div>
                             <div class="col-md-4">
                                 {% if questions|filterQuestionsFetchNext:question != False %}

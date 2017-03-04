@@ -34,7 +34,8 @@
     "pk": 1,
     "fields": {
       "code": "TDT4140",
-      "title": "Programvareutvikling"
+      "title": "Programvareutvikling",
+      "syllabus": "<h3>How to set the tone for the course</h3>\r\n\r\n<blockquote>\r\n<ul>\r\n\t<li>Provide course information such as course number, location and time, prerequisites, and other requirements.</li>\r\n\t<li>Share your teaching philosophy.</li>\r\n\t<li>Announce office hours and location.</li>\r\n\t<li>Share some information about yourself, such as your educational and professional background.</li>\r\n\t<li>Describe how the course relates to the program, discipline, or field.</li>\r\n\t<li>Provide information about campus services that can aid students with their studies.</li>\r\n\t<li>Reflect on the overall tone of your writing: is it encouraging or punitive?</li>\r\n</ul>\r\n</blockquote>"
     }
   },
   {
@@ -42,7 +43,8 @@
     "pk": 2,
     "fields": {
       "code": "TTK4130",
-      "title": "Modellering og simulering"
+      "title": "Modellering og simulering",
+      "syllabus": "<h3>Getting started</h3>\r\n\r\n<blockquote>\r\n<ul>\r\n\t<li><a href=\"https://www.cte.cornell.edu/teaching-ideas/designing-your-course/settting-learning-outcomes.html\">Establish course learning outcomes</a>. Consider what you would like students to know or be able to do as a result of taking your course.</li>\r\n\t<li>Design your course. This&nbsp;<a href=\"https://www.cte.cornell.edu/documents/Course%20Decisions%20Guide.pdf\">Course Decisions Guide</a>&nbsp;<img alt=\"\" src=\"https://www.cte.cornell.edu/images/icon_pdf.gif\" style=\"height:12px; width:12px\" />&nbsp;can guide you in the process.</li>\r\n\t<li>Consult our&nbsp;<a href=\"https://www.cte.cornell.edu/documents/Syllabus%20Template.doc\">Syllabus Template</a>&nbsp;<img alt=\"\" src=\"https://www.cte.cornell.edu/images/icon_word.gif\" style=\"height:12px; width:12px\" />&nbsp;to review some recommended best practices for syllabus construction. Type in your course material and information without having to format.</li>\r\n\t<li>Use this&nbsp;<a href=\"https://www.cte.cornell.edu/documents/Syllabus%20Rubric.pdf\">Syllabus Rubric</a>&nbsp;<img alt=\"\" src=\"https://www.cte.cornell.edu/images/icon_pdf.gif\" style=\"height:12px; width:12px\" />&nbsp;as a tool for reviewing your course syllabus.</li>\r\n\t<li>Review the course description established by your department or syllabi of the same course from previous instructors.</li>\r\n\t<li>Check online for sample syllabi of the same or similar courses from colleagues at other universities.</li>\r\n\t<li>Consider questions students may have about the course. (Davis, 2009)\r\n\t<ul>\r\n\t</ul>\r\n\t</li>\r\n</ul>\r\n</blockquote>"
     }
   },
   {
@@ -53,6 +55,7 @@
       "title": "Exercise 1 - Introduksjon",
       "description": "Bli kjent med Algdat!",
       "attempts": 3,
+      "pass_percent": 40,
       "subject": 1
     }
   },
@@ -64,6 +67,7 @@
       "title": "Exercise 2 - Problemer og algoritmer",
       "description": "Du skal lage et program for \u00e5 finne ord i en tekst. For \u00e5 gj\u00f8re dette, kan du lage en funksjon som bygger et tre og en funksjon som bruker treet til \u00e5 s\u00f8ke. F\u00f8rste linje av input til programmet er en streng som best\u00e5r av tegnene [a-z] og mellomrom. \r\n\r\nDette representerer dokumentet det skal s\u00f8kes i. De neste linjene i input er sp\u00f8rringer etter ord. Programmet skal s\u00f8ke etter disse ordene i teksten, og returnere hvilke posisjoner ordet finnes p\u00e5. Tegnet ? brukes til \u00e5 angi at her kan det st\u00e5 en hvilket som helst bokstav fra alfabetet [a-z].",
       "attempts": 3,
+      "pass_percent": 40,
       "subject": 1
     }
   },
@@ -75,6 +79,7 @@
       "title": "Exercise 3 - Datastrukturer",
       "description": "I denne \u00f8vingen skal du flette sammen et sett med kortstokker. P\u00e5 hvert av disse kortene st\u00e5r det ett tall og en bokstav. Hver enkelt stokk er allerede sortert p\u00e5 tall. Oppgaven din er \u00e5 flette stokkene sammen slik at resultatet fremdeles er riktig sortert. Det er mange forskjellige m\u00e5ter \u00e5 l\u00f8se dette problemet p\u00e5, men det enkleste er nok \u00e5 flette sammen stokkene som du gj\u00f8r i merge-sort. Se Cormen side 32.",
       "attempts": 3,
+      "pass_percent": 40,
       "subject": 1
     }
   },
@@ -86,6 +91,7 @@
       "title": "Exercise 1 - Modeling, linearization",
       "description": "An iron ball of radius R and mass m is lifted by a magnet with a coil of N turns and a current i around\r\na core of length lc and cross section A = \u03c0R. The vertical position of the ball is z, which is positive\r\nin the downwards direction. The flux \u03c6 flows through the iron core, then over the airgap, through the\r\nball, and finally along the return path through the open air as shown in Figure 1.",
       "attempts": 3,
+      "pass_percent": 40,
       "subject": 2
     }
   },
@@ -97,6 +103,7 @@
       "title": "Exercise 2 - Modelica, Dymola, simple two-tank model)",
       "description": "In this problem, we will implement a model of a two-tank system coupled with a pipe with laminar\r\nflow.",
       "attempts": 3,
+      "pass_percent": 40,
       "subject": 2
     }
   },
@@ -105,10 +112,10 @@
     "pk": 1,
     "fields": {
       "title": "Sp\u00f8rsm\u00e5l 1 - Hva er PU?",
-      "description": "",
+      "description": "<p><img alt=\"\" src=\"http://www.aristatechnologies.com/wp-content/uploads/2016/07/software-development-banner.png\" style=\"float:right; height:279px; width:300px\" /><strong>Kunnskap:&nbsp;</strong><br />\r\nStudentene vil f&aring; kunnskap om programvareutvikling-konsepter som prosessmodeller, metoder og teknikker for architecture design, testing, planlegging, konfigurasjonsstyring og kvalitetsstyring.&nbsp;<br />\r\n<br />\r\n<strong>Ferdigheter:&nbsp;</strong><br />\r\nPlanlegge og administrere sm&aring; programvareutviklings-prosjekter og delta som designer / programmerer / tester i st&oslash;rre programvareprosjekter.&nbsp;<br />\r\n<br />\r\n<strong>Generell kompetanse:&nbsp;</strong><br />\r\nStudentene skal kunne forst&aring; betydningen av programvareutvikling som et yrke. Studentene skal kunne forst&aring; og samtale om komplekse programvareutviklings-prosjekter og tilh&oslash;rende tekniske og organisatoriske problemstillinger.</p>",
       "type": "CHECKBOX",
       "order": 0,
-      "attempts": 3,
+      "attempts": 2,
       "status": 0,
       "quiz": 1
     }
@@ -176,6 +183,49 @@
       "attempts": 3,
       "status": 0,
       "quiz": 4
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 7,
+    "fields": {
+      "title": "Sp\u00f8rsm\u00e5l 1 - Hva heter skolen v\u00e5r?",
+      "description": "",
+      "type": "TEXT",
+      "order": 0,
+      "attempts": 2,
+      "status": 0,
+      "quiz": 2
+    }
+  },
+  {
+    "model": "quiz.resource",
+    "pk": 1,
+    "fields": {
+      "title": "PU - Viktig info",
+      "description": "",
+      "url": "http://google.no",
+      "question": 1
+    }
+  },
+  {
+    "model": "quiz.resource",
+    "pk": 2,
+    "fields": {
+      "title": "VG er viktig!",
+      "description": "",
+      "url": "http://vg.no",
+      "question": 2
+    }
+  },
+  {
+    "model": "quiz.resource",
+    "pk": 3,
+    "fields": {
+      "title": "Informasjon om NTNU",
+      "description": "",
+      "url": "http://ntnu.no",
+      "question": 7
     }
   },
   {
@@ -275,6 +325,14 @@
     }
   },
   {
+    "model": "quiz.text",
+    "pk": 3,
+    "fields": {
+      "answer": "NTNU",
+      "question": 7
+    }
+  },
+  {
     "model": "quiz.code",
     "pk": 1,
     "fields": {
@@ -288,7 +346,7 @@
     "pk": 1,
     "fields": {
       "password": "pbkdf2_sha256$30000$v9f5EFnFOEOE$I642AW4OC5R2QqUrQxUoPpTa5nYARWLu0r9/AS8T5yA=",
-      "last_login": "2017-03-02T13:56:16.140Z",
+      "last_login": "2017-03-04T13:14:18.393Z",
       "is_superuser": true,
       "username": "test",
       "first_name": "",

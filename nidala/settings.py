@@ -157,7 +157,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 #Custom constants
-class STATUS_QUESTIONS:
+class STATUS_QUESTION:
     UNANSWERED = 0
     CORRECT = 1
     UNCORRECT = 2
