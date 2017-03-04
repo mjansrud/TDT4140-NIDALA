@@ -1,6 +1,6 @@
-Django==1.10.5
+django==1.10.5
 django-bootstrap3==8.1.0
 django-post-office==2.0.8
+django-ckeditor=5.2.1
 coverage==4.3.4
 codecov==2.0.5
-

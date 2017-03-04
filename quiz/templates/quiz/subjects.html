@@ -2,14 +2,18 @@
 
 {% block content %}
     <div class="container-fluid">
-        <h1 class="text-center">Quiz</h1>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="text-center title-padding"><h1 class="title ">V</h1><h1 class="sub-title">elg fag</h1></div>
+            </div>
+        </div>
         <div class="container">
             <div class="row">
                 <div class="col-xs-12 col-md-8 col-md-offset-2">
                     <ul class="list-group">
                         {% for subject in subjects %}
                             <a href="{% url 'quizList' subject.code %}" class="list-group-item">
-                                {{ subject.code }} {{ subject.title }}
+                            {{ subject.code }} {{ subject.title }}
                             </a>
                         {% endfor %}
                     </ul>

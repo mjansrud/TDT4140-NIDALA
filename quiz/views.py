@@ -2,40 +2,41 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.db.models import Q
-from django import template
-register = template.Library()
-
-
 from .models import *
 
+#URL functions
 @login_required
 def quizList(request, subject_id):
 
     subject = Subject.objects.get(code=subject_id)
-    quizes = Quiz.objects.distinct().filter(subject=subject, questions__isnull  = False)
+    quizes = Quiz.objects.distinct().filter(Q(subject=subject) & Q(quizQuestions__isnull  = False) & (Q(quizQuestions__questionBoxes__isnull=False) | Q(quizQuestions__questionTexts__isnull=False) | Q(quizQuestions__questionCodes__isnull=False)))
+    questions = Question.objects.distinct().filter(quiz__in=quizes)
+    resources = Resource.objects.distinct().filter(question__in=questions)
     attempts = Attempt.objects.filter(user=request.user)
 
     context = {
         'subject': subject,
         'quizes': quizes,
-        'attempts': attempts
+        'attempts': attempts,
+        'questions': questions,
+        'resources': resources,
     }
 
     return render(request, 'quiz/quizList.html', context)
 
 
 @login_required
-def quizFindQuestion(request, quiz_hash, quiz_attempt):
+def quizFindQuestion(request, quiz_hash, attempt_hash):
 
     quiz = Quiz.objects.filter(hash=quiz_hash)
-    attempt = Attempt.objects.filter(hash=quiz_attempt)
+    attempt = Attempt.objects.filter(hash=attempt_hash)
     question = Question.objects.filter(quiz=quiz).order_by('order').first()
     answers = Answer.objects.filter(attempt=attempt, user=request.user)
 
     if(answers.count() > 0):
-        return redirect('quiz', quiz_hash, quiz_attempt, answers.last().question.id)
+        return redirect('quiz', quiz_hash, attempt_hash, answers.last().question.id)
 
-    return redirect('quiz', quiz_hash, quiz_attempt, question.id)
+    return redirect('quiz', quiz_hash, attempt_hash, question.id)
 
 
 @login_required
@@ -58,13 +59,15 @@ def quizRequestAttempt(request, quiz_hash):
 
 
 @login_required
-def quiz(request, quiz_hash, quiz_attempt, quiz_question):
+def quiz(request, quiz_hash, attempt_hash, quiz_question):
 
     #Fetch from database
     quiz = Quiz.objects.get(hash=quiz_hash)
     question = Question.objects.get(id=quiz_question)
-    questions = Question.objects.distinct().filter(Q(quiz=quiz) & (Q(boxes__isnull = False) | Q(text__isnull = False) | Q(code__isnull = False)))
-    attempt = Attempt.objects.get(quiz=quiz, hash=quiz_attempt, user=request.user)
+    questions = Question.objects.distinct().filter(Q(quiz=quiz) & (Q(questionBoxes__isnull = False) | Q(questionTexts__isnull = False) | Q(questionCodes__isnull = False)))
+    attempt = Attempt.objects.get(quiz=quiz, hash=attempt_hash, user=request.user)
+    user_quiz_answers = Answer.objects.filter(attempt=attempt, question__in=questions, user=request.user)
+    resources = Resource.objects.filter(question=question)
 
     #For each question
     alternative_boxes = Select.objects.filter(question=question.id)
@@ -75,10 +78,13 @@ def quiz(request, quiz_hash, quiz_attempt, quiz_question):
         'quiz': quiz,
         'question': question,
         'questions': questions,
+        'resources': resources,
         'attempt': attempt,
+        'user_quiz_answers': user_quiz_answers,
         'alternative_boxes': alternative_boxes,
         'alternative_text': alternative_text,
         'alternative_code': alternative_code,
+        'STATUS_QUESTIONS': settings.STATUS_QUESTIONS,
     }
 
     if(request.method == "POST"):
@@ -132,32 +138,19 @@ def quiz(request, quiz_hash, quiz_attempt, quiz_question):
         context['user_current_answer_correct'] = user_current_answer_correct
 
         #Register that the user has answered a question
-        Answer.objects.create(attempt=attempt, question=question, user=request.user, correct=user_current_answer_correct)
-
-    # Get users answers only for this specific quiz
-    user_quiz_answers = Answer.objects.filter(attempt=attempt, question__in=questions, user=request.user)
-
-    # Check which questions the user has answered correct
-    for user_quiz_answer in user_quiz_answers:
-        for temp_question in questions:
-            if user_quiz_answer.question.id == temp_question.id:
-                if user_quiz_answer.correct:
-                    temp_question.status = 1
-                else:
-                    temp_question.status = 2
-
-    context['user_quiz_answers'] = user_quiz_answers
+        if user_quiz_answers.filter(question=question).count() + 1 <= question.attempts:
+            Answer.objects.create(attempt=attempt, question=question, correct=user_current_answer_correct, user=request.user)
 
     return render(request, 'quiz/quiz.html', context)
 
 @login_required
-def quizResult(request, quiz_hash):
+def quizResult(request, quiz_hash, attempt_hash):
     return render(request, 'quiz/quizResult.html')
 
 @login_required
 def subjects(request):
 
-    subjects = Subject.objects.distinct().filter(Q(quizes__isnull  = False) & Q(quizes__questions__isnull = False) & (Q(quizes__questions__boxes__isnull = False) | Q(quizes__questions__text__isnull = False) | Q(quizes__questions__code__isnull = False)))
+    subjects = Subject.objects.distinct().filter(Q(subjectQuizes__isnull  = False) & Q(subjectQuizes__quizQuestions__isnull = False) & (Q(subjectQuizes__quizQuestions__questionBoxes__isnull = False) | Q(subjectQuizes__quizQuestions__questionTexts__isnull = False) | Q(subjectQuizes__quizQuestions__questionCodes__isnull = False)))
 
     context = {
         'subjects': subjects

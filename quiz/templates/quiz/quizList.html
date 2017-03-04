@@ -1,16 +1,25 @@
 {% extends 'nidala/base.html' %}
 
 {% block content %}
+    {% load quizFilters %}
     <div class="col-md-4">
         <ul class="list-group ">
             <div>
                 <h5>{{ subject.code }}</h5>
             </div>
             {% for quiz in quizes %}
-                <a href="{% url 'quizRequestAttempt' quiz.hash %}" class="list-group-item menu new-attempt" data-hash="{{ quiz.hash }}">
+                <a href="{% url 'quizRequestAttempt' quiz.hash %}" class="list-group-item menu new-attempt" data-attempts="{{ quiz.attempts }}" data-hash="{{ quiz.hash }}">
                     {{ quiz.title }}</a>
                 </a>
             {% endfor %}
+        </ul>
+        <ul class="list-group ">
+            <div>
+                <h5>Pensum</h5>
+            </div>
+            <li class="list-group-item menu" data-hash="{{ quiz.hash }}">
+                {{ subject.syllabus|safe }}
+            </li>
         </ul>
     </div>
     <div class="col-md-8">
@@ -22,9 +31,9 @@
                 <div>
                     <h6>{{ quiz.title }} </h6>
                 </div>
-                    <a href="{% url 'quizRequestAttempt' quiz.hash %}" class="list-group-item new-attempt" data-toggle="modal" data-target="#confirm-delete">
-                        Nytt forsøk
-                    </a>
+                <a href="{% url 'quizRequestAttempt' quiz.hash %}" class="list-group-item new-attempt" data-attempts="{{ quiz.attempts }}" data-toggle="modal" data-target="#confirm-delete">
+                    Nytt forsøk
+                </a>
                 {% for attempt in attempts %}
                     {% if attempt.quiz == quiz %}
                         <a href="{% url 'quizFindQuestion' quiz.hash attempt.hash %}" class="list-group-item">
@@ -32,8 +41,25 @@
                         </a>
                     {% endif %}
                 {% endfor %}
+                <div class="resources-padding">
+                    <h5>Ressurser</h5>
+                </div>
+                {% with questions=questions|filterQuestionsByQuiz:quiz %}
+                    {% if resources|filterResourcesCount:questions > 0 %}
+                        {% for resource in resources|filterResourcesByQuiz:questions %}
+                                <a href="{{ resource.url }}" target="_blank" class="list-group-item">
+                                    {{ resource.title }}
+                                </a>
+                        {% endfor %}
+                    {% else %}
+                         <li class="list-group-item">
+                            Ingen ressurser tilgjengelig
+                         </li>
+                    {% endif %}
+                {% endwith %}
             </ul>
         {% endfor %}
+
     </div>
     <div id="confirm" class="modal fade">
         <div class="modal-body">
@@ -57,7 +83,7 @@
             var link = this;
             bootbox.confirm({
                 title: "Nytt forsøk?",
-                message: "Du kan maks ha 3 forsøk pr øving.",
+                message: "Du kan maks ha " + $(link).data("attempts") + " forsøk pr øving.",
                 buttons: {
                     cancel: {
                         label: '<i class="fa fa-times"></i> Avbryt'
