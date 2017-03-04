@@ -3,7 +3,7 @@ from django.conf import settings
 register = template.Library()
 
 #Constants
-STATUS_QUESTIONS = settings.STATUS_QUESTIONS;
+STATUS_QUESTION = settings.STATUS_QUESTION;
 STATUS_ATTEMPT = settings.STATUS_ATTEMPT;
 
 #custom filters
@@ -20,22 +20,37 @@ def filterResourcesByQuiz(resources, questions):
     return resources.filter(question__in=questions);
 
 @register.filter
+def filterAttemptsByQuizCount(attempts, quiz):
+    return attempts.filter(quiz=quiz).count();
+
+@register.filter
+def filterAttemptsHasPassedQuiz(attempts, quiz):
+
+    passed = False
+    attempts = attempts.filter(quiz=quiz)
+
+    for attempt in attempts:
+        if attempt.status == STATUS_ATTEMPT.PASSED:
+            passed = True
+
+    return passed;
+
+@register.filter
 def filterResourcesCount(resources, questions):
     return resources.filter(question__in=questions).count();
-
 
 @register.filter
 def filterAnswersGetStatus(answers, question):
 
-    STATUS = STATUS_QUESTIONS.UNANSWERED
+    STATUS = STATUS_QUESTION.UNANSWERED
 
     # Check which questions the user has answered correct
     for answer in answers:
             if answer.question == question:
                 if answer.correct:
-                    return STATUS_QUESTIONS.CORRECT
+                    return STATUS_QUESTION.CORRECT
                 else:
-                    STATUS = STATUS_QUESTIONS.UNCORRECT
+                    STATUS = STATUS_QUESTION.UNCORRECT
     return STATUS
 
 @register.filter

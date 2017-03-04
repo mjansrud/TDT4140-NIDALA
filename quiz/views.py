@@ -4,6 +4,10 @@ from django.http import HttpResponseRedirect
 from django.db.models import Q
 from .models import *
 
+#Constants
+STATUS_QUESTION = settings.STATUS_QUESTION;
+STATUS_ATTEMPT = settings.STATUS_ATTEMPT;
+
 #URL functions
 @login_required
 def quizList(request, subject_id):
@@ -20,6 +24,7 @@ def quizList(request, subject_id):
         'attempts': attempts,
         'questions': questions,
         'resources': resources,
+        'STATUS_ATTEMPT': STATUS_ATTEMPT,
     }
 
     return render(request, 'quiz/quizList.html', context)
@@ -84,7 +89,7 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
         'alternative_boxes': alternative_boxes,
         'alternative_text': alternative_text,
         'alternative_code': alternative_code,
-        'STATUS_QUESTIONS': settings.STATUS_QUESTIONS,
+        'STATUS_QUESTION': STATUS_QUESTION,
     }
 
     if(request.method == "POST"):
@@ -145,7 +150,56 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
 
 @login_required
 def quizResult(request, quiz_hash, attempt_hash):
-    return render(request, 'quiz/quizResult.html')
+
+    quiz = Quiz.objects.filter(hash=quiz_hash).first()
+    attempt = Attempt.objects.filter(hash=attempt_hash).first()
+    questions = Question.objects.filter(quiz=quiz)
+    answers = Answer.objects.filter(attempt=attempt, user=request.user)
+    resources = Resource.objects.distinct().filter(question__in=questions)
+
+    correct = 0;
+    for question in questions:
+        for answer in answers:
+            if question == answer.question:
+                if answer.correct:
+                    correct = correct + 1
+
+    correct_percent = round(correct/len(questions) * 100,1);
+
+    #Add a grade to the students attempt
+    grade = 'F';
+    if correct_percent >= 88:
+        grade = 'A';
+    elif correct_percent >= 76:
+        grade = 'B';
+    elif correct_percent >= 64:
+        grade = 'C';
+    elif correct_percent >= 52:
+        grade = 'D';
+    elif correct_percent > quiz.pass_percent:
+        grade = 'E';
+
+    #Update the database
+    if(grade != 'F'):
+        attempt.status = STATUS_ATTEMPT.PASSED
+    else:
+        attempt.status = STATUS_ATTEMPT.FAILED
+    attempt.save()
+
+    context = {
+        'quiz': quiz,
+        'questions': questions,
+        'attempt': attempt,
+        'answers': answers,
+        'resources': resources,
+        'correct': correct,
+        'correct_percent': correct_percent,
+        'grade': grade,
+        'STATUS_QUESTION': STATUS_QUESTION,
+    }
+
+
+    return render(request, 'quiz/quizResult.html', context)
 
 @login_required
 def subjects(request):

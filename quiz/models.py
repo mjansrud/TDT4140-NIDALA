@@ -5,7 +5,7 @@ from ckeditor.fields import RichTextField
 from uuid import uuid4
 
 #Constants
-STATUS_QUESTIONS = settings.STATUS_QUESTIONS;
+STATUS_QUESTION = settings.STATUS_QUESTION;
 STATUS_ATTEMPT = settings.STATUS_ATTEMPT;
 
 # Creates unique URLS
@@ -92,7 +92,7 @@ class Question(models.Model):
     attempts = models.IntegerField(default=3)
 
     #Used just for displaying which questions the user has correct
-    status = models.IntegerField(default=STATUS_QUESTIONS.UNANSWERED, editable=False)
+    status = models.IntegerField(default=STATUS_QUESTION.UNANSWERED, editable=False)
 
     # Foreign relations
     quiz = models.ForeignKey(Quiz, related_name='quizQuestions')
