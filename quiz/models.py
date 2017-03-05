@@ -75,7 +75,9 @@ class Question(models.Model):
         verbose_name="Title",
         max_length=60)
 
-    description = RichTextField()
+    description = RichTextField(
+        blank=True,
+        null=True)
 
     TYPE_CHOICES = (
         ("CHECKBOX", "Checkbox"),
@@ -176,10 +178,6 @@ class Text(models.Model):
 
 class Code(models.Model):
 
-    answer = models.CharField(
-        verbose_name="Answer",
-        max_length=1000)
-
     LANGUAGE_CHOICES = (
         ("JAVASCRIPT", "Javascript"),
         ("JAVA", "Java"),
@@ -189,6 +187,30 @@ class Code(models.Model):
     language = models.CharField(max_length=9,
                                 choices=LANGUAGE_CHOICES,
                                 default="JAVASCRIPT")
+
+    input_usable = models.CharField(
+        max_length=3000,
+        blank=True,
+        null=True)
+
+    input_shown = models.CharField(
+        max_length=3000,
+        blank=True,
+        null=True)
+
+    start_code = models.CharField(
+        max_length=3000,
+        blank=True,
+        null=True)
+
+    solution = models.CharField(
+        max_length=3000,
+        blank=True,
+        null=True)
+
+    answer = models.CharField(
+        verbose_name="Answer",
+        max_length=1000)
 
     # Foreign relationss
     question = models.ForeignKey(Question, related_name='questionCodes', unique=True)
