@@ -12,6 +12,11 @@
     border-radius: 5px !important;
 }
 
+#output, #input{
+    min-height:200px;
+    border-radius: 5px !important;
+}
+
 .description{
     padding:18px;
 }

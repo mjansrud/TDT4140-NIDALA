@@ -4,5 +4,5 @@ django-post-office==2.0.8
 django-ckeditor=5.2.1
 coverage==4.3.4
 codecov==2.0.5
+django-ace==1.0.2
 psycopg2==2.6.2
-django_wysiwyg=0.8.0

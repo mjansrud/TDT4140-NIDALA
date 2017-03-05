@@ -74,11 +74,6 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
     user_quiz_answers = Answer.objects.filter(attempt=attempt, question__in=questions, user=request.user)
     resources = Resource.objects.filter(question=question)
 
-    #For each question
-    alternative_boxes = Select.objects.filter(question=question.id)
-    alternative_text = Text.objects.filter(question=question.id)
-    alternative_code = Code.objects.filter(question=question.id)
-
     context = {
         'quiz': quiz,
         'question': question,
@@ -86,11 +81,19 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
         'resources': resources,
         'attempt': attempt,
         'user_quiz_answers': user_quiz_answers,
-        'alternative_boxes': alternative_boxes,
-        'alternative_text': alternative_text,
-        'alternative_code': alternative_code,
         'STATUS_QUESTION': STATUS_QUESTION,
     }
+
+    #For each question
+    if question.type == 'CHECKBOX' or question.type == 'RADIOBOX':
+        alternative_boxes = Select.objects.filter(question=question.id)
+        context['alternative_boxes'] = alternative_boxes
+    elif question.type == 'TEXT':
+        alternative_text = Text.objects.filter(question=question.id).first()
+        context['alternative_text'] = alternative_text
+    elif question.type == 'CODE':
+        alternative_code = Code.objects.filter(question=question.id).first()
+        context['alternative_code'] = alternative_code
 
     if(request.method == "POST"):
 
@@ -126,7 +129,7 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
             if (len(user_current_answers) == 0):
                 user_current_answer_correct = False
             else:
-                if alternative_text.first().answer != user_current_answers[0]:
+                if alternative_text.answer != user_current_answers[0]:
                     user_current_answer_correct = False
 
         if question.type == 'CODE':
@@ -134,7 +137,7 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
             if (len(user_current_answers) == 0):
                 user_current_answer_correct = False
             else:
-                if alternative_code.first().answer != user_current_answers[0]:
+                if alternative_code.answer != user_current_answers[0]:
                     user_current_answer_correct = False
 
         #Attach new variables

@@ -124,7 +124,7 @@
     "model": "quiz.question",
     "pk": 2,
     "fields": {
-      "title": "Sp\u00f8rsm\u00e5l 2 - Skriv en for-l\u00f8kke i python",
+      "title": "Sp\u00f8rsm\u00e5l 2 - Finn det st\u00f8rste tallet",
       "description": "",
       "type": "CODE",
       "order": 0,
@@ -336,8 +336,12 @@
     "model": "quiz.code",
     "pk": 1,
     "fields": {
-      "answer": "for x in range(0, 3):",
       "language": "PYTHON",
+      "input_usable": "numbers = [0, 5, 10, 15, 9]",
+      "input_shown": "numbers = [0, 5, ......, X]",
+      "start_code": "biggest = 0\r\nfor x in numbers:\r\n    #Run your code here\r\n    #Woho\r\n        \r\nprint(\"%d\" % (biggest))",
+      "solution": "biggest = 0\r\nfor x in numbers:\r\n    if biggest < x:\r\n        biggest = x\r\n        \r\nprint(\"%d\" % (biggest))",
+      "answer": "15",
       "question": 2
     }
   },
@@ -346,7 +350,7 @@
     "pk": 1,
     "fields": {
       "password": "pbkdf2_sha256$30000$v9f5EFnFOEOE$I642AW4OC5R2QqUrQxUoPpTa5nYARWLu0r9/AS8T5yA=",
-      "last_login": "2017-03-04T13:14:18.393Z",
+      "last_login": "2017-03-04T21:17:38.900Z",
       "is_superuser": true,
       "username": "test",
       "first_name": "",
