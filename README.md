@@ -53,4 +53,4 @@ This command will run a local server that comes with Django. Be deafult the webs
 * Pekka <br />
 
 ##Furhter reading
-We have a wiki. Should you have any further questions check our [wiki](https://github.com/mjansrud/TDT4140-NIDALA/wiki/)
+We will soon™ have a wiki. Should you have any further questions check our [wiki](https://github.com/mjansrud/TDT4140-NIDALA/wiki/)
