@@ -292,7 +292,3 @@ class Answer(models.Model):
 
     def __str__(self):
         return str(self.user.username + ' : ' + str(self.question.quiz.subject.code) + ' -> ' + str(self.question.quiz.title) + ' -> ' + str(self.question.title) + ' -> Forsøk '+ str(self.attempt.hash) + ' -> Resultat ' + str(self.correct))
-
-
-
-
