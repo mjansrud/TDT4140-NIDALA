@@ -1,3 +1,5 @@
+from django.core.urlresolvers import reverse
+from django.test import Client
 from django.test import TestCase
 
 from usermanagement.models import *
@@ -51,3 +53,246 @@ class UserTokenTestCase(TestCase):
         # Checks that the expired UserToken does not exist after deletion
         with self.assertRaises(UserToken.DoesNotExist):
             UserToken.objects.get(key=self.expired_token.key)
+
+
+class LoginViewAndLogoutViewTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create(username='test', email='test@test.test')
+        self.password = 'Test1234'
+        self.user.set_password(self.password)
+        self.user.save()
+        self.url = reverse('user:login')
+        self.payload = {
+            'email': self.user.email,
+            'password': self.password,
+        }
+        self.client = Client()
+
+    def test_login_succesful(self):
+        self.client.get(self.url)
+        response = self.client.post(self.url, self.payload)
+        self.assertRedirects(response, reverse('index'))
+
+    def test_login_while_already_logged_in(self):
+        self.client.post(self.url, self.payload)
+        response = self.client.post(self.url, self.payload)
+        self.assertEqual(response.status_code, 404, 'Should get 404 when trying to login while already logged in')
+
+    def test_login_with_next_paramenter(self):
+        self.client.logout()
+        payload = self.payload
+        payload['next'] = reverse('index')
+        response = self.client.post(self.url, payload)
+        self.assertRedirects(response, reverse('index'))
+
+    def test_login_with_not_existing_user(self):
+        self.client.logout()
+        payload = self.payload
+        payload['email'] = 'notExistingEmail@test.test'
+        response = self.client.post(self.url, payload)
+        self.assertIsNotNone(response.context['errors'])
+
+    def test_login_with_inactive_user(self):
+        self.user.is_active = False
+        self.user.save()
+        response = self.client.post(self.url, self.payload)
+        self.assertIsNotNone(response.context['errors'])
+        self.user.is_active = True
+        self.user.save()
+
+    def test_login_with_wrong_password(self):
+        payload = self.payload
+        payload['password'] = 'WrongPassword123'
+        response = self.client.post(self.url, self.payload)
+        self.assertIsNotNone(response.context['errors'])
+
+    def test_logout(self):
+        response = self.client.post(reverse('user:logout'))
+        self.assertRedirects(response, reverse('index'))
+
+
+class SignupUserViewTestCase(TestCase):
+    fixtures = ['test_fixtures.json', ]
+
+    def setUp(self):
+        self.username = 'test'
+        self.email = 'test@test.test'
+        self.password = 'Test1234'
+        self.url = reverse('user:signup')
+        self.payload = {
+            'first_name': 'test',
+            'last_name': 'test',
+            'email': self.email,
+            'password': self.password,
+            'confirm_password': self.password
+        }
+        self.client = Client()
+
+    def test_successful_signup(self):
+        self.client.get(self.url)
+        response = self.client.post(self.url, self.payload)
+        self.assertRedirects(response, reverse('index'))
+
+    def test_signup_with_existing_email(self):
+        self.client.post(self.url, self.payload)
+        response = self.client.post(self.url, self.payload)
+        self.assertIsNotNone(response.context['errors'])
+
+    def test_signup_with_non_matching_passwords(self):
+        payload = self.payload
+        payload['confirm_password'] = self.password + "someMore"
+        response = self.client.post(self.url, payload)
+        self.assertIsNotNone(response.context['errors'])
+
+    def test_signup_with_invalid_password(self):
+        payload = self.payload
+        payload['password'] = "passwordWithoutNumber"
+        response = self.client.post(self.url, payload)
+        self.assertIsNotNone(response.context['errors'])
+
+
+class ForgotPasswordViewTestCase(TestCase):
+    fixtures = ['test_fixtures.json', ]
+
+    def setUp(self):
+        self.user = User.objects.create(username='test', email="test@test.test")
+        self.user.set_password("Test1234")
+        self.user.save()
+        self.url = reverse('user:forgot-password')
+        self.payload = {
+            'email': self.user.email,
+        }
+        self.client = Client()
+
+    def test_forgot_password_successful(self):
+        self.client.get(self.url)
+        response = self.client.post(self.url, self.payload)
+        self.assertRedirects(response, reverse('index'))
+
+    def test_forgot_password_on_inactive_user(self):
+        self.user.is_active = False
+        self.user.save()
+        response = self.client.post(self.url, self.payload)
+        self.assertRedirects(response, reverse('index'))
+        self.user.is_active = True
+        self.user.save()
+
+    def test_forgot_password_with_non_existing_email(self):
+        payload = self.payload
+        payload['email'] = "nonExistingEmail@test.test"
+        response = self.client.post(self.url, payload)
+        self.assertIsNotNone(response.context['errors'])
+
+
+class ChangePasswordViewTestCase(TestCase):
+    def setUp(self):
+        self.username = 'test'
+        self.user = User.objects.create(username=self.username,
+                                        email='test@test.test')
+        self.password = 'test'
+        self.new_password = 'Test1234'
+        self.user.set_password(self.password)
+        self.user.save()
+        self.url = reverse('user:change-password')
+        self.payload = {
+            'current_password' : self.password,
+            'new_password' : self.new_password,
+            'confirm_password': self.new_password,
+        }
+
+        self.client = Client()
+
+
+    def test_change_password_without_authentication(self):
+        response = self.client.post(self.url)
+        self.assertEqual(response.status_code, 404, 'Should get 404 when trying to change password without being logged in')
+
+    def test_change_password_successful(self):
+        self.client.login(username=self.username, password=self.password)
+        self.client.get(self.url)
+        response = self.client.post(self.url, self.payload)
+        self.assertRedirects(response, reverse('index'))
+
+    def test_change_password_with_wrong_existing_password(self):
+        self.client.login(username=self.username, password=self.password)
+        payload = self.payload
+        payload['current_password'] = 'wrong_password123'
+        response = self.client.post(self.url, payload)
+        self.assertIsNotNone(response.context['errors'])
+
+    def test_change_password_with_non_matching_passwords(self):
+        self.client.login(username=self.username, password=self.password)
+        payload = self.payload
+        payload['confirm_password'] = 'wrong_password123'
+        response = self.client.post(self.url, payload)
+        self.assertIsNotNone(response.context['errors'])
+
+    def test_change_password_with_invalid_password(self):
+        self.client.login(username=self.username, password=self.password)
+        payload = self.payload
+        payload['new_password'] = 'wrong'
+        payload['confirm_password'] = 'wrong'
+        response = self.client.post(self.url, payload)
+        self.assertIsNotNone(response.context['errors'])
+
+
+class SetPasswordViewTestCase(TestCase):
+    def setUp(self):
+        self.username = 'test'
+        self.user = User.objects.create(username=self.username,
+                                        email='test@test.test')
+        self.password = 'test'
+        self.new_password = 'Test1234'
+        self.url = reverse('user:set-password', args=[UserToken.objects.create(user=self.user).key])
+        self.user.set_password(self.password)
+        self.user.save()
+        self.payload = {
+            'new_password': self.new_password,
+            'confirm_password': self.new_password,
+        }
+
+        self.client = Client()
+
+    def test_set_password_without_token(self):
+        invalid_url = reverse('user:set-password', args=["12345678123456781234567812345678"])  # Token as argument
+        response = self.client.post(invalid_url)
+        self.assertEqual(response.status_code, 404,
+                         'Should get 404 when trying to set password without valid token')
+
+    def test_set_password_successful(self):
+        self.client.get(self.url)
+        response = self.client.post(self.url, self.payload)
+        self.assertRedirects(response, reverse('index'))
+
+    def test_set_invalid_password(self):
+        payload = self.payload
+        payload['new_password'] = 'wrong'
+        response = self.client.post(self.url, payload)
+        self.assertIsNotNone(response.context['errors'])
+
+class ActivateUserTestCase(TestCase):
+    def setUp(self):
+        self.username = 'test'
+        self.user = User.objects.create(username=self.username,
+                                        email='test@test.test')
+        self.url = reverse('user:activate', args=[UserToken.objects.create(user=self.user).key])
+        self.client = Client()
+
+    def test_activation_without_valid_token(self):
+        invalid_url = reverse('user:activate', args=["12345678123456781234567812345678"])
+        response = self.client.post(invalid_url)
+        self.assertEqual(response.status_code, 404,
+                         'Should get 404 when trying to activate without valid token')
+
+    def test_valid_activation(self):
+        response = self.client.post(self.url)
+        self.assertRedirects(response, reverse('index'))
+
+
+
+
+
+
+
+
+
