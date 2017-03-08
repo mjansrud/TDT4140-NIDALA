@@ -40,13 +40,13 @@
                     {% if attempt.quiz == quiz %}
                         {% if attempt.status == STATUS_ATTEMPT.PASSED or attempt.status == STATUS_ATTEMPT.FAILED %}
                             {% if attempt.status == STATUS_ATTEMPT.PASSED %}
-                                <li class="list-group-item correct">
+                                <a href="{% url 'quizResult' quiz.hash attempt.hash %}" class="list-group-item correct">
                                     Du besto forsøk {{ attempt.hash }}
-                                </li>
+                                </a>
                             {% elif attempt.status == STATUS_ATTEMPT.FAILED %}
-                                <li class="list-group-item uncorrect ">
+                                <a href="{% url 'quizResult' quiz.hash attempt.hash %}" class="list-group-item uncorrect ">
                                     Du besto ikke forsøk {{ attempt.hash }}
-                                </li>
+                                </a>
                             {% endif %}
                         {% else %}
                             <a href="{% url 'quizFindQuestion' quiz.hash attempt.hash %}" class="list-group-item">
