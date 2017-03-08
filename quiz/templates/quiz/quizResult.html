@@ -64,7 +64,7 @@
         <div class="col-md-12" style="padding-bottom: 8px">
             <ul class="list-group">
                 {% for question in questions %}
-                    <li href="{% url 'quiz' quiz.hash attempt.hash question.id %}" class="list-group-item {% if answers|filterAnswersGetStatus:question == STATUS_QUESTION.CORRECT %} correct {% endif %} {% if answers|filterAnswersGetStatus:question == STATUS_QUESTION.UNCORRECT %} uncorrect {% endif %}">
+                    <li href="{% url 'quiz' quiz.hash attempt.hash question.id %}" class="list-group-item {% if question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %} correct {% endif %} {% if question|filterQuestionStatus:attempt == STATUS_QUESTION.UNCORRECT %} uncorrect {% endif %}">
                         {{ question.title }}
                     </li>
                 {% endfor %}

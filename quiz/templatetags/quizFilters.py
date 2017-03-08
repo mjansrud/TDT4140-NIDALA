@@ -1,5 +1,6 @@
 from django import template
 from django.conf import settings
+from quiz.models import Answer
 register = template.Library()
 
 #Constants
@@ -24,6 +25,10 @@ def filterAttemptsByQuizCount(attempts, quiz):
     return attempts.filter(quiz=quiz).count();
 
 @register.filter
+def filterAnswersByQuiz(answers, quiz):
+    return answers.filter(attempt__quiz=quiz);
+
+@register.filter
 def filterAttemptsHasPassedQuiz(attempts, quiz):
 
     passed = False
@@ -33,25 +38,28 @@ def filterAttemptsHasPassedQuiz(attempts, quiz):
         if attempt.status == STATUS_ATTEMPT.PASSED:
             passed = True
 
-    return passed;
+    return passed
+
+@register.filter
+def filterQuestionsByAnswers(questions, answers):
+
+    #answers = Answer.objects.filter(question__in=questions, user=request.user)
+
+    for question in questions:
+        for answer in answers:
+            if answer.attempt.quiz != question.quiz and answer.question == question and answer.correct:
+                questions = questions.exclude(id=question.id)
+
+    return questions
 
 @register.filter
 def filterResourcesCount(resources, questions):
     return resources.filter(question__in=questions).count();
 
+
 @register.filter
-def filterAnswersGetStatus(answers, question):
-
-    STATUS = STATUS_QUESTION.UNANSWERED
-
-    # Check which questions the user has answered correct
-    for answer in answers:
-            if answer.question == question:
-                if answer.correct:
-                    return STATUS_QUESTION.CORRECT
-                else:
-                    STATUS = STATUS_QUESTION.UNCORRECT
-    return STATUS
+def filterQuestionStatus(question, attempt):
+    return question.userAnsweredCorrectly(attempt)
 
 @register.filter
 def filterQuestionsFetchNext(questions, question):

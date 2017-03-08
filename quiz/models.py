@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from ckeditor.fields import RichTextField
 from uuid import uuid4
+from django.db.models import Q
 
 #Constants
 STATUS_QUESTION = settings.STATUS_QUESTION;
@@ -55,11 +56,24 @@ class Quiz(models.Model):
         blank=True,
         null=True)
 
+    exercise_number = models.IntegerField(default=1)
     attempts = models.IntegerField(default=3)
     pass_percent = models.IntegerField(default=40)
 
     #Foreign relations
     subject = models.ForeignKey(Subject, related_name='subjectQuizes')
+
+
+    def getRelevantQuestions(self, user, attempt):
+
+        questions = Question.objects.filter(quiz=self)
+        quizes = Quiz.objects.filter(subject=self.subject, exercise_number__lt=self.exercise_number)
+        earlier_questions = Question.objects.filter(quiz__in=quizes)
+        earlier_questions = earlier_questions.exclude(Q(questionAnswers__correct=True) & ~Q(questionAnswers__attempt = attempt))
+        questions = questions | earlier_questions
+        questions = questions.distinct().filter(Q(questionBoxes__isnull=False) | Q(questionTexts__isnull=False) | Q(questionCodes__isnull=False))
+
+        return questions
 
     class Meta:
         verbose_name = "Quiz"
@@ -69,6 +83,7 @@ class Quiz(models.Model):
         return self.title
 
 class Question(models.Model):
+
 
     #Internal information
     title = models.CharField(
@@ -98,6 +113,18 @@ class Question(models.Model):
 
     # Foreign relations
     quiz = models.ForeignKey(Quiz, related_name='quizQuestions')
+
+    def userAnsweredCorrectly(self, attempt):
+
+        STATUS = STATUS_QUESTION.UNANSWERED
+
+        # Check which questions the user has answered correct
+        if (Answer.objects.filter(question=self, correct=True, user=attempt.user, attempt=attempt).count()):
+            STATUS = STATUS_QUESTION.CORRECT
+        elif(Answer.objects.filter(question=self, correct=False, user=attempt.user, attempt=attempt).count()):
+            STATUS = STATUS_QUESTION.UNCORRECT
+
+        return STATUS
 
     class Meta:
         verbose_name = "Question"

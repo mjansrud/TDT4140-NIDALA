@@ -68,19 +68,21 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
 
     #Fetch from database
     quiz = Quiz.objects.get(hash=quiz_hash)
+    quizes = Quiz.objects.filter(subject=quiz.subject, exercise_number__lte=quiz.exercise_number)
     question = Question.objects.get(id=quiz_question)
-    questions = Question.objects.distinct().filter(Q(quiz=quiz) & (Q(questionBoxes__isnull = False) | Q(questionTexts__isnull = False) | Q(questionCodes__isnull = False)))
     attempt = Attempt.objects.get(quiz=quiz, hash=attempt_hash, user=request.user)
-    user_quiz_answers = Answer.objects.filter(attempt=attempt, question__in=questions, user=request.user)
+    questions = quiz.getRelevantQuestions(request.user, attempt)
+    answers = Answer.objects.filter(question__in=questions, user=request.user)
     resources = Resource.objects.filter(question=question)
 
     context = {
         'quiz': quiz,
+        'quizes': quizes,
         'question': question,
         'questions': questions,
         'resources': resources,
         'attempt': attempt,
-        'user_quiz_answers': user_quiz_answers,
+        'answers': answers,
         'STATUS_QUESTION': STATUS_QUESTION,
     }
 
@@ -146,7 +148,7 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
         context['user_current_answer_correct'] = user_current_answer_correct
 
         #Register that the user has answered a question
-        if user_quiz_answers.filter(question=question).count() + 1 <= question.attempts:
+        if answers.filter(question=question).count() + 1 <= question.attempts:
             Answer.objects.create(attempt=attempt, question=question, correct=user_current_answer_correct, user=request.user)
 
     return render(request, 'quiz/quiz.html', context)
@@ -154,13 +156,16 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
 @login_required
 def quizResult(request, quiz_hash, attempt_hash):
 
-    quiz = Quiz.objects.filter(hash=quiz_hash).first()
-    attempt = Attempt.objects.filter(hash=attempt_hash).first()
-    questions = Question.objects.filter(quiz=quiz)
-    answers = Answer.objects.filter(attempt=attempt, user=request.user)
+
+    #Fetch from database
+    quiz = Quiz.objects.get(hash=quiz_hash)
+    quizes = Quiz.objects.filter(subject=quiz.subject, exercise_number__lte=quiz.exercise_number)
+    attempt = Attempt.objects.get(hash=attempt_hash)
+    questions = quiz.getRelevantQuestions(request.user,attempt)
+    answers = Answer.objects.filter(question__in=questions, attempt=attempt, user=request.user)
     resources = Resource.objects.distinct().filter(question__in=questions)
 
-    correct = 0;
+    correct = 0
     for question in questions:
         for answer in answers:
             if question == answer.question:
