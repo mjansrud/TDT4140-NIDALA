@@ -1,3 +1,4 @@
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
@@ -75,6 +76,9 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
     answers = Answer.objects.filter(question__in=questions, user=request.user)
     resources = Resource.objects.filter(question=question)
 
+    if(attempt.status != STATUS_ATTEMPT.STARTED):
+        return redirect('quizResult', quiz_hash, attempt_hash)
+
     context = {
         'quiz': quiz,
         'quizes': quizes,
@@ -91,10 +95,10 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
         alternative_boxes = Select.objects.filter(question=question.id)
         context['alternative_boxes'] = alternative_boxes
     elif question.type == 'TEXT':
-        alternative_text = Text.objects.filter(question=question.id).first()
+        alternative_text = Text.objects.get(question=question.id)
         context['alternative_text'] = alternative_text
     elif question.type == 'CODE':
-        alternative_code = Code.objects.filter(question=question.id).first()
+        alternative_code = Code.objects.get(question=question.id)
         context['alternative_code'] = alternative_code
 
     if(request.method == "POST"):
