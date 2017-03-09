@@ -97,7 +97,7 @@ else:
             'NAME': 'nidala_main',
             'USER': 'nidala_user',
             'PASSWORD': os.environ.get('SERVER_PASSWORD', ''),
-            'HOST': '87.76.28.159',
+            'HOST': 'localhost',
             'PORT': '',  # Set to empty string for default.
         }
     }
