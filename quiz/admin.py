@@ -1,8 +1,9 @@
+from django import forms
 from django.contrib import admin
+from django_ace import AceWidget
+
 from .models import *
 
-from django import forms
-from django_ace import AceWidget
 
 class EditorForm(forms.ModelForm):
     input_usable = forms.CharField(widget=AceWidget(width="1000px", height="50px", mode='python'))
@@ -10,8 +11,10 @@ class EditorForm(forms.ModelForm):
     start_code = forms.CharField(widget=AceWidget(width="1000px", mode='python'))
     solution = forms.CharField(widget=AceWidget(width="1000px", mode='python'))
 
+
 class EditorFormAdmin(admin.ModelAdmin):
     form = EditorForm
+
 
 # Register your models here.
 admin.site.register(Subject)

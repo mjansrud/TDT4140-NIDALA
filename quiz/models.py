@@ -1,21 +1,23 @@
-from django.db import models
-from django.contrib.auth.models import User
-from django.conf import settings
-from ckeditor.fields import RichTextField
 from uuid import uuid4
+
+from ckeditor.fields import RichTextField
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.db import models
 from django.db.models import Q
 
-#Constants
-STATUS_QUESTION = settings.STATUS_QUESTION;
-STATUS_ATTEMPT = settings.STATUS_ATTEMPT;
+# Constants
+STATUS_QUESTION = settings.STATUS_QUESTION
+STATUS_ATTEMPT = settings.STATUS_ATTEMPT
+
 
 # Creates unique URLS
 def hash_generate():
     return uuid4().hex[:10]
 
+
 # Subjects like TDT
 class Subject(models.Model):
-
     code = models.CharField(
         verbose_name="Subject",
         max_length=7,
@@ -36,9 +38,9 @@ class Subject(models.Model):
     def __str__(self):
         return self.code + ' - ' + self.title
 
-class Quiz(models.Model):
 
-    #Internal information
+class Quiz(models.Model):
+    # Internal information
     hash = models.CharField(
         verbose_name="Hash",
         max_length=8,
@@ -60,18 +62,18 @@ class Quiz(models.Model):
     attempts = models.IntegerField(default=3)
     pass_percent = models.IntegerField(default=40)
 
-    #Foreign relations
+    # Foreign relations
     subject = models.ForeignKey(Subject, related_name='subjectQuizes')
 
-
     def getRelevantQuestions(self, user, attempt):
-
         questions = Question.objects.filter(quiz=self)
         quizes = Quiz.objects.filter(subject=self.subject, exercise_number__lt=self.exercise_number)
         earlier_questions = Question.objects.filter(quiz__in=quizes)
-        earlier_questions = earlier_questions.exclude(Q(questionAnswers__correct=True) & ~Q(questionAnswers__attempt = attempt))
+        earlier_questions = earlier_questions.exclude(
+            Q(questionAnswers__correct=True) & ~Q(questionAnswers__attempt=attempt))
         questions = questions | earlier_questions
-        questions = questions.distinct().filter(Q(questionBoxes__isnull=False) | Q(questionTexts__isnull=False) | Q(questionCodes__isnull=False))
+        questions = questions.distinct().filter(
+            Q(questionBoxes__isnull=False) | Q(questionTexts__isnull=False) | Q(questionCodes__isnull=False))
 
         return questions
 
@@ -82,10 +84,9 @@ class Quiz(models.Model):
     def __str__(self):
         return self.title
 
+
 class Question(models.Model):
-
-
-    #Internal information
+    # Internal information
     title = models.CharField(
         verbose_name="Title",
         max_length=60)
@@ -108,7 +109,7 @@ class Question(models.Model):
     order = models.IntegerField(default=0)
     attempts = models.IntegerField(default=3)
 
-    #Used just for displaying which questions the user has correct
+    # Used just for displaying which questions the user has correct
     status = models.IntegerField(default=STATUS_QUESTION.UNANSWERED, editable=False)
 
     # Foreign relations
@@ -121,7 +122,7 @@ class Question(models.Model):
         # Check which questions the user has answered correct
         if (Answer.objects.filter(question=self, correct=True, user=attempt.user, attempt=attempt).count()):
             STATUS = STATUS_QUESTION.CORRECT
-        elif(Answer.objects.filter(question=self, correct=False, user=attempt.user, attempt=attempt).count()):
+        elif (Answer.objects.filter(question=self, correct=False, user=attempt.user, attempt=attempt).count()):
             STATUS = STATUS_QUESTION.UNCORRECT
 
         return STATUS
@@ -133,8 +134,8 @@ class Question(models.Model):
     def __str__(self):
         return self.title
 
-class Resource(models.Model):
 
+class Resource(models.Model):
     title = models.CharField(
         verbose_name="Title",
         max_length=60)
@@ -154,8 +155,8 @@ class Resource(models.Model):
 
     # Functions
     def getResourcesByQuiz(self, quiz):
-        questions = Question.filter(quiz=quiz);
-        return self.filter(question__in=questions);
+        questions = Question.filter(quiz=quiz)
+        return self.filter(question__in=questions)
 
     class Meta:
         verbose_name = "Resource"
@@ -164,8 +165,8 @@ class Resource(models.Model):
     def __str__(self):
         return self.title
 
-class Select(models.Model):
 
+class Select(models.Model):
     title = models.CharField(
         verbose_name="Title",
         max_length=60)
@@ -187,8 +188,8 @@ class Select(models.Model):
     def __str__(self):
         return self.title
 
-class Text(models.Model):
 
+class Text(models.Model):
     answer = models.CharField(
         verbose_name="Answer",
         max_length=200)
@@ -203,8 +204,8 @@ class Text(models.Model):
     def __str__(self):
         return self.answer
 
-class Code(models.Model):
 
+class Code(models.Model):
     LANGUAGE_CHOICES = (
         ("JAVASCRIPT", "Javascript"),
         ("JAVA", "Java"),
@@ -249,8 +250,8 @@ class Code(models.Model):
     def __str__(self):
         return self.answer
 
-class Attempt(models.Model):
 
+class Attempt(models.Model):
     # Internal information
     hash = models.CharField(
         verbose_name="Hash",
@@ -273,10 +274,11 @@ class Attempt(models.Model):
         verbose_name_plural = "Attempts"
 
     def __str__(self):
-        return str(self.user.username + ' : ' + str(self.quiz.subject.code) + ' -> ' + str(self.quiz.title)  + ' -> Forsøk '+ str(self.hash))
+        return str(self.user.username + ' : ' + str(self.quiz.subject.code) + ' -> ' + str(
+            self.quiz.title) + ' -> Forsøk ' + str(self.hash))
+
 
 class Answer(models.Model):
-
     # Foreign relations
     question = models.ForeignKey(Question, related_name='questionAnswers')
     attempt = models.ForeignKey(Attempt, related_name='attemptAnswers')
@@ -291,4 +293,6 @@ class Answer(models.Model):
         verbose_name_plural = "Answers"
 
     def __str__(self):
-        return str(self.user.username + ' : ' + str(self.question.quiz.subject.code) + ' -> ' + str(self.question.quiz.title) + ' -> ' + str(self.question.title) + ' -> Forsøk '+ str(self.attempt.hash) + ' -> Resultat ' + str(self.correct))
+        return str(self.user.username + ' : ' + str(self.question.quiz.subject.code) + ' -> ' + str(
+            self.question.quiz.title) + ' -> ' + str(self.question.title) + ' -> Forsøk ' + str(
+            self.attempt.hash) + ' -> Resultat ' + str(self.correct))

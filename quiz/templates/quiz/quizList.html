@@ -1,117 +1,121 @@
 {% extends 'nidala/base.html' %}
 
 {% block content %}
-    {% load quizFilters %}
-    <div class="col-md-4">
-        <ul class="list-group ">
-            <div>
-                <h5>{{ subject.code }}</h5>
-            </div>
-            {% for quiz in quizes %}
-                <a {% if attempts|filterAttemptsByQuizCount:quiz < quiz.attempts  %} href="{% url 'quizRequestAttempt' quiz.hash %}" {% endif %} class="list-group-item menu {% if attempts|filterAttemptsByQuizCount:quiz < quiz.attempts  %} new-attempt {% endif %}{% if attempts|filterAttemptsHasPassedQuiz:quiz %} correct {% endif %} {% if not attempts|filterAttemptsHasPassedQuiz:quiz and attempts|filterAttemptsByQuizCount:quiz >= quiz.attempts %} uncorrect {% endif %}" data-attempts="{{ quiz.attempts }}" data-hash="{{ quiz.hash }}">
-                    {{ quiz.title }}</a>
-                </a>
-            {% endfor %}
-        </ul>
-        <ul class="list-group ">
-            <div>
-                <h5>Pensum</h5>
-            </div>
-            <li class="list-group-item menu" data-hash="{{ quiz.hash }}">
-                {{ subject.syllabus|safe }}
-            </li>
-        </ul>
+  {% load quizFilters %}
+  <div class="col-md-4">
+    <ul class="list-group ">
+      <div>
+        <h5>{{ subject.code }}</h5>
+      </div>
+      {% for quiz in quizes %}
+        <a {% if attempts|filterAttemptsByQuizCount:quiz < quiz.attempts %}
+          href="{% url 'quizRequestAttempt' quiz.hash %}" {% endif %}
+          class="list-group-item menu {% if attempts|filterAttemptsByQuizCount:quiz < quiz.attempts %} new-attempt {% endif %}{% if attempts|filterAttemptsHasPassedQuiz:quiz %} correct {% endif %} {% if not attempts|filterAttemptsHasPassedQuiz:quiz and attempts|filterAttemptsByQuizCount:quiz >= quiz.attempts %} uncorrect {% endif %}"
+          data-attempts="{{ quiz.attempts }}" data-hash="{{ quiz.hash }}">
+          {{ quiz.title }}</a>
+        </a>
+      {% endfor %}
+    </ul>
+    <ul class="list-group ">
+      <div>
+        <h5>Pensum</h5>
+      </div>
+      <li class="list-group-item menu" data-hash="{{ quiz.hash }}">
+        {{ subject.syllabus|safe }}
+      </li>
+    </ul>
+  </div>
+  <div class="col-md-8">
+    <div>
+      <h5>Forsøk</h5>
     </div>
-    <div class="col-md-8">
+    {% for quiz in quizes %}
+      <ul class="list-group attempt" id="{{ quiz.hash }}" style="display:none">
         <div>
-            <h5>Forsøk</h5>
+          <h6>{{ quiz.title }} </h6>
         </div>
-        {% for quiz in quizes %}
-            <ul class="list-group attempt" id="{{ quiz.hash }}" style="display:none">
-                <div>
-                    <h6>{{ quiz.title }} </h6>
-                </div>
-                {% if attempts|filterAttemptsByQuizCount:quiz < quiz.attempts %}
-                    <a href="{% url 'quizRequestAttempt' quiz.hash %}" class="list-group-item new-attempt" data-attempts="{{ quiz.attempts }}" data-toggle="modal" data-target="#confirm-delete">
-                        Nytt forsøk
-                    </a>
-                {% endif %}
-                {% for attempt in attempts %}
-                    {% if attempt.quiz == quiz %}
-                        {% if attempt.status == STATUS_ATTEMPT.PASSED or attempt.status == STATUS_ATTEMPT.FAILED %}
-                            {% if attempt.status == STATUS_ATTEMPT.PASSED %}
-                                <a href="{% url 'quizResult' quiz.hash attempt.hash %}" class="list-group-item correct">
-                                    Du besto forsøk {{ attempt.hash }}
-                                </a>
-                            {% elif attempt.status == STATUS_ATTEMPT.FAILED %}
-                                <a href="{% url 'quizResult' quiz.hash attempt.hash %}" class="list-group-item uncorrect ">
-                                    Du besto ikke forsøk {{ attempt.hash }}
-                                </a>
-                            {% endif %}
-                        {% else %}
-                            <a href="{% url 'quizFindQuestion' quiz.hash attempt.hash %}" class="list-group-item">
-                                Fortsett på {{ attempt.hash }}
-                            </a>
-                        {% endif %}
-                    {% endif %}
-                {% endfor %}
-                <div class="resources-padding">
-                    <h5>Ressurser</h5>
-                </div>
-                {% with questions=questions|filterQuestionsByQuiz:quiz %}
-                    {% if resources|filterResourcesCount:questions > 0 %}
-                        {% for resource in resources|filterResourcesByQuiz:questions %}
-                            <a href="{{ resource.url }}" target="_blank" class="list-group-item">
-                                {{ resource.title }}
-                            </a>
-                        {% endfor %}
-                    {% else %}
-                        <li class="list-group-item">
-                            Ingen ressurser tilgjengelig
-                        </li>
-                    {% endif %}
-                {% endwith %}
-            </ul>
+        {% if attempts|filterAttemptsByQuizCount:quiz < quiz.attempts %}
+          <a href="{% url 'quizRequestAttempt' quiz.hash %}" class="list-group-item new-attempt"
+             data-attempts="{{ quiz.attempts }}" data-toggle="modal" data-target="#confirm-delete">
+            Nytt forsøk
+          </a>
+        {% endif %}
+        {% for attempt in attempts %}
+          {% if attempt.quiz == quiz %}
+            {% if attempt.status == STATUS_ATTEMPT.PASSED or attempt.status == STATUS_ATTEMPT.FAILED %}
+              {% if attempt.status == STATUS_ATTEMPT.PASSED %}
+                <a href="{% url 'quizResult' quiz.hash attempt.hash %}" class="list-group-item correct">
+                  Du besto forsøk {{ attempt.hash }}
+                </a>
+              {% elif attempt.status == STATUS_ATTEMPT.FAILED %}
+                <a href="{% url 'quizResult' quiz.hash attempt.hash %}" class="list-group-item uncorrect ">
+                  Du besto ikke forsøk {{ attempt.hash }}
+                </a>
+              {% endif %}
+            {% else %}
+              <a href="{% url 'quizFindQuestion' quiz.hash attempt.hash %}" class="list-group-item">
+                Fortsett på {{ attempt.hash }}
+              </a>
+            {% endif %}
+          {% endif %}
         {% endfor %}
+        <div class="resources-padding">
+          <h5>Ressurser</h5>
+        </div>
+        {% with questions=questions|filterQuestionsByQuiz:quiz %}
+          {% if resources|filterResourcesCount:questions > 0 %}
+            {% for resource in resources|filterResourcesByQuiz:questions %}
+              <a href="{{ resource.url }}" target="_blank" class="list-group-item">
+                {{ resource.title }}
+              </a>
+            {% endfor %}
+          {% else %}
+            <li class="list-group-item">
+              Ingen ressurser tilgjengelig
+            </li>
+          {% endif %}
+        {% endwith %}
+      </ul>
+    {% endfor %}
 
+  </div>
+  <div id="confirm" class="modal fade">
+    <div class="modal-body">
+      Are you sure?
     </div>
-    <div id="confirm" class="modal fade">
-        <div class="modal-body">
-            Are you sure?
-        </div>
-        <div class="modal-footer">
-            <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Delete</button>
-            <button type="button" data-dismiss="modal" class="btn">Cancel</button>
-        </div>
+    <div class="modal-footer">
+      <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Delete</button>
+      <button type="button" data-dismiss="modal" class="btn">Cancel</button>
     </div>
-    <script>
-        $( ".menu" ).mouseover(function() {
-            var id = $(this).data("hash");
-            $(".attempt").each(function() {
-                $(this).hide();
-            })
-            $( "#" + id ).show();
-        } );
-        $( ".new-attempt" ).click(function(e) {
-            e.preventDefault();
-            var link = this;
-            bootbox.confirm({
-                title: "Nytt forsøk?",
-                message: "Du kan maks ha " + $(link).data("attempts") + " forsøk pr øving.",
-                buttons: {
-                    cancel: {
-                        label: '<i class="fa fa-times"></i> Avbryt'
-                    },
-                    confirm: {
-                        label: '<i class="fa fa-check"></i> Bekreft'
-                    }
-                },
-                callback: function (confirmed) {
-                    if (confirmed) {
-                        window.location.href = link.href; // similar behavior as clicking on a link (Increments browser history)
-                    }
-                }
-            });
-        } );
-    </script>
+  </div>
+  <script>
+    $(".menu").mouseover(function () {
+      var id = $(this).data("hash");
+      $(".attempt").each(function () {
+        $(this).hide();
+      })
+      $("#" + id).show();
+    });
+    $(".new-attempt").click(function (e) {
+      e.preventDefault();
+      var link = this;
+      bootbox.confirm({
+        title: "Nytt forsøk?",
+        message: "Du kan maks ha " + $(link).data("attempts") + " forsøk pr øving.",
+        buttons: {
+          cancel: {
+            label: '<i class="fa fa-times"></i> Avbryt'
+          },
+          confirm: {
+            label: '<i class="fa fa-check"></i> Bekreft'
+          }
+        },
+        callback: function (confirmed) {
+          if (confirmed) {
+            window.location.href = link.href; // similar behavior as clicking on a link (Increments browser history)
+          }
+        }
+      });
+    });
+  </script>
 {% endblock content %}

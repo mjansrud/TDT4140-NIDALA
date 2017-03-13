@@ -4,8 +4,8 @@ from quiz.models import Answer
 register = template.Library()
 
 #Constants
-STATUS_QUESTION = settings.STATUS_QUESTION;
-STATUS_ATTEMPT = settings.STATUS_ATTEMPT;
+STATUS_QUESTION = settings.STATUS_QUESTION
+STATUS_ATTEMPT = settings.STATUS_ATTEMPT
 
 #custom filters
 @register.filter
@@ -14,19 +14,19 @@ def filterAnswersByQuestion(answers, question):
 
 @register.filter
 def filterQuestionsByQuiz(questions, quiz):
-    return questions.filter(quiz=quiz);
+    return questions.filter(quiz=quiz)
 
 @register.filter
 def filterResourcesByQuiz(resources, questions):
-    return resources.filter(question__in=questions);
+    return resources.filter(question__in=questions)
 
 @register.filter
 def filterAttemptsByQuizCount(attempts, quiz):
-    return attempts.filter(quiz=quiz).count();
+    return attempts.filter(quiz=quiz).count()
 
 @register.filter
 def filterAnswersByQuiz(answers, quiz):
-    return answers.filter(attempt__quiz=quiz);
+    return answers.filter(attempt__quiz=quiz)
 
 @register.filter
 def filterAttemptsHasPassedQuiz(attempts, quiz):
@@ -54,7 +54,7 @@ def filterQuestionsByAnswers(questions, answers):
 
 @register.filter
 def filterResourcesCount(resources, questions):
-    return resources.filter(question__in=questions).count();
+    return resources.filter(question__in=questions).count()
 
 
 @register.filter
@@ -68,6 +68,6 @@ def filterQuestionsFetchNext(questions, question):
     for index, value in enumerate(questions):
         if value == question:
             if len(questions) - 1 > index:
-                return questions.filter(id=list(questions.values_list('id', flat=True))[index + 1]).first().id;
+                return questions.filter(id=list(questions.values_list('id', flat=True))[index + 1]).first().id
 
     return False

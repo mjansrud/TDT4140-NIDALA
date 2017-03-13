@@ -2,292 +2,302 @@
 {% load static %}
 
 {% block css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/quiz.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/quiz.css' %}">
 {% endblock css %}
 
 {% block content %}
-    {% load quizFilters %}
+  {% load quizFilters %}
 
-    <div class="col-md-4">
-        <ul class="list-group">
-            <div>
-                <h5>{{ quiz.title }}</h5>
-            </div>
-            {% for question in questions%}
-                    <a href="{% url 'quiz' quiz.hash attempt.hash question.id %}" class="list-group-item {% if question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %} correct {% endif %} {% if question|filterQuestionStatus:attempt == STATUS_QUESTION.UNCORRECT %} uncorrect {% endif %}">{{ question.title }}</a>
-            {% endfor %}
-            <br>
-            <a href="{% url 'quizResult' quiz.hash attempt.hash %}" class="btn btn-primary submit-button result"
-               data-pass-percent="{{ quiz.pass_percent }}">Gå til resultat</a>
-        </ul>
-    </div>
-    <div class="col-md-8">
-        <div class="container-fluid">
+  <div class="col-md-4">
+    <ul class="list-group">
+      <div>
+        <h5>{{ quiz.title }}</h5>
+      </div>
+      {% for question in questions %}
+        <a href="{% url 'quiz' quiz.hash attempt.hash question.id %}"
+           class="list-group-item {% if question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %} correct {% endif %} {% if question|filterQuestionStatus:attempt == STATUS_QUESTION.UNCORRECT %} uncorrect {% endif %}">{{ question.title }}</a>
+      {% endfor %}
+      <br>
+      <a href="{% url 'quizResult' quiz.hash attempt.hash %}" class="btn btn-primary submit-button result"
+         data-pass-percent="{{ quiz.pass_percent }}">Gå til resultat</a>
+    </ul>
+  </div>
+  <div class="col-md-8">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <form method="POST">{% csrf_token %}
+            <input type=hidden name="question_id" value="{{ question.id }}">
             <div class="row">
-                <div class="col-md-12">
-                    <form method="POST">{% csrf_token %}
-                        <input type=hidden name="question_id" value="{{ question.id }}">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h5>{{ question.title }}</h5>
-                            </div>
-                            <div class="col-md-6" align="right">
-                                <h5>Forsøk {{ attempt.attemptAnswers|filterAnswersByQuestion:question }}
-                                    av {{ question.attempts }}</h5>
-                            </div>
-                        </div>
-                        {% if user_answered %}
-                            {% if user_current_answer_correct %}
-                                <div class="alert alert-success" role="alert">
-                                    <span class="glyphicon glyphicon glyphicon-check" aria-hidden="true"></span>
-                                    <span class="sr-only">Riktig:</span>
-                                    Svaret var korrekt!
-                                </div>
-                            {% else %}
-                                <div class="alert alert-danger" role="alert">
-                                    <span class="glyphicon glyphicon glyphicon-check" aria-hidden="true"></span>
-                                    <span class="sr-only">Feil:</span>
-                                    Dette var ikke helt riktig dessverre!
-                                </div>
-                            {% endif %}
-                        {% endif %}
-                        {{ question.description|safe }}
-                        <ul class="list-group"> {#Iterer gjennom alle spørsmålene#}
-                            <li class="list-group-item">
-                                <div class="form-group">
-                                    {% if question.type == "CHECKBOX" %}
-
-                                        {% for alternative in alternative_boxes %}
-                                            <div class="radio">
-                                                <label><input type="checkbox" name="answer" value="{{ alternative.id }}"
-                                                        {% if attempt.attemptAnswers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}
-                                                            {% if alternative.correct %} checked {% endif %}
-                                                              class="disabled"
-                                                              disabled {% endif %}>{{ alternative.title }}</label>
-                                            </div>
-                                        {% endfor %}
-
-                                    {% elif question.type == "RADIOBOX" %}
-
-                                        {% for alternative in alternative_boxes %}
-                                            <div class="radio">
-                                                <label><input type="radio" name="answer" value="{{ alternative.id }}"
-                                                        {% if answers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}
-                                                            {% if alternative.correct %} checked {% endif %}
-                                                              class="disabled"
-                                                              disabled {% endif %}>{{ alternative.title }}</label>
-                                            </div>
-                                        {% endfor %}
-
-                                    {% elif question.type == "TEXT" %}
-
-                                        <label for="text" class="col-2 col-form-label">Skriv inn svaret i boksen
-                                            under</label>
-                                        <div class="col-10">
-                                            <input class="form-control" type="text" name="answer" id="text"
-                                                    {% if attempt.attemptAnswers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}
-                                                   value="{{ alternative_text.answer }}" class="disabled"
-                                                   disabled {% endif %}}
-                                        </div>
-
-                                    {% elif question.type == "CODE" %}
-
-                                        <label for="editor" class="col-2 col-form-label">Skriv inn koden i boksen
-                                            under</label>
-                                        <div id="editor">{% if answers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}{{ alternative_code.solution }}{% else %}{{ alternative_code.start_code }}{% endif %}</div>
-                                        <textarea name="answer" style="display:none"></textarea>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label for="input" class="col-2 col-form-label">Input</label>
-                                                <div id="input">{{ alternative_code.input_shown }}</div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="output" class="col-2 col-form-label">Output</label>
-                                                <div id="output">{% if answers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}{{ alternative_code.answer }}{% endif %}</div>
-                                            </div>
-                                        </div>
-                                        <script src="https://cdn.jsdelivr.net/ace/1.2.6/min/ace.js"
-                                                type="text/javascript" charset="utf-8"></script>
-                                        <script>
-                                            //Editor
-                                            editor = ace.edit("editor");
-                                            {% if answers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT  %}
-                                                editor.container.style.pointerEvents = "none"
-                                                editor.container.style.opacity = 0.8
-                                                editor.renderer.setStyle("disabled", true)
-                                                editor.blur()
-                                            {% endif %}
-                                            editor.getSession().setMode("ace/mode/{% filter force_escape|lower %}{{ alternative_code.language }}{% endfilter %}");
-
-                                            //Input
-                                            input = ace.edit("input");
-                                            input.container.style.pointerEvents = "none"
-                                            input.container.style.opacity = 0.8
-                                            input.renderer.setStyle("disabled", true)
-                                            input.blur()
-                                            input.getSession().setMode("ace/mode/{% filter force_escape|lower %}{{ alternative_code.language }}{% endfilter %}");
-
-                                            //Output
-                                            output = ace.edit("output");
-                                            input.container.style.pointerEvents = "none"
-                                            output.container.style.opacity = 0.8
-                                            output.renderer.setStyle("disabled", true)
-                                            output.blur()
-
-                                            switch('{{ alternative_code.language }}') {
-                                                case "PYTHON":
-                                                    language = 116;
-                                                    break;
-                                                case "JAVA":
-                                                    language = 10;
-                                                    break;
-                                                case "JAVASCRIPT":
-                                                    language = 35;
-                                                    break;
-                                            }
-
-                                            //Call the sphere engine API
-                                            $(function () {
-
-                                                //Need to be able to cancel the interval
-                                                var interval;
-
-                                                function createStatusMessage(message){
-                                                    $("#submit").html('<i class="fa fa-cog fa-spin"></i> ' + message);
-                                                    output.getSession().setValue(message);
-                                                }
-
-                                                function fetchStatus(id){
-                                                    createStatusMessage("Skaffer resultat ...")
-                                                    $.ajax({
-                                                        type: "GET",
-                                                        url: "http://aecae34f.compilers.sphere-engine.com/api/v3/submissions/" + id + "?access_token=27a39299db2cb8376648f2d1adc907ce&withOutput=true&withSource=true&withCmpinfo=true",
-                                                        success: function (result) {
-                                                            createStatusMessage("Validerer resultat ...")
-                                                            json = $.parseJSON(result);
-                                                            console.log(json);
-
-                                                            if(json.status == 0) {
-                                                                //Submission has completed
-                                                                clearInterval(interval);
-                                                                $("#submit").attr("disabled", false);
-                                                                if (json.output) {
-                                                                    output.getSession().setValue(json.output);
-                                                                    if ("{{ alternative_code.answer }}" == String(json.output.replace(/[^a-z0-9\s]/gi, '')).trim()) {
-                                                                        $("#submit").html('<i class="fa fa-check"></i> Du svarte riktig!');
-                                                                    }else{
-                                                                        $("#submit").html('<i class="fa fa-times"></i> Du svarte feil!');
-                                                                    }
-                                                                    textarea = $('textarea[name="answer"]');
-                                                                    textarea.html(String(json.output.replace(/[^a-z0-9\s]/gi, '')).trim());
-                                                                    $("#submit").off().trigger("click");
-                                                                } else if (json.cmpinfo) {
-                                                                    output.getSession().setValue(json.cmpinfo);
-                                                                    $("#submit").html('<i class="fa fa-times"></i> Kompileringsfeil! Prøv igjen');
-                                                                } else if (json.error && json.error != 'OK') {
-                                                                    output.getSession().setValue(json.error);
-                                                                    $("#submit").html('<i class="fa fa-times"></i> Feil! Prøv igjen');
-                                                                } else if (!json.output){
-                                                                    output.getSession().setValue("Tomt resultat");
-                                                                    $("#submit").html("Svar");
-                                                                }
-                                                            }
-                                                    }
-                                                });
-                                            }
-
-                                            $("#submit").click(function (event) {
-                                                event.preventDefault();
-                                                createStatusMessage("Oppretter innlevering ... ");
-                                                $.ajax({
-                                                    type: "POST",
-                                                    url: "http://aecae34f.compilers.sphere-engine.com/api/v3/submissions?access_token=27a39299db2cb8376648f2d1adc907ce",
-                                                    data: { language: language, source:"{{ alternative_code.input_usable }}" + '\n' + editor.getValue() },
-                                                    success: function (result) {
-                                                        $("#submit").attr("disabled", true);
-                                                        json = $.parseJSON(result);
-                                                        console.log(json);
-                                                        interval = setInterval( function() { fetchStatus(json.id); }, 2000 );
-                                                        createStatusMessage("Kompilerer ... id: " + json.id)
-                                                    }
-                                                });
-
-                                            });
-
-                                            });
-                                        </script>
-
-                                    {% else %}
-
-                                        Ukjent type spørsmål
-
-                                    {% endif %}
-                                </div>
-                            </li>
-                        </ul>
-                        <div class="row">
-                            <div class="col-md-8">
-                                <button id="submit" class="btn btn-primary submit-button"
-                                        {% if answers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}
-                                        disabled {% endif %}>
-                                    {% if question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}
-                                        Du har svart
-                                        riktig{% elif question|filterQuestionStatus:attempt > question.attempts %}
-                                        For mange forsøk{% else %}Svar{% endif %} </button>
-                            </div>
-                            <div class="col-md-4">
-                                {% if questions|filterQuestionsFetchNext:question != False %}
-                                    <a href="{% url 'quiz' quiz.hash attempt.hash questions|filterQuestionsFetchNext:question %}"
-                                       class="btn btn-primary btn-block">Neste spørsmål</a>
-                                {% else %}
-                                    <a href="{% url 'quizResult' quiz.hash attempt.hash %}"
-                                       class="btn btn-primary submit-button result"
-                                       data-pass-percent="{{ quiz.pass_percent }}">Gå til resultat</a>
-                                {% endif %}
-                            </div>
-                        </div>
-                        <div class="resources-padding">
-                            <h5>Ressurser</h5>
-                        </div>
-                        <ul class="list-group">
-                            {% if resources.count > 0 %}
-                                {% for resource in resources %}
-                                    <a href="{{ resource.url }}" target="_blank" class="list-group-item">
-                                        {{ resource.title }}
-                                    </a>
-                                {% endfor %}
-                            {% else %}
-                                <li class="list-group-item">
-                                    Ingen ressurser tilgjengelig
-                                </li>
-                            {% endif %}
-                        </ul>
-                    </form>
-                </div>
+              <div class="col-md-6">
+                <h5>{{ question.title }}</h5>
+              </div>
+              <div class="col-md-6" align="right">
+                <h5>Forsøk {{ attempt.attemptAnswers|filterAnswersByQuestion:question }}
+                  av {{ question.attempts }}</h5>
+              </div>
             </div>
+            {% if user_answered %}
+              {% if user_current_answer_correct %}
+                <div class="alert alert-success" role="alert">
+                  <span class="glyphicon glyphicon glyphicon-check" aria-hidden="true"></span>
+                  <span class="sr-only">Riktig:</span>
+                  Svaret var korrekt!
+                </div>
+              {% else %}
+                <div class="alert alert-danger" role="alert">
+                  <span class="glyphicon glyphicon glyphicon-check" aria-hidden="true"></span>
+                  <span class="sr-only">Feil:</span>
+                  Dette var ikke helt riktig dessverre!
+                </div>
+              {% endif %}
+            {% endif %}
+            {{ question.description|safe }}
+            <ul class="list-group"> {#Iterer gjennom alle spørsmålene#}
+              <li class="list-group-item">
+                <div class="form-group">
+                  {% if question.type == "CHECKBOX" %}
+
+                    {% for alternative in alternative_boxes %}
+                      <div class="radio">
+                        <label><input type="checkbox" name="answer" value="{{ alternative.id }}"
+                                {% if attempt.attemptAnswers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}
+                                  {% if alternative.correct %} checked {% endif %}
+                                      class="disabled"
+                                      disabled {% endif %}>{{ alternative.title }}</label>
+                      </div>
+                    {% endfor %}
+
+                  {% elif question.type == "RADIOBOX" %}
+
+                    {% for alternative in alternative_boxes %}
+                      <div class="radio">
+                        <label><input type="radio" name="answer" value="{{ alternative.id }}"
+                                {% if answers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}
+                                  {% if alternative.correct %} checked {% endif %}
+                                      class="disabled"
+                                      disabled {% endif %}>{{ alternative.title }}</label>
+                      </div>
+                    {% endfor %}
+
+                  {% elif question.type == "TEXT" %}
+
+                    <label for="text" class="col-2 col-form-label">Skriv inn svaret i boksen
+                      under</label>
+                    <div class="col-10">
+                      <input class="form-control" type="text" name="answer" id="text"
+                              {% if attempt.attemptAnswers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}
+                             value="{{ alternative_text.answer }}" class="disabled"
+                             disabled {% endif %}}
+                    </div>
+
+                  {% elif question.type == "CODE" %}
+
+                    <label for="editor" class="col-2 col-form-label">Skriv inn koden i boksen
+                      under</label>
+                    <div id="editor">
+                      {% if answers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}
+                        {{ alternative_code.solution }}{% else %}{{ alternative_code.start_code }}{% endif %}</div>
+                    <textarea name="answer" style="display:none"></textarea>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <label for="input" class="col-2 col-form-label">Input</label>
+                        <div id="input">{{ alternative_code.input_shown }}</div>
+                      </div>
+                      <div class="col-md-6">
+                        <label for="output" class="col-2 col-form-label">Output</label>
+                        <div id="output">
+                          {% if answers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}
+                            {{ alternative_code.answer }}{% endif %}</div>
+                      </div>
+                    </div>
+                    <script src="https://cdn.jsdelivr.net/ace/1.2.6/min/ace.js"
+                            type="text/javascript" charset="utf-8"></script>
+                    <script>
+                      //Editor
+                      editor = ace.edit("editor");
+                      {% if answers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT  %}
+                        editor.container.style.pointerEvents = "none"
+                        editor.container.style.opacity = 0.8
+                        editor.renderer.setStyle("disabled", true)
+                        editor.blur()
+                      {% endif %}
+                      editor.getSession().setMode("ace/mode/{% filter force_escape|lower %}{{ alternative_code.language }}{% endfilter %}");
+
+                      //Input
+                      input = ace.edit("input");
+                      input.container.style.pointerEvents = "none"
+                      input.container.style.opacity = 0.8
+                      input.renderer.setStyle("disabled", true)
+                      input.blur()
+                      input.getSession().setMode("ace/mode/{% filter force_escape|lower %}{{ alternative_code.language }}{% endfilter %}");
+
+                      //Output
+                      output = ace.edit("output");
+                      input.container.style.pointerEvents = "none"
+                      output.container.style.opacity = 0.8
+                      output.renderer.setStyle("disabled", true)
+                      output.blur()
+
+                      switch ('{{ alternative_code.language }}') {
+                        case "PYTHON":
+                          language = 116;
+                          break;
+                        case "JAVA":
+                          language = 10;
+                          break;
+                        case "JAVASCRIPT":
+                          language = 35;
+                          break;
+                      }
+
+                      //Call the sphere engine API
+                      $(function () {
+
+                        //Need to be able to cancel the interval
+                        var interval;
+
+                        function createStatusMessage(message) {
+                          $("#submit").html('<i class="fa fa-cog fa-spin"></i> ' + message);
+                          output.getSession().setValue(message);
+                        }
+
+                        function fetchStatus(id) {
+                          createStatusMessage("Skaffer resultat ...")
+                          $.ajax({
+                            type: "GET",
+                            url: "http://aecae34f.compilers.sphere-engine.com/api/v3/submissions/" + id + "?access_token=27a39299db2cb8376648f2d1adc907ce&withOutput=true&withSource=true&withCmpinfo=true",
+                            success: function (result) {
+                              createStatusMessage("Validerer resultat ...")
+                              json = $.parseJSON(result);
+                              console.log(json);
+
+                              if (json.status == 0) {
+                                //Submission has completed
+                                clearInterval(interval);
+                                $("#submit").attr("disabled", false);
+                                if (json.output) {
+                                  output.getSession().setValue(json.output);
+                                  if ("{{ alternative_code.answer }}" == String(json.output.replace(/[^a-z0-9\s]/gi, '')).trim()) {
+                                    $("#submit").html('<i class="fa fa-check"></i> Du svarte riktig!');
+                                  } else {
+                                    $("#submit").html('<i class="fa fa-times"></i> Du svarte feil!');
+                                  }
+                                  textarea = $('textarea[name="answer"]');
+                                  textarea.html(String(json.output.replace(/[^a-z0-9\s]/gi, '')).trim());
+                                  $("#submit").off().trigger("click");
+                                } else if (json.cmpinfo) {
+                                  output.getSession().setValue(json.cmpinfo);
+                                  $("#submit").html('<i class="fa fa-times"></i> Kompileringsfeil! Prøv igjen');
+                                } else if (json.error && json.error != 'OK') {
+                                  output.getSession().setValue(json.error);
+                                  $("#submit").html('<i class="fa fa-times"></i> Feil! Prøv igjen');
+                                } else if (!json.output) {
+                                  output.getSession().setValue("Tomt resultat");
+                                  $("#submit").html("Svar");
+                                }
+                              }
+                            }
+                          });
+                        }
+
+                        $("#submit").click(function (event) {
+                          event.preventDefault();
+                          createStatusMessage("Oppretter innlevering ... ");
+                          $.ajax({
+                            type: "POST",
+                            url: "http://aecae34f.compilers.sphere-engine.com/api/v3/submissions?access_token=27a39299db2cb8376648f2d1adc907ce",
+                            data: {
+                              language: language,
+                              source: "{{ alternative_code.input_usable }}" + '\n' + editor.getValue()
+                            },
+                            success: function (result) {
+                              $("#submit").attr("disabled", true);
+                              json = $.parseJSON(result);
+                              console.log(json);
+                              interval = setInterval(function () {
+                                fetchStatus(json.id);
+                              }, 2000);
+                              createStatusMessage("Kompilerer ... id: " + json.id)
+                            }
+                          });
+
+                        });
+
+                      });
+                    </script>
+
+                  {% else %}
+
+                    Ukjent type spørsmål
+
+                  {% endif %}
+                </div>
+              </li>
+            </ul>
+            <div class="row">
+              <div class="col-md-8">
+                <button id="submit" class="btn btn-primary submit-button"
+                        {% if answers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}
+                        disabled {% endif %}>
+                  {% if question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}
+                    Du har svart
+                    riktig{% elif question|filterQuestionStatus:attempt > question.attempts %}
+                    For mange forsøk{% else %}Svar{% endif %} </button>
+              </div>
+              <div class="col-md-4">
+                {% if questions|filterQuestionsFetchNext:question != False %}
+                  <a href="{% url 'quiz' quiz.hash attempt.hash questions|filterQuestionsFetchNext:question %}"
+                     class="btn btn-primary btn-block">Neste spørsmål</a>
+                {% else %}
+                  <a href="{% url 'quizResult' quiz.hash attempt.hash %}"
+                     class="btn btn-primary submit-button result"
+                     data-pass-percent="{{ quiz.pass_percent }}">Gå til resultat</a>
+                {% endif %}
+              </div>
+            </div>
+            <div class="resources-padding">
+              <h5>Ressurser</h5>
+            </div>
+            <ul class="list-group">
+              {% if resources.count > 0 %}
+                {% for resource in resources %}
+                  <a href="{{ resource.url }}" target="_blank" class="list-group-item">
+                    {{ resource.title }}
+                  </a>
+                {% endfor %}
+              {% else %}
+                <li class="list-group-item">
+                  Ingen ressurser tilgjengelig
+                </li>
+              {% endif %}
+            </ul>
+          </form>
         </div>
+      </div>
     </div>
-    <script>
-        $(".result").click(function (e) {
-            e.preventDefault();
-            var link = this;
-            bootbox.confirm({
-                title: "Avslutt?",
-                message: "Er du sikker på at du ønsker å avslutte? Du trenger minimum " + $(link).data("pass-percent") + "% riktig for å bestå.",
-                buttons: {
-                    cancel: {
-                        label: '<i class="fa fa-times"></i> Avbryt'
-                    },
-                    confirm: {
-                        label: '<i class="fa fa-check"></i> Bekreft'
-                    }
-                },
-                callback: function (confirmed) {
-                    if (confirmed) {
-                        window.location.href = link.href;
-                    }
-                }
-            });
-        });
-    </script>
+  </div>
+  <script>
+    $(".result").click(function (e) {
+      e.preventDefault();
+      var link = this;
+      bootbox.confirm({
+        title: "Avslutt?",
+        message: "Er du sikker på at du ønsker å avslutte? Du trenger minimum " + $(link).data("pass-percent") + "% riktig for å bestå.",
+        buttons: {
+          cancel: {
+            label: '<i class="fa fa-times"></i> Avbryt'
+          },
+          confirm: {
+            label: '<i class="fa fa-check"></i> Bekreft'
+          }
+        },
+        callback: function (confirmed) {
+          if (confirmed) {
+            window.location.href = link.href;
+          }
+        }
+      });
+    });
+  </script>
 {% endblock content %}
