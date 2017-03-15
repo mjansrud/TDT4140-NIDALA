@@ -16,10 +16,53 @@ class EditorFormAdmin(admin.ModelAdmin):
     form = EditorForm
 
 
+class TextInline(admin.TabularInline):
+    model = Text
+
+
+class SelectInline(admin.TabularInline):
+    model = Select
+
+
+class CodeInline(admin.TabularInline):
+    model = Code
+
+
+class QuestionAdmin(admin.ModelAdmin):
+    inlines = [
+        TextInline,
+        SelectInline,
+        CodeInline
+    ]
+
+
+class QuestionInline(admin.TabularInline):
+    model = Question
+    show_change_link = True
+
+
+class QuizAdmin(admin.ModelAdmin):
+    inlines = [
+        QuestionInline
+    ]
+
+
+class QuizInline(admin.TabularInline):
+    model = Quiz
+    show_change_link = True
+
+
+class SubjectAdmin(admin.ModelAdmin):
+    inlines = [
+        QuizInline
+    ]
+
+
 # Register your models here.
-admin.site.register(Subject)
-admin.site.register(Quiz)
-admin.site.register(Question)
+
+admin.site.register(Subject, SubjectAdmin)
+admin.site.register(Quiz, QuizAdmin)
+admin.site.register(Question, QuestionAdmin)
 admin.site.register(Resource)
 admin.site.register(Select)
 admin.site.register(Text)
