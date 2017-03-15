@@ -2,165 +2,165 @@
 {% load static %}
 
 {% block css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/quiz.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/quiz.css' %}">
 {% endblock css %}
 
 {% block content %}
-    {% load quizFilters %}
+  {% load quizFilters %}
 
-    <div class="col-md-4">
-        <ul class="list-group">
-            <div>
-                <h5>{{ quiz.title }}</h5>
-            </div> 
-            {% for question in questions %}
-                <a href="{% url 'quiz' quiz.hash attempt.hash question.id %}"
-                   class="list-group-item {% if question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %} correct {% endif %} {% if question|filterQuestionStatus:attempt == STATUS_QUESTION.UNCORRECT %} uncorrect {% endif %}">{{ question.title }}</a>
-            {% endfor %}
-            <br>
-            <a href="{% url 'quizResult' quiz.hash attempt.hash %}" class="btn btn-primary submit-button result"
-               data-pass-percent="{{ quiz.pass_percent }}">Gå til resultat</a>
-        </ul>
-    </div>
-    <div class="col-md-8">
-        <div class="container-fluid">
+  <div class="col-md-4">
+    <ul class="list-group">
+      <div>
+        <h5>{{ quiz.title }}</h5>
+      </div>
+      {% for question in questions %}
+        <a href="{% url 'quiz' quiz.hash attempt.hash question.id %}"
+           class="list-group-item {% if question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %} correct {% endif %} {% if question|filterQuestionStatus:attempt == STATUS_QUESTION.UNCORRECT %} uncorrect {% endif %}">{{ question.title }}</a>
+      {% endfor %}
+      <br>
+      <a href="{% url 'quizResult' quiz.hash attempt.hash %}" class="btn btn-primary submit-button result"
+         data-pass-percent="{{ quiz.pass_percent }}">Gå til resultat</a>
+    </ul>
+  </div> 
+  <div class="col-md-8">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <form method="POST">{% csrf_token %}
+            <input type=hidden name="question_id" value="{{ question.id }}">
             <div class="row">
-                <div class="col-md-12">
-                    <form method="POST">{% csrf_token %}
-                        <input type=hidden name="question_id" value="{{ question.id }}">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h5>{{ question.title }}</h5>
-                            </div>
-                            <div class="col-md-6" align="right">
-                                <h5>Forsøk {{ attempt.attemptAnswers|filterAnswersByQuestion:question }}
-                                    av {{ question.attempts }}</h5>
-                            </div>
-                        </div>
-                        {% if user_answered %}
-                            {% if user_current_answer_correct %}
-                                <div class="alert alert-success" role="alert">
-                                    <span class="glyphicon glyphicon glyphicon-check" aria-hidden="true"></span>
-                                    <span class="sr-only">Riktig:</span>
-                                    Svaret var korrekt!
-                                </div>
-                            {% else %}
-                                <div class="alert alert-danger" role="alert">
-                                    <span class="glyphicon glyphicon glyphicon-check" aria-hidden="true"></span>
-                                    <span class="sr-only">Feil:</span>
-                                    Dette var ikke helt riktig dessverre!
-                                </div>
-                            {% endif %}
-                        {% endif %}
-                        {{ question.description|safe }}
-                        <ul class="list-group"> {#Iterer gjennom alle spørsmålene#}
-                            <li class="list-group-item">
-                                <div class="form-group">
-                                    {% if question.type == "CHECKBOX" %}
-
-                                        {% for alternative in alternative_boxes %}
-                                            <div class="radio">
-                                                <label><input type="checkbox" name="answer" value="{{ alternative.id }}"
-                                                        {% if attempt.attemptAnswers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}
-                                                            {% if alternative.correct %} checked {% endif %}
-                                                              class="disabled"
-                                                              disabled {% endif %}>{{ alternative.title }}</label>
-                                            </div>
-                                        {% endfor %}
-
-                                    {% elif question.type == "RADIOBOX" %}
-
-                                        {% for alternative in alternative_boxes %}
-                                            <div class="radio">
-                                                <label><input type="radio" name="answer" value="{{ alternative.id }}"
-                                                        {% if answers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}
-                                                            {% if alternative.correct %} checked {% endif %}
-                                                              class="disabled"
-                                                              disabled {% endif %}>{{ alternative.title }}</label>
-                                            </div>
-                                        {% endfor %}
-
-                                    {% elif question.type == "TEXT" %}
-
-                                        <label for="text" class="col-2 col-form-label">Skriv inn svaret i boksen under</label>
-                                        <div class="col-10">
-                                            <input class="form-control" type="text" name="answer" id="text"
-                                                    {% if attempt.attemptAnswers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}
-                                                   value="{{ alternative_text.answer }}" class="disabled"
-                                                   disabled {% endif %}}
-                                        </div>
-
-                                    {% elif question.type == "CODE" %}
-
-                                        <label for="editor" class="col-2 col-form-label">Skriv inn koden i boksen under</label>
-                                        <div id="editor">{% if answers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}{{ alternative_code.solution }}{% else %}{{ alternative_code.start_code }}{% endif %}</div>
-                                        <textarea name="answer" style="display:none"></textarea>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label for="input" class="col-2 col-form-label">Input</label>
-                                                <div id="input">{{ alternative_code.input_shown }}</div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="output" class="col-2 col-form-label">Output</label>
-                                                <div id="output">{% if answers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}{{ alternative_code.answer }}{% endif %}</div>
-                                            </div>
-                                        </div>
-                                        <script src="https://cdn.jsdelivr.net/ace/1.2.6/min/ace.js"></script>
-                                        <script src="{% static 'js/code.js' %}"></script>
-                                        <script>
-                                            $(function () {
-                                                configureEditor('{{ alternative_code.language }}', {% if answers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT  %}true{%else%}false{% endif %})
-                                            });
-                                        </script>
-                                    {% else %}
-
-                                        Ukjent type spørsmål
-
-                                    {% endif %}
-                                </div>
-                            </li>
-                        </ul>
-                        <div class="row">
-                            <div class="col-md-8">
-                                <button id="submit" class="btn btn-primary submit-button"
-                                        {% if answers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}
-                                        disabled {% endif %}>
-                                    {% if question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}
-                                        Du har svart
-                                        riktig{% elif question|filterQuestionStatus:attempt > question.attempts %}
-                                        For mange forsøk{% else %}Svar{% endif %} </button>
-                            </div>
-                            <div class="col-md-4">
-                                {% if questions|filterQuestionsFetchNext:question != False %}
-                                    <a href="{% url 'quiz' quiz.hash attempt.hash questions|filterQuestionsFetchNext:question %}"
-                                       class="btn btn-primary btn-block">Neste spørsmål</a>
-                                {% else %}
-                                    <a href="{% url 'quizResult' quiz.hash attempt.hash %}"
-                                       class="btn btn-primary submit-button result"
-                                       data-pass-percent="{{ quiz.pass_percent }}">Gå til resultat</a>
-                                {% endif %}
-                            </div>
-                        </div>
-                        <div class="resources-padding">
-                            <h5>Ressurser</h5>
-                        </div>
-                        <ul class="list-group">
-                            {% if resources.count > 0 %}
-                                {% for resource in resources %}
-                                    <a href="{{ resource.url }}" target="_blank" class="list-group-item">
-                                        {{ resource.title }}
-                                    </a>
-                                {% endfor %}
-                            {% else %}
-                                <li class="list-group-item">
-                                    Ingen ressurser tilgjengelig
-                                </li>
-                            {% endif %}
-                        </ul>
-                    </form>
-                </div>
+              <div class="col-md-6">
+                <h5>{{ question.title }}</h5>
+              </div>
+              <div class="col-md-6" align="right">
+                <h5>Forsøk {{ attempt.attemptAnswers|filterAnswersByQuestion:question }}
+                  av {{ question.attempts }}</h5>
+              </div>
             </div>
+            {% if user_answered %}
+              {% if user_current_answer_correct %}
+                <div class="alert alert-success" role="alert">
+                  <span class="glyphicon glyphicon glyphicon-check" aria-hidden="true"></span>
+                  <span class="sr-only">Riktig:</span>
+                  Svaret var korrekt!
+                </div>
+              {% else %}
+                <div class="alert alert-danger" role="alert">
+                  <span class="glyphicon glyphicon glyphicon-check" aria-hidden="true"></span>
+                  <span class="sr-only">Feil:</span>
+                  Dette var ikke helt riktig dessverre!
+                </div>
+              {% endif %}
+            {% endif %}
+            {{ question.description|safe }}
+            <ul class="list-group"> {#Iterer gjennom alle spørsmålene#}
+              <li class="list-group-item">
+                <div class="form-group">
+                  {% if question.type == "CHECKBOX" %}
+
+                    {% for alternative in alternative_boxes %}
+                      <div class="radio">
+                        <label><input type="checkbox" name="answer" value="{{ alternative.id }}"
+                                {% if attempt.attemptAnswers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}
+                                  {% if alternative.correct %} checked {% endif %}
+                                      class="disabled"
+                                      disabled {% endif %}>{{ alternative.title }}</label>
+                      </div>
+                    {% endfor %}
+
+                  {% elif question.type == "RADIOBOX" %}
+
+                    {% for alternative in alternative_boxes %}
+                      <div class="radio">
+                        <label><input type="radio" name="answer" value="{{ alternative.id }}"
+                                {% if answers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}
+                                  {% if alternative.correct %} checked {% endif %}
+                                      class="disabled"
+                                      disabled {% endif %}>{{ alternative.title }}</label>
+                      </div>
+                    {% endfor %}
+
+                  {% elif question.type == "TEXT" %}
+
+                    <label for="text" class="col-2 col-form-label">Skriv inn svaret i boksen under</label>
+                    <div class="col-10">
+                      <input class="form-control" type="text" name="answer" id="text"
+                              {% if attempt.attemptAnswers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}
+                             value="{{ alternative_text.answer }}" class="disabled"
+                             disabled {% endif %}}
+                    </div>
+
+                  {% elif question.type == "CODE" %}
+
+                    <label for="editor" class="col-2 col-form-label">Skriv inn koden i boksen under</label>
+                    <div id="editor">{% if answers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}{{ alternative_code.solution }}{% else %}{{ alternative_code.start_code }}{% endif %}</div>
+                    <textarea name="answer" style="display:none"></textarea>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <label for="input" class="col-2 col-form-label">Input</label>
+                        <div id="input">{{ alternative_code.input_shown }}</div>
+                      </div>
+                      <div class="col-md-6">
+                        <label for="output" class="col-2 col-form-label">Output</label>
+                        <div id="output">{% if answers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}{{ alternative_code.answer }}{% endif %}</div>
+                      </div>
+                    </div>
+                    <script src="https://cdn.jsdelivr.net/ace/1.2.6/min/ace.js"></script>
+                    <script src="{% static 'js/quizCode.js' %}"></script>
+                    <script>
+                      $(function () {
+                        configureEditor('{{ alternative_code.language }}', {% if answers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT  %}true{%else%}false{% endif %})
+                      });
+                    </script>
+                  {% else %}
+
+                    Ukjent type spørsmål
+
+                  {% endif %}
+                </div>
+              </li>
+            </ul>
+            <div class="row">
+              <div class="col-md-8">
+                <button id="submit" class="btn btn-primary submit-button"
+                        {% if answers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}
+                        disabled {% endif %}>
+                  {% if question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}
+                    Du har svart
+                    riktig{% elif question|filterQuestionStatus:attempt > question.attempts %}
+                    For mange forsøk{% else %}Svar{% endif %} </button>
+              </div>
+              <div class="col-md-4">
+                {% if questions|filterQuestionsFetchNext:question != False %}
+                  <a href="{% url 'quiz' quiz.hash attempt.hash questions|filterQuestionsFetchNext:question %}"
+                     class="btn btn-primary btn-block">Neste spørsmål</a>
+                {% else %}
+                  <a href="{% url 'quizResult' quiz.hash attempt.hash %}"
+                     class="btn btn-primary submit-button result"
+                     data-pass-percent="{{ quiz.pass_percent }}">Gå til resultat</a>
+                {% endif %}
+              </div>
+            </div>
+            <div class="resources-padding">
+              <h5>Ressurser</h5>
+            </div>
+            <ul class="list-group">
+              {% if resources.count > 0 %}
+                {% for resource in resources %}
+                  <a href="{{ resource.url }}" target="_blank" class="list-group-item">
+                    {{ resource.title }}
+                  </a>
+                {% endfor %}
+              {% else %}
+                <li class="list-group-item">
+                  Ingen ressurser tilgjengelig
+                </li>
+              {% endif %}
+            </ul>
+          </form>
         </div>
+      </div>
     </div>
-    <script src="{% static 'js/exit.js' %}" type="text/javascript" ></script>
+  </div>
+  <script src="{% static 'js/quizExit.js' %}" ></script>
 {% endblock content %}
