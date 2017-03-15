@@ -67,5 +67,14 @@ a {
 
 .uncorrect{
     background: rgba(239, 0, 15, 0.05);
+
+}
+
+.menu {
+    cursor: default;
+}
+
+.new-attempt {
+    cursor: pointer;
 }
 

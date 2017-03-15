@@ -77,6 +77,30 @@ class Quiz(models.Model):
 
         return questions
 
+    @staticmethod
+    def getQuizStatus(quizes, user):
+        for quiz in quizes:
+            if Attempt.objects.filter(user=user, quiz__id=quiz.id, status=STATUS_ATTEMPT.PASSED).count() > 0:
+                quiz.status = 'correct'
+            elif Attempt.objects.filter(user=user, quiz__id=quiz.id,
+                                        status=STATUS_ATTEMPT.FAILED).count() == quiz.attempts:
+                quiz.status = 'uncorrect'
+            else:
+                quiz.status = 'started'
+
+            if Attempt.objects.filter(user=user, quiz__id=quiz.id).count() < quiz.attempts:
+                quiz.new_attempt = 'new-attempt'
+
+    @staticmethod
+    def getResources(quizes):
+        for quiz in quizes:
+            quiz.resources = Resource.objects.filter(question__quiz__id=quiz.id).distinct()
+
+    @staticmethod
+    def getAttempts(quizes, user):
+        for quiz in quizes:
+            quiz.attempts_list = [attempt for attempt in Attempt.objects.filter(user=user, quiz__id=quiz.id)]
+
     class Meta:
         verbose_name = "Quiz"
         verbose_name_plural = "Quizes"

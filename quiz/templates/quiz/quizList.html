@@ -8,12 +8,8 @@
         <h5>{{ subject.code }}</h5>
       </div>
       {% for quiz in quizes %}
-        <a {% if attempts|filterAttemptsByQuizCount:quiz < quiz.attempts %}
-          href="{% url 'quizRequestAttempt' quiz.hash %}" {% endif %}
-          class="list-group-item menu {% if attempts|filterAttemptsByQuizCount:quiz < quiz.attempts %} new-attempt {% endif %}{% if attempts|filterAttemptsHasPassedQuiz:quiz %} correct {% endif %} {% if not attempts|filterAttemptsHasPassedQuiz:quiz and attempts|filterAttemptsByQuizCount:quiz >= quiz.attempts %} uncorrect {% endif %}"
-          data-attempts="{{ quiz.attempts }}" data-hash="{{ quiz.hash }}">
-          {{ quiz.title }}</a>
-        </a>
+        <a href="{% url 'quizRequestAttempt' quiz.hash %}" class="list-group-item menu {{ quiz.status }} {{ quiz.new_attempt }}"
+           data-attempts="{{ quiz.attempts }}" data-hash="{{ quiz.hash }}">{{ quiz.title }}</a>
       {% endfor %}
     </ul>
     <ul class="list-group ">
@@ -34,47 +30,39 @@
         <div>
           <h6>{{ quiz.title }} </h6>
         </div>
-        {% if attempts|filterAttemptsByQuizCount:quiz < quiz.attempts %}
+        {% if quiz.attempts_list|length < quiz.attempts %}
           <a href="{% url 'quizRequestAttempt' quiz.hash %}" class="list-group-item new-attempt"
              data-attempts="{{ quiz.attempts }}" data-toggle="modal" data-target="#confirm-delete">
             Nytt forsøk
           </a>
         {% endif %}
-        {% for attempt in attempts %}
-          {% if attempt.quiz == quiz %}
-            {% if attempt.status == STATUS_ATTEMPT.PASSED or attempt.status == STATUS_ATTEMPT.FAILED %}
-              {% if attempt.status == STATUS_ATTEMPT.PASSED %}
-                <a href="{% url 'quizResult' quiz.hash attempt.hash %}" class="list-group-item correct">
-                  Du besto forsøk {{ attempt.hash }}
-                </a>
-              {% elif attempt.status == STATUS_ATTEMPT.FAILED %}
-                <a href="{% url 'quizResult' quiz.hash attempt.hash %}" class="list-group-item uncorrect ">
-                  Du besto ikke forsøk {{ attempt.hash }}
-                </a>
-              {% endif %}
-            {% else %}
-              <a href="{% url 'quizFindQuestion' quiz.hash attempt.hash %}" class="list-group-item">
-                Fortsett på {{ attempt.hash }}
-              </a>
-            {% endif %}
+        {% for attempt in quiz.attempts_list %}
+          {% if attempt.status == STATUS_ATTEMPT.PASSED %}
+            <a href="{% url 'quizResult' quiz.hash attempt.hash %}" class="list-group-item correct">
+              Du besto forsøk {{ attempt.hash }}
+            </a>
+          {% elif attempt.status == STATUS_ATTEMPT.FAILED %}
+            <a href="{% url 'quizResult' quiz.hash attempt.hash %}" class="list-group-item uncorrect ">
+              Du besto ikke forsøk {{ attempt.hash }}
+            </a>
+          {% else %}
+            <a href="{% url 'quizFindQuestion' quiz.hash attempt.hash %}" class="list-group-item">
+              Fortsett på {{ attempt.hash }}
+            </a>
           {% endif %}
         {% endfor %}
         <div class="resources-padding">
           <h5>Ressurser</h5>
         </div>
-        {% with questions=questions|filterQuestionsByQuiz:quiz %}
-          {% if resources|filterResourcesCount:questions > 0 %}
-            {% for resource in resources|filterResourcesByQuiz:questions %}
-              <a href="{{ resource.url }}" target="_blank" class="list-group-item">
-                {{ resource.title }}
-              </a>
-            {% endfor %}
-          {% else %}
-            <li class="list-group-item">
-              Ingen ressurser tilgjengelig
-            </li>
-          {% endif %}
-        {% endwith %}
+        {% for resource in quiz.resources %}
+          <a href="{{ resource.url }}" target="_blank" class="list-group-item">
+            {{ resource.title }}
+          </a>
+        {% empty %}
+          <li class="list-group-item">
+            Ingen ressurser tilgjengelig
+          </li>
+        {% endfor %}
       </ul>
     {% endfor %}
 
@@ -89,4 +77,9 @@
     </div>
   </div>
   <script src="{% static 'js/quizList.js' %}" ></script>
+  <script>
+    $(".menu.uncorrect").click(function (e) {
+      e.preventDefault();
+    });
+  </script>
 {% endblock content %}

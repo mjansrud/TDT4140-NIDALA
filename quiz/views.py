@@ -13,19 +13,14 @@ STATUS_ATTEMPT = settings.STATUS_ATTEMPT
 @login_required
 def quizList(request, subject_id):
     subject = Subject.objects.get(code=subject_id)
-    quizes = Quiz.objects.distinct().filter(Q(subject=subject) & Q(quizQuestions__isnull=False) & (
-    Q(quizQuestions__questionBoxes__isnull=False) | Q(quizQuestions__questionTexts__isnull=False) | Q(
-        quizQuestions__questionCodes__isnull=False)))
-    questions = Question.objects.distinct().filter(quiz__in=quizes)
-    resources = Resource.objects.distinct().filter(question__in=questions)
-    attempts = Attempt.objects.filter(user=request.user)
+    quizes = [quiz for quiz in Quiz.objects.filter(subject=subject)]
+    Quiz.getQuizStatus(quizes, request.user)
+    Quiz.getResources(quizes)
+    Quiz.getAttempts(quizes, request.user)
 
     context = {
         'subject': subject,
         'quizes': quizes,
-        'attempts': attempts,
-        'questions': questions,
-        'resources': resources,
         'STATUS_ATTEMPT': STATUS_ATTEMPT,
     }
 
@@ -213,11 +208,7 @@ def quizResult(request, quiz_hash, attempt_hash):
 
 @login_required
 def subjects(request):
-    subjects = Subject.objects.distinct().filter(
-        Q(subjectQuizes__isnull=False) & Q(subjectQuizes__quizQuestions__isnull=False) & (
-        Q(subjectQuizes__quizQuestions__questionBoxes__isnull=False) | Q(
-            subjectQuizes__quizQuestions__questionTexts__isnull=False) | Q(
-            subjectQuizes__quizQuestions__questionCodes__isnull=False)))
+    subjects = Subject.objects.all()
 
     context = {
         'subjects': subjects
