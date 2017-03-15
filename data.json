@@ -30,6 +30,24 @@
     }
   },
   {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$30000$v9f5EFnFOEOE$I642AW4OC5R2QqUrQxUoPpTa5nYARWLu0r9/AS8T5yA=",
+      "last_login": "2017-03-04T21:17:38.900Z",
+      "is_superuser": true,
+      "username": "test",
+      "first_name": "",
+      "last_name": "",
+      "email": "test@test.test",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2017-02-23T14:21:12.371Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
     "model": "quiz.subject",
     "pk": 1,
     "fields": {
@@ -48,12 +66,22 @@
     }
   },
   {
+    "model": "quiz.subject",
+    "pk": 3,
+    "fields": {
+      "code": "TDT4120",
+      "title": "Algoritmer og Datastrukturer",
+      "syllabus": "<p>Introduction to Algorithms -Thomas H. Cormen</p>"
+    }
+  },
+  {
     "model": "quiz.quiz",
     "pk": 1,
     "fields": {
       "hash": "1b54373ade",
       "title": "Exercise 1 - Introduksjon",
       "description": "Bli kjent med Algdat!",
+      "exercise_number": 1,
       "attempts": 3,
       "pass_percent": 40,
       "subject": 1
@@ -66,6 +94,7 @@
       "hash": "fdf7fe2ff3",
       "title": "Exercise 2 - Problemer og algoritmer",
       "description": "Du skal lage et program for \u00e5 finne ord i en tekst. For \u00e5 gj\u00f8re dette, kan du lage en funksjon som bygger et tre og en funksjon som bruker treet til \u00e5 s\u00f8ke. F\u00f8rste linje av input til programmet er en streng som best\u00e5r av tegnene [a-z] og mellomrom. \r\n\r\nDette representerer dokumentet det skal s\u00f8kes i. De neste linjene i input er sp\u00f8rringer etter ord. Programmet skal s\u00f8ke etter disse ordene i teksten, og returnere hvilke posisjoner ordet finnes p\u00e5. Tegnet ? brukes til \u00e5 angi at her kan det st\u00e5 en hvilket som helst bokstav fra alfabetet [a-z].",
+      "exercise_number": 1,
       "attempts": 3,
       "pass_percent": 40,
       "subject": 1
@@ -78,6 +107,7 @@
       "hash": "6108a508de",
       "title": "Exercise 3 - Datastrukturer",
       "description": "I denne \u00f8vingen skal du flette sammen et sett med kortstokker. P\u00e5 hvert av disse kortene st\u00e5r det ett tall og en bokstav. Hver enkelt stokk er allerede sortert p\u00e5 tall. Oppgaven din er \u00e5 flette stokkene sammen slik at resultatet fremdeles er riktig sortert. Det er mange forskjellige m\u00e5ter \u00e5 l\u00f8se dette problemet p\u00e5, men det enkleste er nok \u00e5 flette sammen stokkene som du gj\u00f8r i merge-sort. Se Cormen side 32.",
+      "exercise_number": 1,
       "attempts": 3,
       "pass_percent": 40,
       "subject": 1
@@ -90,6 +120,7 @@
       "hash": "c84cd55e6a",
       "title": "Exercise 1 - Modeling, linearization",
       "description": "An iron ball of radius R and mass m is lifted by a magnet with a coil of N turns and a current i around\r\na core of length lc and cross section A = \u03c0R. The vertical position of the ball is z, which is positive\r\nin the downwards direction. The flux \u03c6 flows through the iron core, then over the airgap, through the\r\nball, and finally along the return path through the open air as shown in Figure 1.",
+      "exercise_number": 1,
       "attempts": 3,
       "pass_percent": 40,
       "subject": 2
@@ -102,9 +133,62 @@
       "hash": "a20fb38ea6",
       "title": "Exercise 2 - Modelica, Dymola, simple two-tank model)",
       "description": "In this problem, we will implement a model of a two-tank system coupled with a pipe with laminar\r\nflow.",
+      "exercise_number": 1,
       "attempts": 3,
       "pass_percent": 40,
       "subject": 2
+    }
+  },
+  {
+    "model": "quiz.quiz",
+    "pk": 6,
+    "fields": {
+      "hash": "879ab1188e",
+      "title": "Introduksjon",
+      "description": "Dette er f\u00f8rste \u00f8vingen i TDT4120 og ment som en introduksjon til faget.",
+      "exercise_number": 1,
+      "attempts": 3,
+      "pass_percent": 40,
+      "subject": 3
+    }
+  },
+  {
+    "model": "quiz.quiz",
+    "pk": 7,
+    "fields": {
+      "hash": "8a5378b0dd",
+      "title": "TDT-4120 - \u00d8ving 2 - Problemer og algoritmer",
+      "description": "\u00d8ving 2 - Problemer og algoritmer",
+      "exercise_number": 2,
+      "attempts": 3,
+      "pass_percent": 40,
+      "subject": 3
+    }
+  },
+  {
+    "model": "quiz.quiz",
+    "pk": 8,
+    "fields": {
+      "hash": "2a88af8695",
+      "title": "TDT-4120 - \u00d8ving3 - Datastrukturer",
+      "description": "Her ser vi n\u00e6rmere p\u00e5 datastrukturer",
+      "exercise_number": 3,
+      "attempts": 3,
+      "pass_percent": 40,
+      "subject": 3
+    }
+  },
+  {
+    "model": "quiz.quiz",
+    "pk": 9,
+    "fields": {
+      "hash": "152f5ca96c",
+      "title": "TDT-4120 - \u00d8ving 4 - Splitt og Hersk",
+      "description": "Oppgaver tilknyttet splitt og hersk metoden for \u00e5 l\u00f8se problemer. \r\n1. Del opp problemer i trivielt enkle delproblemer\r\n2. L\u00f8s disse\r\n3. Sett sammen l\u00f8sningene fra subproblemene",
+      "exercise_number": 4,
+      "attempts": 3,
+      "pass_percent": 40,
+      "subject": 3
     }
   },
   {
@@ -196,6 +280,331 @@
       "attempts": 2,
       "status": 0,
       "quiz": 2
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 8,
+    "fields": {
+      "title": "TDT-4120 \u00d81 - Oppg1",
+      "description": "<p>En instans av et problem er?&nbsp;</p>",
+      "type": "CHECKBOX",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 6
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 9,
+    "fields": {
+      "title": "TDT-4120 \u00d81 - Oppg2",
+      "description": "<p>Hvilket alternativ beskriver best algoritmer og datastrukturer?</p>",
+      "type": "CHECKBOX",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 6
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 10,
+    "fields": {
+      "title": "TDT-4120 \u00d81 - Oppg3",
+      "description": "<p>Hva er pseudokode?&nbsp;</p>",
+      "type": "CHECKBOX",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 6
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 11,
+    "fields": {
+      "title": "TDT-4120 \u00d81 - Oppg4",
+      "description": "<p>I dette faget vil vi i hovedsak vurdere algoritmer ut i fra...</p>",
+      "type": "CHECKBOX",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 6
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 12,
+    "fields": {
+      "title": "TDT-4120 \u00d81 - Oppg5",
+      "description": "<p>I denne oppgaven skal vi se p&aring; en variant av spillet Nim. Reglene er som f&oslash;lger: To spillere skal etter tur plukke vekk fyrstikker fra en haug p&aring; bordet. Den som plukker opp den siste fyrstikken har tapt. Hver spiller m&aring; plukke opp mins en fyrstikk i hver runde, og kan maksimal plukke opp seks fyrstikker.</p>\r\n\r\n<p>Hvis det er 5 fyrstikker igjen, hvor mange m&aring; du ta for &aring; vinne?&nbsp;</p>",
+      "type": "CHECKBOX",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 6
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 13,
+    "fields": {
+      "title": "TDT-4120 \u00d81 - Oppg6",
+      "description": "<p>I denne oppgaven skal vi se p&aring; en variant av spillet Nim. Reglene er som f&oslash;lger: To spillere skal etter tur plukke vekk fyrstikker fra en haug p&aring; bordet. Den som plukker opp den siste fyrstikken har tapt. Hver spiller m&aring; plukke opp mins en fyrstikk i hver runde, og kan maksimal plukke opp seks fyrstikker.</p>\r\n\r\n<p>Hvis det er 10&nbsp;fyrstikker igjen, hvor mange m&aring; du ta for &aring; vinne?&nbsp;</p>",
+      "type": "CHECKBOX",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 6
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 14,
+    "fields": {
+      "title": "TDT-4120 \u00d81 - Oppg7",
+      "description": "<p>I denne oppgaven skal vi se p&aring; en variant av spillet Nim. Reglene er som f&oslash;lger: To spillere skal etter tur plukke vekk fyrstikker fra en haug p&aring; bordet. Den som plukker opp den siste fyrstikken har tapt. Hver spiller m&aring; plukke opp mins en fyrstikk i hver runde, og kan maksimal plukke opp seks fyrstikker.</p>\r\n\r\n<p>Hvis det er 250 fyrstikker igjen, hvor mange m&aring; du ta for &aring; vinne?&nbsp;</p>",
+      "type": "CHECKBOX",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 6
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 15,
+    "fields": {
+      "title": "TDT-4120 \u00d81 - Oppg8",
+      "description": "<p>I denne oppgaven skal vi se p&aring; en variant av spillet Nim. Reglene er som f&oslash;lger: To spillere skal etter tur plukke vekk fyrstikker fra en haug p&aring; bordet. Den som plukker opp den siste fyrstikken har tapt. Hver spiller m&aring; plukke opp mins en fyrstikk i hver runde, og kan maksimal plukke opp seks fyrstikker.</p>\r\n\r\n<p>Hvis det er 134&nbsp;fyrstikker igjen, hvor mange m&aring; du ta for &aring; vinne?&nbsp;</p>",
+      "type": "CHECKBOX",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 6
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 16,
+    "fields": {
+      "title": "TDT-4120 \u00d82 - Oppg1",
+      "description": "<p>&nbsp;At en algoritme har kj&oslash;retid &Theta;(f(n)), betyr at kj&oslash;retiden har en ... begrensning.</p>",
+      "type": "CHECKBOX",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 7
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 17,
+    "fields": {
+      "title": "TDT-4120 \u00d82 - Oppg2",
+      "description": "<p>Hvilke av egenskapene m&aring; ikke bevises for &aring; bevise en l&oslash;kkeinvariant?</p>",
+      "type": "CHECKBOX",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 7
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 18,
+    "fields": {
+      "title": "TDT-4120 \u00d82 - Oppg3",
+      "description": "<p>Ved sterk induksjon antar vi at ...&nbsp;</p>",
+      "type": "CHECKBOX",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 7
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 19,
+    "fields": {
+      "title": "TDT-4120 \u00d82 - Oppg4",
+      "description": "<p>Hilken av algoritmene under er en splitt-og-hersk-algoritme?</p>",
+      "type": "RADIOBOX",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 7
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 20,
+    "fields": {
+      "title": "TDT-4120 \u00d82 - Oppg5",
+      "description": "<p>Hvor mange sammenligninger (comparisons) og bytter (swaps) trengs for &aring; sortere listen [5, 29, 32, 32, 65, 66] om du bruker insertion sort?</p>",
+      "type": "RADIOBOX",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 7
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 21,
+    "fields": {
+      "title": "TDT-4120 \u00d82 - Oppg6",
+      "description": "<p>Hvor mange sammenligninger (comparisons) og bytter (swaps) trengs for &aring; sortere listen [5, 32, 66, 32, 65, 29] om du bruker insertion sort?</p>",
+      "type": "RADIOBOX",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 7
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 22,
+    "fields": {
+      "title": "TDT-4120 \u00d83 - Oppg1",
+      "description": "<p>Anta du har en k&oslash;&nbsp;<code>Q = &lt;4,7,32,72,3&gt;</code>&nbsp;hvor det bakerste elementet representerer hodet til k&oslash;en.Hvordan vil k&oslash;en se ut etter &aring; ha kj&oslash;rt&nbsp;<code>ENQUEUE(Q,3)</code>?</p>",
+      "type": "RADIOBOX",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 8
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 23,
+    "fields": {
+      "title": "TDT-4120 \u00d83 - Oppg2",
+      "description": "<p>Anta du har en k&oslash;&nbsp;<code>Q = &lt;4,7,32,72,3&gt;</code>&nbsp;hvor det bakerste elementet representerer hodet til k&oslash;en.&nbsp;Hvordan vil k&oslash;en se ut etter &aring; ha kj&oslash;rt&nbsp;<code>DEQUEUE(Q)</code>?</p>",
+      "type": "RADIOBOX",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 8
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 24,
+    "fields": {
+      "title": "TDT-4120 \u00d83 - Oppg3",
+      "description": "<p>Anta du har en k&oslash;&nbsp;<code>Q = &lt;4,7,32,72,3&gt;</code>&nbsp;hvor det bakerste elementet representerer hodet til k&oslash;en.&nbsp;Hva er det minste antallet ENQUEUE/DEQUEUE-operasjoner du trenger for at k&oslash;en skal endres til&nbsp;<code>&lt;3,4,7,32,72,3&gt;</code>?</p>",
+      "type": "RADIOBOX",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 8
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 25,
+    "fields": {
+      "title": "TDT-4120 \u00d83 - Oppg4",
+      "description": "<p>Anta du har en stakk&nbsp;<code>S = &lt;4,7,32,72,3&gt;</code>&nbsp;hvor det bakerste elementet representerer toppen av stakken.Hvordan vil stakken se ut etter &aring; ha kj&oslash;rt&nbsp;<code>PUSH(S,3)</code>?</p>",
+      "type": "RADIOBOX",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 8
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 26,
+    "fields": {
+      "title": "TDT-4120 \u00d83 - Oppg5",
+      "description": "<p>Anta du har en stakk&nbsp;<code>S = &lt;4,7,32,72,3&gt;</code>&nbsp;hvor det bakerste elementet representerer toppen av stakken.&nbsp;&nbsp;Hvordan vil stakken se ut etter &aring; ha kj&oslash;rt&nbsp;<code>POP(S)</code>?</p>\r\n\r\n<p>&nbsp;</p>",
+      "type": "RADIOBOX",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 8
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 27,
+    "fields": {
+      "title": "TDT-4120 \u00d83 - Oppg6",
+      "description": "<p>Anta du har en stakk&nbsp;<code>S = &lt;4,7,32,72,3&gt;</code>&nbsp;hvor det bakerste elementet representerer toppen av stakken.</p>\r\n\r\n<p>Hva er det minste antallet PUSH/POP-operasjoner du trenger for at stakken skal endres til&nbsp;<code>&lt;3,4,7,32,72,3&gt;</code>?</p>",
+      "type": "RADIOBOX",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 8
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 28,
+    "fields": {
+      "title": "TDT-4120 \u00d84 - Oppg1",
+      "description": "<p>Vi har en usortert liste med&nbsp;nn&nbsp;elementer, og vi &oslash;nsker &aring; finne ut om alle elementene i listen er unike. Etter algoritmene vi har l&aelig;rt s&aring; langt, hva er raskeste kj&oslash;retiden vi kan f&aring; n&aring;r vi l&oslash;ser denne oppgaven?</p>",
+      "type": "CHECKBOX",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 9
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 29,
+    "fields": {
+      "title": "TDT-4120 \u00d84 - Oppg2",
+      "description": "<p>Vi &oslash;nsker &aring; sortere en liste med lavest mulig minneforbruk. Hvilken algoritme er best?</p>",
+      "type": "CHECKBOX",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 9
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 30,
+    "fields": {
+      "title": "TDT-4120 \u00d84 - Oppg3",
+      "description": "<p>Vi oppn&aring;r worst-case tid for quicksort hvis listen allerede er sortert?</p>",
+      "type": "RADIOBOX",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 9
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 31,
+    "fields": {
+      "title": "TDT-4120 \u00d84 - Oppg4",
+      "description": "<p>Quicksort forbruker&nbsp;O(1)O(1)&nbsp;ekstra minne i tillegg til det minnet som trengs for &aring; lagre tallene som skal sorteres?</p>",
+      "type": "CHECKBOX",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 9
+    }
+  },
+  {
+    "model": "quiz.question",
+    "pk": 32,
+    "fields": {
+      "title": "TDT-4120 \u00d84 - Oppg5",
+      "description": "<p>All input kan gi worst-case kj&oslash;retid for randomized-quicksort?</p>",
+      "type": "CHECKBOX",
+      "order": 0,
+      "attempts": 3,
+      "status": 0,
+      "quiz": 9
     }
   },
   {
@@ -343,24 +752,6 @@
       "solution": "biggest = 0\r\nfor x in numbers:\r\n    if biggest < x:\r\n        biggest = x\r\n        \r\nprint(\"%d\" % (biggest))",
       "answer": "15",
       "question": 2
-    }
-  },
-  {
-    "model": "auth.user",
-    "pk": 1,
-    "fields": {
-      "password": "pbkdf2_sha256$30000$v9f5EFnFOEOE$I642AW4OC5R2QqUrQxUoPpTa5nYARWLu0r9/AS8T5yA=",
-      "last_login": "2017-03-04T21:17:38.900Z",
-      "is_superuser": true,
-      "username": "test",
-      "first_name": "",
-      "last_name": "",
-      "email": "test@test.test",
-      "is_staff": true,
-      "is_active": true,
-      "date_joined": "2017-02-23T14:21:12.371Z",
-      "groups": [],
-      "user_permissions": []
     }
   }
 ]
