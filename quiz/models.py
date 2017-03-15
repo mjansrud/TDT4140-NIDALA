@@ -195,7 +195,7 @@ class Text(models.Model):
         max_length=200)
 
     # Foreign relations
-    question = models.ForeignKey(Question, related_name='questionTexts', unique=True)
+    question = models.ForeignKey(Question, related_name='questionTexts')
 
     class Meta:
         verbose_name = "Alternative: Text"
@@ -241,7 +241,7 @@ class Code(models.Model):
         max_length=1000)
 
     # Foreign relationss
-    question = models.ForeignKey(Question, related_name='questionCodes', unique=True)
+    question = models.ForeignKey(Question, related_name='questionCodes')
 
     class Meta:
         verbose_name = "Alternative: Code"
