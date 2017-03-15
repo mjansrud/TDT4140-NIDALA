@@ -7,7 +7,7 @@ $(function () {
         var id = $(this).data("hash");
         $(".attempt").each(function () {
             $(this).hide();
-        })
+        });
         $("#" + id).show();
     });
     $(".new-attempt").click(function (e) {
