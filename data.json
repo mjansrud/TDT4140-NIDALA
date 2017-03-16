@@ -200,7 +200,6 @@
       "type": "CHECKBOX",
       "order": 0,
       "attempts": 2,
-      "status": 0,
       "quiz": 1
     }
   },
@@ -213,7 +212,6 @@
       "type": "CODE",
       "order": 0,
       "attempts": 3,
-      "status": 0,
       "quiz": 1
     }
   },
@@ -226,7 +224,6 @@
       "type": "TEXT",
       "order": 0,
       "attempts": 3,
-      "status": 0,
       "quiz": 1
     }
   },
@@ -239,7 +236,6 @@
       "type": "RADIOBOX",
       "order": 0,
       "attempts": 3,
-      "status": 0,
       "quiz": 1
     }
   },
@@ -252,7 +248,6 @@
       "type": "RADIOBOX",
       "order": 0,
       "attempts": 3,
-      "status": 0,
       "quiz": 4
     }
   },
@@ -265,7 +260,6 @@
       "type": "TEXT",
       "order": 0,
       "attempts": 3,
-      "status": 0,
       "quiz": 4
     }
   },
@@ -278,7 +272,6 @@
       "type": "TEXT",
       "order": 0,
       "attempts": 2,
-      "status": 0,
       "quiz": 2
     }
   },
@@ -291,7 +284,6 @@
       "type": "CHECKBOX",
       "order": 0,
       "attempts": 3,
-      "status": 0,
       "quiz": 6
     }
   },
@@ -304,7 +296,6 @@
       "type": "CHECKBOX",
       "order": 0,
       "attempts": 3,
-      "status": 0,
       "quiz": 6
     }
   },
@@ -317,7 +308,6 @@
       "type": "CHECKBOX",
       "order": 0,
       "attempts": 3,
-      "status": 0,
       "quiz": 6
     }
   },
@@ -330,7 +320,6 @@
       "type": "CHECKBOX",
       "order": 0,
       "attempts": 3,
-      "status": 0,
       "quiz": 6
     }
   },
@@ -343,7 +332,6 @@
       "type": "CHECKBOX",
       "order": 0,
       "attempts": 3,
-      "status": 0,
       "quiz": 6
     }
   },
@@ -356,7 +344,6 @@
       "type": "CHECKBOX",
       "order": 0,
       "attempts": 3,
-      "status": 0,
       "quiz": 6
     }
   },
@@ -369,7 +356,6 @@
       "type": "CHECKBOX",
       "order": 0,
       "attempts": 3,
-      "status": 0,
       "quiz": 6
     }
   },
@@ -382,7 +368,6 @@
       "type": "CHECKBOX",
       "order": 0,
       "attempts": 3,
-      "status": 0,
       "quiz": 6
     }
   },
@@ -395,7 +380,6 @@
       "type": "CHECKBOX",
       "order": 0,
       "attempts": 3,
-      "status": 0,
       "quiz": 7
     }
   },
@@ -408,7 +392,6 @@
       "type": "CHECKBOX",
       "order": 0,
       "attempts": 3,
-      "status": 0,
       "quiz": 7
     }
   },
@@ -421,7 +404,6 @@
       "type": "CHECKBOX",
       "order": 0,
       "attempts": 3,
-      "status": 0,
       "quiz": 7
     }
   },
@@ -434,7 +416,6 @@
       "type": "RADIOBOX",
       "order": 0,
       "attempts": 3,
-      "status": 0,
       "quiz": 7
     }
   },
@@ -447,7 +428,6 @@
       "type": "RADIOBOX",
       "order": 0,
       "attempts": 3,
-      "status": 0,
       "quiz": 7
     }
   },
@@ -460,7 +440,6 @@
       "type": "RADIOBOX",
       "order": 0,
       "attempts": 3,
-      "status": 0,
       "quiz": 7
     }
   },
@@ -473,7 +452,6 @@
       "type": "RADIOBOX",
       "order": 0,
       "attempts": 3,
-      "status": 0,
       "quiz": 8
     }
   },
@@ -486,7 +464,6 @@
       "type": "RADIOBOX",
       "order": 0,
       "attempts": 3,
-      "status": 0,
       "quiz": 8
     }
   },
@@ -499,7 +476,6 @@
       "type": "RADIOBOX",
       "order": 0,
       "attempts": 3,
-      "status": 0,
       "quiz": 8
     }
   },
@@ -512,7 +488,6 @@
       "type": "RADIOBOX",
       "order": 0,
       "attempts": 3,
-      "status": 0,
       "quiz": 8
     }
   },
@@ -525,7 +500,6 @@
       "type": "RADIOBOX",
       "order": 0,
       "attempts": 3,
-      "status": 0,
       "quiz": 8
     }
   },
@@ -538,7 +512,6 @@
       "type": "RADIOBOX",
       "order": 0,
       "attempts": 3,
-      "status": 0,
       "quiz": 8
     }
   },
@@ -551,7 +524,6 @@
       "type": "CHECKBOX",
       "order": 0,
       "attempts": 3,
-      "status": 0,
       "quiz": 9
     }
   },
@@ -564,7 +536,6 @@
       "type": "CHECKBOX",
       "order": 0,
       "attempts": 3,
-      "status": 0,
       "quiz": 9
     }
   },
@@ -577,7 +548,6 @@
       "type": "RADIOBOX",
       "order": 0,
       "attempts": 3,
-      "status": 0,
       "quiz": 9
     }
   },
@@ -590,7 +560,6 @@
       "type": "CHECKBOX",
       "order": 0,
       "attempts": 3,
-      "status": 0,
       "quiz": 9
     }
   },
@@ -603,7 +572,6 @@
       "type": "CHECKBOX",
       "order": 0,
       "attempts": 3,
-      "status": 0,
       "quiz": 9
     }
   },
