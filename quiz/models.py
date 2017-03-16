@@ -179,12 +179,12 @@ class Question(models.Model):
             if self.type == "TEXT":
                 self.html += ' value=' + Text.objects.get(question=self).answer
 
-class Meta:
-    verbose_name = "Question"
-    verbose_name_plural = "Questions"
+    class Meta:
+        verbose_name = "Question"
+        verbose_name_plural = "Questions"
 
-def __str__(self):
-    return self.title
+    def __str__(self):
+        return self.title
 
 
 class Resource(models.Model):

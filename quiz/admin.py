@@ -1,8 +1,9 @@
 from django import forms
 from django.contrib import admin
 from django_ace import AceWidget
-from django.forms import ModelForm, TextInput
-from suit.widgets import NumberInput, AutosizedTextarea
+from django.contrib.admin import ModelAdmin
+from django.forms import ModelForm
+from suit.widgets import NumberInput
 
 from .models import *
 
@@ -50,7 +51,14 @@ class QuestionForm(ModelForm):
             'attempts':  NumberInput(attrs={'class': 'input-mini'}),
         }
 
-class QuestionAdmin(admin.ModelAdmin):
+    def __init__(self, *args, **kwargs):
+        super(QuestionForm, self).__init__(*args, **kwargs)
+
+        if self.instance.type == "CHECKBOX":
+            self.instance.exclude = ('type',)
+
+
+class QuestionAdmin(ModelAdmin):
     def get_model_perms(self, request): return {}
     form = QuestionForm
     inlines = [
@@ -83,14 +91,14 @@ class QuestionAdmin(admin.ModelAdmin):
         })
     ]
 
-    suit_form_tabs = (('question', 'Question'), ('selects', 'Selects'), ('text', 'Text'), ('code', 'Code'), ('resources', 'Resources'))
+    suit_form_tabs = (('question', 'Question'), ('selects', 'Checkboxes / Selects'), ('text', 'Text'), ('code', 'Code'), ('resources', 'Resources'))
     suit_classes = 'suit-tab suit-tab-question'
 
 class QuestionInline(admin.TabularInline):
     show_change_link = True
     model = Question
     form = QuestionForm
-    extra = 1
+    extra = 1 
     exclude = ['description']
     suit_classes = 'suit-tab suit-tab-questions'
 
