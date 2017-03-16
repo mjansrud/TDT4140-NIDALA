@@ -53,8 +53,7 @@ class Quiz(models.Model):
         verbose_name="Title",
         max_length=60)
 
-    description = models.TextField(
-        verbose_name="Description",
+    description = RichTextField(
         blank=True,
         null=True)
 
@@ -143,9 +142,9 @@ class Question(models.Model):
             #Default
             question.status = 'unanswered'
             # Check which questions the user has answered correct
-            if (Answer.objects.filter(question=question, correct=True, user=attempt.user, attempt=attempt).count()):
+            if (Answer.objects.filter(question=question, correct=True, attempt__user=attempt.user, attempt=attempt).count()):
                 question.status = 'correct'
-            elif (Answer.objects.filter(question=question, correct=False, user=attempt.user, attempt=attempt).count()):
+            elif (Answer.objects.filter(question=question, correct=False, attempt__user=attempt.user, attempt=attempt).count()):
                 question.status = 'uncorrect'
 
     def setQuestionVariables(self, attempt):
@@ -157,19 +156,19 @@ class Question(models.Model):
         self.html = ''
 
         # Check how many attempts the user has tried
-        self.user_attempts = Answer.objects.filter(question=self, attempt=attempt, user=attempt.user).count() + 1
+        self.user_attempts = Answer.objects.filter(question=self, attempt=attempt, attempt__user=attempt.user).count() + 1
 
         if self.user_attempts > self.attempts:
             self.finished = True
             self.button = 'Du har brukt for mange forsøk'
             self.html += ' class="disabled" disabled '
         # Check which questions the user has answered correct
-        if (Answer.objects.filter(question=self, correct=True, user=attempt.user, attempt=attempt).count()):
+        if (Answer.objects.filter(question=self, correct=True, attempt__user=attempt.user, attempt=attempt).count()):
             self.finished = True
             self.status = 'correct'
             self.button = 'Du har svart riktig'
             self.html += 'class="disabled" disabled '
-        elif (Answer.objects.filter(question=self, correct=False, user=attempt.user, attempt=attempt).count()):
+        elif (Answer.objects.filter(question=self, correct=False, attempt__user=attempt.user, attempt=attempt).count()):
             self.status = 'uncorrect'
 
         #If the user has answered correct or is out of attempts
@@ -193,13 +192,13 @@ class Resource(models.Model):
         verbose_name="Title",
         max_length=60)
 
-    description = models.TextField(
-        verbose_name="Description",
+    description = RichTextField(
         blank=True,
         null=True)
 
-    url = models.TextField(
+    url = models.CharField(
         verbose_name="URL",
+        max_length=400,
         blank=True,
         null=True)
 
@@ -224,8 +223,7 @@ class Select(models.Model):
         verbose_name="Title",
         max_length=60)
 
-    description = models.TextField(
-        verbose_name="Description",
+    description = RichTextField(
         blank=True,
         null=True)
 
@@ -259,6 +257,7 @@ class Text(models.Model):
 
 
 class Code(models.Model):
+
     LANGUAGE_CHOICES = (
         ("JAVASCRIPT", "Javascript"),
         ("JAVA", "Java"),
@@ -318,8 +317,14 @@ class Attempt(models.Model):
     quiz = models.ForeignKey(Quiz, related_name='quizAttempts')
     user = models.ForeignKey(User, related_name='userAttempts')
 
+    TYPE_CHOICES = [
+        (STATUS_ATTEMPT.STARTED, 'Started'),
+        (STATUS_ATTEMPT.PASSED, 'Passed'),
+        (STATUS_ATTEMPT.FAILED, 'Failed'),
+    ]
+
     # Internal
-    status = models.IntegerField(default=STATUS_ATTEMPT.STARTED)
+    status = models.IntegerField(default=STATUS_ATTEMPT.STARTED, choices=TYPE_CHOICES)
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -334,7 +339,6 @@ class Answer(models.Model):
     # Foreign relations
     question = models.ForeignKey(Question, related_name='questionAnswers')
     attempt = models.ForeignKey(Attempt, related_name='attemptAnswers')
-    user = models.ForeignKey(User, related_name='userAnswers')
 
     # Internal
     correct = models.BooleanField(default=False)

@@ -32,7 +32,7 @@ def quizFindQuestion(request, quiz_hash, attempt_hash):
     quiz = Quiz.objects.filter(hash=quiz_hash)
     attempt = Attempt.objects.filter(hash=attempt_hash)
     question = Question.objects.filter(quiz=quiz).order_by('order').first()
-    answers = Answer.objects.filter(attempt=attempt, user=request.user)
+    answers = Answer.objects.filter(attempt=attempt, attempt__user=request.user)
 
     if (answers.count() > 0):
         return redirect('quiz', quiz_hash, attempt_hash, answers.last().question.id)
@@ -141,9 +141,8 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
         context['user_current_answer_correct'] = user_current_answer_correct
 
         # Register that the user has answered a question
-        if Answer.objects.filter(question=question, attempt=attempt, user=request.user).count() + 1 <= question.attempts:
-            Answer.objects.create(attempt=attempt, question=question, correct=user_current_answer_correct,
-                                  user=request.user)
+        if Answer.objects.filter(question=question, attempt=attempt, attempt__user=request.user).count() + 1 <= question.attempts:
+            Answer.objects.create(attempt=attempt, question=question, correct=user_current_answer_correct)
 
     #Run functions
     Question.setQuestionsStatus(questions, attempt)
@@ -159,7 +158,7 @@ def quizResult(request, quiz_hash, attempt_hash):
     quiz = Quiz.objects.get(hash=quiz_hash)
     attempt = Attempt.objects.get(hash=attempt_hash)
     questions = [question for question in quiz.getRelevantQuestions(request.user, attempt)]
-    answers = Answer.objects.filter(question__in=questions, attempt=attempt, user=request.user)
+    answers = Answer.objects.filter(question__in=questions, attempt=attempt, attempt__user=request.user)
     resources = Resource.objects.distinct().filter(question__in=questions)
 
     # Run update functions
