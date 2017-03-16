@@ -15,7 +15,7 @@
       </div>
       {% for question in questions %}
         <a href="{% url 'quiz' quiz.hash attempt.hash question.id %}"
-           class="list-group-item {% if question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %} correct {% endif %} {% if question|filterQuestionStatus:attempt == STATUS_QUESTION.UNCORRECT %} uncorrect {% endif %}">{{ question.title }}</a>
+           class="list-group-item {{ question.status }}">{{ question.title }}</a>
       {% endfor %}
       <br>
       <a href="{% url 'quizResult' quiz.hash attempt.hash %}" class="btn btn-primary submit-button result"
@@ -33,7 +33,7 @@
                 <h5>{{ question.title }}</h5>
               </div>
               <div class="col-md-6" align="right">
-                <h5>Forsøk {{ attempt.attemptAnswers|filterAnswersByQuestion:question }}
+                <h5>Forsøk {{ question.user_attempts }}
                   av {{ question.attempts }}</h5>
               </div>
             </div>
@@ -58,25 +58,17 @@
                 <div class="form-group">
                   {% if question.type == "CHECKBOX" %}
 
-                    {% for alternative in alternative_boxes %}
+                    {% for alternative in question.alternatives %}
                       <div class="radio">
-                        <label><input type="checkbox" name="answer" value="{{ alternative.id }}"
-                                {% if attempt.attemptAnswers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}
-                                  {% if alternative.correct %} checked {% endif %}
-                                      class="disabled"
-                                      disabled {% endif %}>{{ alternative.title }}</label>
+                        <label><input type="checkbox" name="answer" value="{{ alternative.id }}" {% if alternative.correct and question.finished %} checked="checked" {% endif %} {{ question.html }} >{{ alternative.title }}</label>
                       </div>
                     {% endfor %}
 
                   {% elif question.type == "RADIOBOX" %}
 
-                    {% for alternative in alternative_boxes %}
+                    {% for alternative in question.alternatives %}
                       <div class="radio">
-                        <label><input type="radio" name="answer" value="{{ alternative.id }}"
-                                {% if answers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}
-                                  {% if alternative.correct %} checked {% endif %}
-                                      class="disabled"
-                                      disabled {% endif %}>{{ alternative.title }}</label>
+                        <label><input type="radio" name="answer" value="{{ alternative.id }}" {% if alternative.correct and question.finished  %} checked="checked" {% endif %} {{ question.html }}>{{ alternative.title }}</label>
                       </div>
                     {% endfor %}
 
@@ -84,32 +76,31 @@
 
                     <label for="text" class="col-2 col-form-label">Skriv inn svaret i boksen under</label>
                     <div class="col-10">
-                      <input class="form-control" type="text" name="answer" id="text"
-                              {% if attempt.attemptAnswers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}
-                             value="{{ alternative_text.answer }}" class="disabled"
-                             disabled {% endif %}}
+                      <input class="form-control" type="text" name="answer" id="text" {{ question.html }} />
                     </div>
 
                   {% elif question.type == "CODE" %}
 
                     <label for="editor" class="col-2 col-form-label">Skriv inn koden i boksen under</label>
-                    <div id="editor">{% if answers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}{{ alternative_code.solution }}{% else %}{{ alternative_code.start_code }}{% endif %}</div>
+                    <div id="editor">{% if question.finished %}{{ question.code }}{% else %}{{ question.alternative.start_code }}{% endif %}</div>
+                    <div id="usable" style="display:none">{{ question.alternative.input_usable }}</div>
+                    <div id="answer" style="display:none">{{ question.alternative.answer }}</div>
                     <textarea name="answer" style="display:none"></textarea>
                     <div class="row">
                       <div class="col-md-6">
                         <label for="input" class="col-2 col-form-label">Input</label>
-                        <div id="input">{{ alternative_code.input_shown }}</div>
+                        <div id="input">{{ question.alternative.input_shown }}</div>
                       </div>
                       <div class="col-md-6">
                         <label for="output" class="col-2 col-form-label">Output</label>
-                        <div id="output">{% if answers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}{{ alternative_code.answer }}{% endif %}</div>
+                        <div id="output">{% if question.finished  %}{{ question.alternative.answer }}{% endif %}</div>
                       </div>
                     </div>
                     <script src="https://cdn.jsdelivr.net/ace/1.2.6/min/ace.js"></script>
                     <script src="{% static 'js/quizCode.js' %}"></script>
                     <script>
                       $(function () {
-                        configureEditor('{{ alternative_code.language }}', {% if answers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT  %}true{%else%}false{% endif %})
+                        configureEditor('{{ question.alternative.language }}', {{ question.finished|lower }})
                       });
                     </script>
                   {% else %}
@@ -123,12 +114,8 @@
             <div class="row">
               <div class="col-md-8">
                 <button id="submit" class="btn btn-primary submit-button"
-                        {% if answers|filterAnswersByQuestion:question > question.attempts or question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}
-                        disabled {% endif %}>
-                  {% if question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %}
-                    Du har svart
-                    riktig{% elif question|filterQuestionStatus:attempt > question.attempts %}
-                    For mange forsøk{% else %}Svar{% endif %} </button>
+                        {% if question.finished %}
+                        disabled {% endif %}>{{ question.button }}</button>
               </div>
               <div class="col-md-4">
                 {% if questions|filterQuestionsFetchNext:question != False %}
@@ -141,21 +128,19 @@
                 {% endif %}
               </div>
             </div>
-            <div class="resources-padding">
+            <div class="resources-padding"> 
               <h5>Ressurser</h5>
             </div>
             <ul class="list-group">
-              {% if resources.count > 0 %}
-                {% for resource in resources %}
-                  <a href="{{ resource.url }}" target="_blank" class="list-group-item">
-                    {{ resource.title }}
-                  </a>
-                {% endfor %}
-              {% else %}
+              {% for resource in resources %}
+                <a href="{{ resource.url }}" target="_blank" class="list-group-item">
+                  {{ resource.title }}
+                </a>
+              {% empty %}
                 <li class="list-group-item">
                   Ingen ressurser tilgjengelig
                 </li>
-              {% endif %}
+              {% endfor %}
             </ul>
           </form>
         </div>

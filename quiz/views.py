@@ -14,7 +14,7 @@ STATUS_ATTEMPT = settings.STATUS_ATTEMPT
 def quizList(request, subject_id):
     subject = Subject.objects.get(code=subject_id)
     quizes = [quiz for quiz in Quiz.objects.filter(subject=subject)]
-    Quiz.getQuizStatus(quizes, request.user)
+    Quiz.setQuizStatus(quizes, request.user)
     Quiz.getResources(quizes)
     Quiz.getAttempts(quizes, request.user)
 
@@ -59,13 +59,13 @@ def quizRequestAttempt(request, quiz_hash):
 
 @login_required
 def quiz(request, quiz_hash, attempt_hash, quiz_question):
+
     # Fetch from database
     quiz = Quiz.objects.get(hash=quiz_hash)
     quizes = Quiz.objects.filter(subject=quiz.subject, exercise_number__lte=quiz.exercise_number)
     question = Question.objects.get(id=quiz_question)
     attempt = Attempt.objects.get(quiz=quiz, hash=attempt_hash, user=request.user)
-    questions = quiz.getRelevantQuestions(request.user, attempt)
-    answers = Answer.objects.filter(question__in=questions, user=request.user)
+    questions = [question for question in quiz.getRelevantQuestions(request.user, attempt)]
     resources = Resource.objects.filter(question=question)
 
     if (attempt.status != STATUS_ATTEMPT.STARTED):
@@ -78,20 +78,16 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
         'questions': questions,
         'resources': resources,
         'attempt': attempt,
-        'answers': answers,
         'STATUS_QUESTION': STATUS_QUESTION,
     }
 
     # For each question
     if question.type == 'CHECKBOX' or question.type == 'RADIOBOX':
-        alternative_boxes = Select.objects.filter(question=question.id)
-        context['alternative_boxes'] = alternative_boxes
+        question.alternatives = Select.objects.filter(question=question.id)
     elif question.type == 'TEXT':
-        alternative_text = Text.objects.get(question=question.id)
-        context['alternative_text'] = alternative_text
+        question.alternative = Text.objects.get(question=question.id)
     elif question.type == 'CODE':
-        alternative_code = Code.objects.get(question=question.id)
-        context['alternative_code'] = alternative_code
+        question.alternative = Code.objects.get(question=question.id)
 
     if (request.method == "POST"):
 
@@ -109,7 +105,7 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
                 # Convert to integers to use built in features
                 user_current_answers = list(map(int, user_current_answers))
 
-                for alternative in alternative_boxes:
+                for alternative in question.alternatives:
                     if (alternative.correct == True and alternative.id not in user_current_answers) or (
                             alternative.correct == False and alternative.id in user_current_answers):
                         user_current_answer_correct = False
@@ -119,7 +115,7 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
             if (len(user_current_answers) == 0):
                 user_current_answer_correct = False
             else:
-                for alternative in alternative_boxes:
+                for alternative in question.alternatives:
                     if alternative.correct == True and alternative.id != int(user_current_answers[0]):
                         user_current_answer_correct = False
 
@@ -128,7 +124,7 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
             if (len(user_current_answers) == 0):
                 user_current_answer_correct = False
             else:
-                if alternative_text.answer != user_current_answers[0]:
+                if question.alternative.answer != user_current_answers[0]:
                     user_current_answer_correct = False
 
         if question.type == 'CODE':
@@ -136,7 +132,7 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
             if (len(user_current_answers) == 0):
                 user_current_answer_correct = False
             else:
-                if alternative_code.answer != user_current_answers[0]:
+                if question.alternative.answer != user_current_answers[0]:
                     user_current_answer_correct = False
 
         # Attach new variables
@@ -145,62 +141,67 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
         context['user_current_answer_correct'] = user_current_answer_correct
 
         # Register that the user has answered a question
-        if answers.filter(question=question).count() + 1 <= question.attempts:
+        if Answer.objects.filter(question=question, attempt=attempt, user=request.user).count() + 1 <= question.attempts:
             Answer.objects.create(attempt=attempt, question=question, correct=user_current_answer_correct,
                                   user=request.user)
+
+    #Run functions
+    Question.setQuestionsStatus(questions, attempt)
+    question.setQuestionVariables(attempt)
 
     return render(request, 'quiz/quiz.html', context)
 
 
 @login_required
 def quizResult(request, quiz_hash, attempt_hash):
+
     # Fetch from database
     quiz = Quiz.objects.get(hash=quiz_hash)
-    quizes = Quiz.objects.filter(subject=quiz.subject, exercise_number__lte=quiz.exercise_number)
     attempt = Attempt.objects.get(hash=attempt_hash)
-    questions = quiz.getRelevantQuestions(request.user, attempt)
+    questions = [question for question in quiz.getRelevantQuestions(request.user, attempt)]
     answers = Answer.objects.filter(question__in=questions, attempt=attempt, user=request.user)
     resources = Resource.objects.distinct().filter(question__in=questions)
 
-    correct = 0
+    # Run update functions
+    Question.setQuestionsStatus(questions, attempt)
+
+    #Count the number of questions the user has answered correct
+    attempt.correct_count = 0
     for question in questions:
         for answer in answers:
-            if question == answer.question:
-                if answer.correct:
-                    correct = correct + 1
+            if question == answer.question and answer.correct:
+                attempt.correct_count = attempt.correct_count + 1
 
-    correct_percent = round(correct / len(questions) * 100, 1)
+    attempt.correct_percent = round(attempt.correct_count / len(questions) * 100, 1)
 
     # Add a grade to the students attempt
-    grade = 'F'
-    if correct_percent >= 88:
-        grade = 'A'
-    elif correct_percent >= 76:
-        grade = 'B'
-    elif correct_percent >= 64:
-        grade = 'C'
-    elif correct_percent >= 52:
-        grade = 'D'
-    elif correct_percent > quiz.pass_percent:
-        grade = 'E'
+    attempt.grade = 'F'
+    if attempt.correct_percent >= 88:
+        attempt.grade = 'A'
+    elif attempt.correct_percent >= 76:
+        attempt.grade = 'B'
+    elif attempt.correct_percent >= 64:
+        attempt.grade = 'C'
+    elif attempt.correct_percent >= 52:
+        attempt.grade = 'D'
+    elif attempt.correct_percent > quiz.pass_percent:
+        attempt.grade = 'E'
 
     # Update the database
-    if (grade != 'F'):
+    if (attempt.grade != 'F'):
         attempt.status = STATUS_ATTEMPT.PASSED
+        attempt.image = 'images/passed.png'
     else:
         attempt.status = STATUS_ATTEMPT.FAILED
+        attempt.image = 'images/failed.png'
+
     attempt.save()
 
     context = {
         'quiz': quiz,
         'questions': questions,
         'attempt': attempt,
-        'answers': answers,
         'resources': resources,
-        'correct': correct,
-        'correct_percent': correct_percent,
-        'grade': grade,
-        'STATUS_QUESTION': STATUS_QUESTION,
     }
 
     return render(request, 'quiz/quizResult.html', context)

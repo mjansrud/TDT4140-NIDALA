@@ -11,61 +11,80 @@ class EditorForm(forms.ModelForm):
     start_code = forms.CharField(widget=AceWidget(width="1000px", mode='python'))
     solution = forms.CharField(widget=AceWidget(width="1000px", mode='python'))
 
-
 class EditorFormAdmin(admin.ModelAdmin):
+    def get_model_perms(self, request): return {}
     form = EditorForm
 
+class ResourceInline(admin.TabularInline):
+    model = Resource
+    extra = 1
 
 class TextInline(admin.TabularInline):
     model = Text
-
+    max_num = 1
 
 class SelectInline(admin.TabularInline):
     model = Select
 
-
 class CodeInline(admin.TabularInline):
+    show_change_link = True
     model = Code
-
+    max_num = 1
 
 class QuestionAdmin(admin.ModelAdmin):
+    def get_model_perms(self, request): return {}
     inlines = [
         TextInline,
+        CodeInline,
         SelectInline,
-        CodeInline
+        ResourceInline
     ]
-
 
 class QuestionInline(admin.TabularInline):
-    model = Question
     show_change_link = True
+    model = Question
+    extra = 1
 
+class AttemptInLine(admin.TabularInline):
+    show_change_link = True
+    model = Attempt
+    extra = 0
 
 class QuizAdmin(admin.ModelAdmin):
+    def get_model_perms(self, request): return {}
     inlines = [
-        QuestionInline
+        QuestionInline,
+        AttemptInLine
     ]
 
-
 class QuizInline(admin.TabularInline):
-    model = Quiz
     show_change_link = True
-
+    model = Quiz
+    extra = 1
 
 class SubjectAdmin(admin.ModelAdmin):
     inlines = [
         QuizInline
     ]
 
+class AnswersInline(admin.TabularInline):
+    show_change_link = True
+    model = Answer
+    extra = 0
+
+class AttemptAdmin(admin.ModelAdmin):
+    def get_model_perms(self, request): return {}
+    inlines = [
+        AnswersInline
+    ]
 
 # Register your models here.
-
 admin.site.register(Subject, SubjectAdmin)
 admin.site.register(Quiz, QuizAdmin)
 admin.site.register(Question, QuestionAdmin)
-admin.site.register(Resource)
-admin.site.register(Select)
-admin.site.register(Text)
 admin.site.register(Code, EditorFormAdmin)
-admin.site.register(Attempt)
-admin.site.register(Answer)
+admin.site.register(Attempt, AttemptAdmin)
+#admin.site.register(Resource)
+#admin.site.register(Select)
+#admin.site.register(Text)
+#admin.site.register(Answer)

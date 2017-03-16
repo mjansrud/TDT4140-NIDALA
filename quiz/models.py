@@ -78,7 +78,7 @@ class Quiz(models.Model):
         return questions
 
     @staticmethod
-    def getQuizStatus(quizes, user):
+    def setQuizStatus(quizes, user):
         for quiz in quizes:
             if Attempt.objects.filter(user=user, quiz__id=quiz.id, status=STATUS_ATTEMPT.PASSED).count() > 0:
                 quiz.status = 'correct'
@@ -133,30 +133,60 @@ class Question(models.Model):
     order = models.IntegerField(default=0)
     attempts = models.IntegerField(default=3)
 
-    # Used just for displaying which questions the user has correct
-    status = models.IntegerField(default=STATUS_QUESTION.UNANSWERED, editable=False)
-
     # Foreign relations
     quiz = models.ForeignKey(Quiz, related_name='quizQuestions')
 
-    def userAnsweredCorrectly(self, attempt):
+    @staticmethod
+    def setQuestionsStatus(questions, attempt):
 
-        STATUS = STATUS_QUESTION.UNANSWERED
+        for question in questions:
+            #Default
+            question.status = 'unanswered'
+            # Check which questions the user has answered correct
+            if (Answer.objects.filter(question=question, correct=True, user=attempt.user, attempt=attempt).count()):
+                question.status = 'correct'
+            elif (Answer.objects.filter(question=question, correct=False, user=attempt.user, attempt=attempt).count()):
+                question.status = 'uncorrect'
 
+    def setQuestionVariables(self, attempt):
+
+        # Default
+        self.finished = False
+        self.status = 'unanswered'
+        self.button = 'Svar'
+        self.html = ''
+
+        # Check how many attempts the user has tried
+        self.user_attempts = Answer.objects.filter(question=self, attempt=attempt, user=attempt.user).count() + 1
+
+        if self.user_attempts > self.attempts:
+            self.finished = True
+            self.button = 'Du har brukt for mange forsøk'
+            self.html += ' class="disabled" disabled '
         # Check which questions the user has answered correct
         if (Answer.objects.filter(question=self, correct=True, user=attempt.user, attempt=attempt).count()):
-            STATUS = STATUS_QUESTION.CORRECT
+            self.finished = True
+            self.status = 'correct'
+            self.button = 'Du har svart riktig'
+            self.html += 'class="disabled" disabled '
         elif (Answer.objects.filter(question=self, correct=False, user=attempt.user, attempt=attempt).count()):
-            STATUS = STATUS_QUESTION.UNCORRECT
+            self.status = 'uncorrect'
 
-        return STATUS
+        #If the user has answered correct or is out of attempts
+        if self.finished:
+            # Get answers based on type
+            if self.type == "CODE":
+                self.code = Code.objects.get(question=self).solution
+            if self.type == "TEXT":
+                self.html += ' value=' + Text.objects.get(question=self).answer
 
-    class Meta:
-        verbose_name = "Question"
-        verbose_name_plural = "Questions"
 
-    def __str__(self):
-        return self.title
+class Meta:
+    verbose_name = "Question"
+    verbose_name_plural = "Questions"
+
+def __str__(self):
+    return self.title
 
 
 class Resource(models.Model):
@@ -298,8 +328,7 @@ class Attempt(models.Model):
         verbose_name_plural = "Attempts"
 
     def __str__(self):
-        return str(self.user.username + ' : ' + str(self.quiz.subject.code) + ' -> ' + str(
-            self.quiz.title) + ' -> Forsøk ' + str(self.hash))
+        return str(self.user.username + ' -> Forsøk ' + str(self.hash))
 
 
 class Answer(models.Model):
@@ -317,6 +346,4 @@ class Answer(models.Model):
         verbose_name_plural = "Answers"
 
     def __str__(self):
-        return str(self.user.username + ' : ' + str(self.question.quiz.subject.code) + ' -> ' + str(
-            self.question.quiz.title) + ' -> ' + str(self.question.title) + ' -> Forsøk ' + str(
-            self.attempt.hash) + ' -> Resultat ' + str(self.correct))
+        return str('Resultat ' + str(self.correct))

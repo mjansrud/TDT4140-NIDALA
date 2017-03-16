@@ -2,7 +2,15 @@
  * Created by mjansrud on 15.03.2017.
  */
 
-function configureEditor(language, correct){
+//Global variables
+//Need to be able to cancel the interval
+var interval;
+var language
+
+function configureEditor(lang, correct){
+
+    //Set global variables
+    language = lang;
 
     //Editor
     editor = ace.edit("editor");
@@ -24,7 +32,7 @@ function configureEditor(language, correct){
 
     //Output
     output = ace.edit("output");
-    input.container.style.pointerEvents = "none"
+    output.container.style.pointerEvents = "none"
     output.container.style.opacity = 0.8
     output.renderer.setStyle("disabled", true)
     output.blur()
@@ -42,11 +50,8 @@ function configureEditor(language, correct){
     }
 }
 
-//Call the sphere engine API
+//Create functions to be able to call the sphere engine API
 $(function () {
-
-    //Need to be able to cancel the interval
-    var interval;
 
     function createStatusMessage(message) {
         $("#submit").html('<i class="fa fa-cog fa-spin"></i> ' + message);
@@ -69,11 +74,11 @@ $(function () {
                     $("#submit").attr("disabled", false);
                     if (json.output) {
                         output.getSession().setValue(json.output);
-                        if ("{{ alternative_code.answer }}" == String(json.output.replace(/[^a-z0-9\s]/gi, '')).trim()) {
+                        if ($("#answer").html() == String(json.output.replace(/[^a-z0-9\s]/gi, '')).trim()) {
                             $("#submit").html('<i class="fa fa-check"></i> Du svarte riktig!');
                         } else {
                             $("#submit").html('<i class="fa fa-times"></i> Du svarte feil!');
-                        }
+                        } 
                         textarea = $('textarea[name="answer"]');
                         textarea.html(String(json.output.replace(/[^a-z0-9\s]/gi, '')).trim());
                         $("#submit").off().trigger("click");
@@ -100,7 +105,7 @@ $(function () {
             url: "http://aecae34f.compilers.sphere-engine.com/api/v3/submissions?access_token=27a39299db2cb8376648f2d1adc907ce",
             data: {
                 language: language,
-                source: "{{ alternative_code.input_usable }}" + '\n' + editor.getValue()
+                source: $("#usable").html() + '\n' + editor.getValue()
             },
             success: function (result) {
                 $("#submit").attr("disabled", true);

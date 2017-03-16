@@ -65,7 +65,6 @@
         {% endfor %}
       </ul>
     {% endfor %}
-
   </div>
   <div id="confirm" class="modal fade">
     <div class="modal-body">
@@ -77,9 +76,4 @@
     </div>
   </div>
   <script src="{% static 'js/quizList.js' %}" ></script>
-  <script>
-    $(".menu.uncorrect").click(function (e) {
-      e.preventDefault();
-    });
-  </script>
 {% endblock content %}

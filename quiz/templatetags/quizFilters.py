@@ -29,18 +29,6 @@ def filterAnswersByQuiz(answers, quiz):
     return answers.filter(attempt__quiz=quiz)
 
 @register.filter
-def filterAttemptsHasPassedQuiz(attempts, quiz):
-
-    passed = False
-    attempts = attempts.filter(quiz=quiz)
-
-    for attempt in attempts:
-        if attempt.status == STATUS_ATTEMPT.PASSED:
-            passed = True
-
-    return passed
-
-@register.filter
 def filterQuestionsByAnswers(questions, answers):
 
     #answers = Answer.objects.filter(question__in=questions, user=request.user)
@@ -51,15 +39,6 @@ def filterQuestionsByAnswers(questions, answers):
                 questions = questions.exclude(id=question.id)
 
     return questions
-
-@register.filter
-def filterResourcesCount(resources, questions):
-    return resources.filter(question__in=questions).count()
-
-
-@register.filter
-def filterQuestionStatus(question, attempt):
-    return question.userAnsweredCorrectly(attempt)
 
 @register.filter
 def filterQuestionsFetchNext(questions, question):

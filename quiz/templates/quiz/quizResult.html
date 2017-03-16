@@ -11,8 +11,8 @@
     <div class="col-md-12">
       <div class="panel panel-default">
         <div class="panel-body">
-          <div class="panel-body">Du svarte riktig på {{ correct }} av {{ questions.count }} spørsmål, som
-            tilsvarer {{ correct_percent }}% av {{ quiz.pass_percent }}% nødvendig for bestått.
+          <div class="panel-body">Du svarte riktig på {{ attempt.correct_count }} av {{ questions.count }} spørsmål, som
+            tilsvarer {{ attempt.correct_percent }}% av {{ quiz.pass_percent }}% nødvendig for bestått.
           </div>
         </div>
       </div>
@@ -24,14 +24,10 @@
       <div class="panel panel-default">
         <div class="panel-body">
           <div class="col-md-6" align="center">
-            <h1>{{ grade }}</h1>
+            <h1>{{ attempt.grade }}</h1>
           </div>
           <div class="col-md-6" align="center">
-            {% if grade != 'F' %}
-              <img src="{% static "images/passed.png" %}" alt="My image" width="105px"/>
-            {% else %}
-              <img src="{% static "images/failed.png" %}" alt="My image" width="105px"/>
-            {% endif %}
+            <img src="{% static attempt.image %}" alt="My image" width="105px"/>
           </div>
         </div>
       </div>
@@ -41,17 +37,15 @@
         <h5>Basert på feil: Les følgende ressurser</h5>
       </div>
       <ul class="list-group">
-        {% if resources|filterResourcesCount:questions > 0 %}
-          {% for resource in resources|filterResourcesByQuiz:questions %}
-            <a href="{{ resource.url }}" target="_blank" class="list-group-item">
-              {{ resource.title }}
-            </a>
-          {% endfor %}
-        {% else %}
+        {% for resource in resources %}
+          <a href="{{ resource.url }}" target="_blank" class="list-group-item">
+            {{ resource.title }}
+          </a>
+        {% empty %}
           <li class="list-group-item">
             Ingen ressurser tilgjengelig
           </li>
-        {% endif %}
+        {% endfor %}
       </ul>
     </div>
 
@@ -65,7 +59,7 @@
       <ul class="list-group">
         {% for question in questions %}
           <li href="{% url 'quiz' quiz.hash attempt.hash question.id %}"
-              class="list-group-item {% if question|filterQuestionStatus:attempt == STATUS_QUESTION.CORRECT %} correct {% endif %} {% if question|filterQuestionStatus:attempt == STATUS_QUESTION.UNCORRECT %} uncorrect {% endif %}">
+              class="list-group-item {{ question.status }}">
             {{ question.title }}
           </li>
         {% endfor %}
