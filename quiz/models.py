@@ -180,7 +180,6 @@ class Question(models.Model):
             if self.type == "TEXT":
                 self.html += ' value=' + Text.objects.get(question=self).answer
 
-
 class Meta:
     verbose_name = "Question"
     verbose_name_plural = "Questions"
