@@ -36,7 +36,7 @@ class SelectInline(admin.TabularInline):
     model = Select
     exclude = ['description']
     suit_classes = 'suit-tab suit-tab-selects'
- 
+
 class CodeInline(admin.StackedInline):
     show_change_link = True
     model = Code

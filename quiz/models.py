@@ -109,6 +109,7 @@ class Quiz(models.Model):
 
 
 class Question(models.Model):
+
     # Internal information
     title = models.CharField(
         verbose_name="Title",
@@ -127,7 +128,8 @@ class Question(models.Model):
 
     type = models.CharField(max_length=9,
                             choices=TYPE_CHOICES,
-                            default="CHECKBOX")
+                            default="CHECKBOX",
+                            verbose_name="Answer type")
 
     order = models.IntegerField(default=0)
     attempts = models.IntegerField(default=3)

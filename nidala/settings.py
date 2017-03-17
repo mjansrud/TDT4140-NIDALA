@@ -181,6 +181,19 @@ CKEDITOR_CONFIGS = {
 
 
 SUIT_CONFIG = {
+    'MENU': (
+
+        # Rename app and set icon
+        {'app': 'auth', 'label': 'Authorization', 'icon': 'icon-lock'},
+
+        # Rename app and set icon
+        {'app': 'post_office', 'label': 'Emails', 'icon': 'icon-envelope'},
+
+        # Rename app and set icon
+        {'app': 'quiz', 'label': 'Exercises', 'icon': 'icon-check'},
+
+
+    ),
     # header
     'ADMIN_NAME': 'Nidala - Smart learning',
     # 'HEADER_DATE_FORMAT': 'l, j. F Y',
@@ -195,7 +208,7 @@ SUIT_CONFIG = {
     'MENU_ICONS': {
         'sites': 'icon-leaf',
         'auth': 'icon-lock',
-     },
+    },
     'CONFIRM_UNSAVED_CHANGES': True,
     # 'MENU_OPEN_FIRST_CHILD': True, # Default True
     # 'MENU_EXCLUDE': ('auth.group',),
