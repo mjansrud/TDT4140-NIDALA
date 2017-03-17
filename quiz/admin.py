@@ -54,19 +54,32 @@ class QuestionForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(QuestionForm, self).__init__(*args, **kwargs)
 
-        if self.instance.type == "CHECKBOX":
-            self.instance.exclude = ('type',)
-
-
 class QuestionAdmin(ModelAdmin):
     def get_model_perms(self, request): return {}
     form = QuestionForm
+
     inlines = [
         TextInline,
         CodeInline,
         SelectInline,
         ResourceInline
     ]
+
+    def get_form(self, request, obj=None, **kwargs):
+        if obj != None:
+            if obj.type == 'CHECKBOX':
+                QuestionAdmin.suit_form_tabs = (
+                ('question', 'Question'), ('selects', 'Checkboxes'))
+            if obj.type == 'RADIOBOX':
+                QuestionAdmin.suit_form_tabs = (
+                    ('question', 'Question'), ('selects', 'Radioboxes'))
+            if obj.type == 'TEXT':
+                QuestionAdmin.suit_form_tabs = (
+                    ('question', 'Question'), ('text', 'Text answer'))
+            if obj.type == 'CODE':
+                QuestionAdmin.suit_form_tabs = (
+                    ('question', 'Question'), ('code', 'Code answer'))
+        return super(QuestionAdmin, self).get_form(request, obj, **kwargs)
 
     fieldsets = [
         (None, {
@@ -90,8 +103,9 @@ class QuestionAdmin(ModelAdmin):
             'fields': [],
         })
     ]
-
-    suit_form_tabs = (('question', 'Question'), ('selects', 'Checkboxes / Selects'), ('text', 'Text'), ('code', 'Code'), ('resources', 'Resources'))
+    #suit_form_tabs = (
+    #            ('question', 'Question'), ('selects', 'Checkboxes / Selects'), ('text', 'Text'), ('code', 'Code'),
+    #            ('resources', 'Resources'))
     suit_classes = 'suit-tab suit-tab-question'
 
 class QuestionInline(admin.TabularInline):
