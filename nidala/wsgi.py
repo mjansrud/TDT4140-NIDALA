@@ -15,9 +15,10 @@ sys.path.append('/home/nidala/public_html/nidala')
 # add the hellodjango project path into the sys.path
 sys.path.append('/home/nidala/public_html')
 
-
 # add the virtualenv site-packages path to the sys.path
 sys.path.append('/usr/lib/python3.4/site-packages')
+
+exec(open("/home/nidala/configuration/config.py").read()) 
 
 from django.core.wsgi import get_wsgi_application
 from whitenoise.django import DjangoWhiteNoise
