@@ -11,7 +11,7 @@ STATUS_ATTEMPT = settings.STATUS_ATTEMPT
 
 # URL functions
 @login_required
-def quizList(request, subject_id):
+def quizList(request, subject_id): 
     subject = get_object_or_404(Subject, code=subject_id)
     quizes = [quiz for quiz in Quiz.objects.filter(subject=subject)]
     Quiz.setQuizStatus(quizes, request.user)
