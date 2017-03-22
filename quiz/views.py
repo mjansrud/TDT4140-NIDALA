@@ -202,7 +202,7 @@ def quizResult(request, quiz_hash, attempt_hash):
         mail.send(
             'forelesere@nidala.no',  # List of email addresses also accepted
             'post@nidala.no',
-            subject= request.user.username + ' is failing in ' + quiz.code + "!",
+            subject= request.user.username + ' is failing in ' + quiz.subject.code + "!",
             message='We have detected that the student has failed an attempt on a quiz in your class',
             html_message='We have detected that the student has failed an attempt on a quiz in your class',
         )
