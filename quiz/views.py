@@ -11,7 +11,7 @@ STATUS_ATTEMPT = settings.STATUS_ATTEMPT
 
 # URL functions
 @login_required
-def quizList(request, subject_id): 
+def quizList(request, subject_id):
     subject = get_object_or_404(Subject, code=subject_id)
     quizes = [quiz for quiz in Quiz.objects.filter(subject=subject)]
     Quiz.setQuizStatus(quizes, request.user)
@@ -85,9 +85,9 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
     if question.type == 'CHECKBOX' or question.type == 'RADIOBOX':
         question.alternatives = Select.objects.filter(question=question.id)
     elif question.type == 'TEXT':
-        question.alternative = get_object_or_404(Text, uestion=question.id)
+        question.alternative = get_object_or_404(Text, question=question.id)
     elif question.type == 'CODE':
-        question.alternative = get_object_or_404(Code, uestion=question.id)
+        question.alternative = get_object_or_404(Code, question=question.id)
 
     if (request.method == "POST"):
 
