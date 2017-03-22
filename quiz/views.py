@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 from post_office import mail
 
 from .models import *
@@ -33,7 +33,7 @@ def quizFindQuestion(request, quiz_hash, attempt_hash):
 
     quiz = get_object_or_404(Quiz, hash=quiz_hash)
     attempt = get_object_or_404(Attempt, hash=attempt_hash, user=request.user)
-    question = get_object_or_404(Question, quiz=quiz, pk=1)
+    question = get_list_or_404(Question.objects.order_by('order'), quiz=quiz).first()
     answers = Answer.objects.filter(attempt=attempt, attempt__user=request.user)
 
     if (answers.count() > 0):
