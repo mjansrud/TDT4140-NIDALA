@@ -29,8 +29,8 @@ def quizList(request, subject_id):
 
 @login_required
 def quizFindQuestion(request, quiz_hash, attempt_hash):
-    quiz = Quiz.objects.filter(hash=quiz_hash)
-    attempt = Attempt.objects.filter(hash=attempt_hash)
+    quiz = get_object_or_404(Quiz, ash=quiz_hash)
+    attempt = get_object_or_404(Attempt, hash=attempt_hash, user=request.user)
     question = get_object_or_404(Question, quiz=quiz).order_by('order')
     answers = Answer.objects.filter(attempt=attempt, attempt__user=request.user)
 
