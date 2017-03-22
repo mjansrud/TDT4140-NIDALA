@@ -211,6 +211,10 @@ class Resource(models.Model):
         questions = Question.filter(quiz=quiz)
         return self.filter(question__in=questions)
 
+    @staticmethod
+    def getResourcesByResult(questions, user):
+        return Resource.objects.distinct().filter(question__in=questions, question__questionAnswers__correct=False, question__questionAnswers__attempt__user=user)
+
     class Meta:
         verbose_name = "Resource"
         verbose_name_plural = "Resources"
@@ -351,3 +355,5 @@ class Answer(models.Model):
 
     def __str__(self):
         return str('Resultat ' + str(self.correct))
+
+
