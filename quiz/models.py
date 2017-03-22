@@ -12,7 +12,7 @@ STATUS_ATTEMPT = settings.STATUS_ATTEMPT
 
 # Creates unique URLS
 def hash_generate():
-    return uuid4().hex[:8]
+    return uuid4().hex[:10]
 
 
 # Subjects like TDT
@@ -307,7 +307,7 @@ class Code(models.Model):
 class Attempt(models.Model):
     # Internal information
     hash = models.CharField(
-        verbose_name="Hash",
+        verbose_name="Hash", 
         max_length=10,
         unique=True,
         default=hash_generate,
