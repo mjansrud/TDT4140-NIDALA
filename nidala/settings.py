@@ -158,13 +158,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, "/static")
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 #Custom constants
 class STATUS_QUESTION:
     UNANSWERED = 0
     CORRECT = 1
-    UNCORRECT = 2 
+    UNCORRECT = 2
 
 class STATUS_ATTEMPT:
     STARTED = 0
