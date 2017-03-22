@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from post_office import mail
- 
+
 from .models import *
 
 # Constants
@@ -160,6 +160,7 @@ def quizResult(request, quiz_hash, attempt_hash):
     attempt = get_object_or_404(Attempt, hash=attempt_hash, user=request.user)
     questions = [question for question in quiz.getRelevantQuestions(request.user, attempt)]
     answers = Answer.objects.filter(question__in=questions, attempt=attempt, attempt__user=request.user)
+
     # Run update functions
     Question.setQuestionsStatus(questions, attempt)
 
@@ -201,9 +202,9 @@ def quizResult(request, quiz_hash, attempt_hash):
         mail.send(
             'forelesere@nidala.no',  # List of email addresses also accepted
             'post@nidala.no',
-            subject='Student is failing!!',
-            message='We have detected that a student is failing your class',
-            html_message='We have detected that a student is failing your class',
+            subject= request.user.username + ' is failing in ' + quiz.code + "!",
+            message='We have detected that the student has failed an attempt on a quiz in your class',
+            html_message='We have detected that the student has failed an attempt on a quiz in your class',
         )
 
     attempt.save()
