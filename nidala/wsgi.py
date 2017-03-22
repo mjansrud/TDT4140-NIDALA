@@ -9,16 +9,21 @@ https://docs.djangoproject.com/en/1.10/howto/deployment/wsgi/
 
 import os, sys
 
-# add the hellodjango project path into the sys.path
-sys.path.append('/home/nidala/public_html/nidala')
+try:
+    exec (open("config.py").read())
 
-# add the hellodjango project path into the sys.path
-sys.path.append('/home/nidala/public_html')
+    # add the hellodjango project path into the sys.path
+    sys.path.append('/home/nidala/public_html/nidala')
 
-# add the virtualenv site-packages path to the sys.path
-sys.path.append('/usr/lib/python3.4/site-packages')
+    # add the hellodjango project path into the sys.path
+    sys.path.append('/home/nidala/public_html')
 
-exec(open("/home/nidala/configuration/config.py").read()) 
+    # add the virtualenv site-packages path to the sys.path
+    sys.path.append('/usr/lib/python3.4/site-packages')
+
+except:
+
+    os.environ['SERVER_PRODUCTION'] = 'False'
 
 from django.core.wsgi import get_wsgi_application
 from whitenoise.django import DjangoWhiteNoise

@@ -10,7 +10,6 @@ from django.db.models import Q
 STATUS_QUESTION = settings.STATUS_QUESTION
 STATUS_ATTEMPT = settings.STATUS_ATTEMPT
 
-
 # Creates unique URLS
 def hash_generate():
     return uuid4().hex[:8]

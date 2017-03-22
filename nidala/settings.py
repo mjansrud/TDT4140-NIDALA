@@ -15,18 +15,21 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# Check if production
+if os.environ.get('SERVER_PRODUCTION', '') == 'True':
+    DEBUG = False
+    SECURE_SSL_REDIRECT = True
+    PRODUCTION = True
+else:
+    PRODUCTION = False
+    DEBUG = True
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '78!#*f5j3lzkc1odq_pjt8ki3-%b^3-!d=u7%l5^g=f!n^!_dk'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False 
-
-ALLOWED_HOSTS = ['nidala.no']
-SECURE_SSL_REDIRECT = True
+SECRET_KEY = os.environ.get('SERVER_SECRET_KEY', 'Default server key')
+ALLOWED_HOSTS = ['nidala.no', 'localhost'] 
 
 # Application definition
 
@@ -81,16 +84,7 @@ WSGI_APPLICATION = 'nidala.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
-LOCAL = False
-
-if LOCAL:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
-    }
-else:
+if PRODUCTION:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -101,7 +95,13 @@ else:
             'PORT': '',  # Set to empty string for default.
         }
     }
-
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
 # Email setup
 POST_OFFICE = {
