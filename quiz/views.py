@@ -199,6 +199,9 @@ def quizResult(request, quiz_hash, attempt_hash):
         attempt.status = STATUS_ATTEMPT.FAILED
         attempt.image = 'images/failed.png'
 
+
+    if(quiz.hasFailedQuiz()):
+
         mail.send(
             'forelesere@nidala.no',  # List of email addresses also accepted
             'post@nidala.no',
