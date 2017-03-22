@@ -15,6 +15,7 @@ def quizList(request, subject_id):
 
     subject = get_object_or_404(Subject, code=subject_id)
     quizes = [quiz for quiz in Quiz.objects.filter(subject=subject)]
+
     Quiz.setQuizStatus(quizes, request.user)
     Quiz.getResources(quizes)
     Quiz.getAttempts(quizes, request.user)
