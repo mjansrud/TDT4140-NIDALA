@@ -9,10 +9,10 @@ from .models import *
 STATUS_QUESTION = settings.STATUS_QUESTION
 STATUS_ATTEMPT = settings.STATUS_ATTEMPT
 
-
 # URL functions
 @login_required
 def quizList(request, subject_id):
+
     subject = get_object_or_404(Subject, code=subject_id)
     quizes = [quiz for quiz in Quiz.objects.filter(subject=subject)]
     Quiz.setQuizStatus(quizes, request.user)
@@ -27,20 +27,18 @@ def quizList(request, subject_id):
 
     return render(request, 'quiz/quizList.html', context)
 
-
 @login_required
 def quizFindQuestion(request, quiz_hash, attempt_hash):
 
     quiz = get_object_or_404(Quiz, hash=quiz_hash)
     attempt = get_object_or_404(Attempt, hash=attempt_hash, user=request.user)
-    question = get_object_or_404(Question, quiz=quiz)
+    question = Question.objects.filter(quiz=quiz).order_by('order').first()
     answers = Answer.objects.filter(attempt=attempt, attempt__user=request.user)
 
     if (answers.count() > 0):
         return redirect('quiz', quiz_hash, attempt_hash, answers.last().question.id)
 
     return redirect('quiz', quiz_hash, attempt_hash, question.id)
-
 
 @login_required
 def quizRequestAttempt(request, quiz_hash):
@@ -49,15 +47,14 @@ def quizRequestAttempt(request, quiz_hash):
     attempts = Attempt.objects.filter(quiz=quiz, user=request.user)
 
     if attempts.count() <= quiz.attempts - 1:
+        question = Question.objects.filter(quiz=quiz).order_by('order').first()
 
         # Register that the user has answered a question
-        question = get_object_or_404(Question, quiz=quiz)
         Attempt.objects.create(quiz=quiz, user=request.user)
         return redirect('quiz', quiz_hash, Attempt.objects.latest('id').hash, question.id)
 
     # Find quiz
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
 
 @login_required
 def quiz(request, quiz_hash, attempt_hash, quiz_question):
@@ -152,7 +149,6 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
 
     return render(request, 'quiz/quiz.html', context)
 
-
 @login_required
 def quizResult(request, quiz_hash, attempt_hash):
 
@@ -221,7 +217,6 @@ def quizResult(request, quiz_hash, attempt_hash):
     }
 
     return render(request, 'quiz/quizResult.html', context)
-
 
 @login_required
 def subjects(request):
