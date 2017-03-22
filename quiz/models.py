@@ -70,8 +70,10 @@ class Quiz(models.Model):
         earlier_questions = earlier_questions.exclude(
             Q(questionAnswers__correct=True) & ~Q(questionAnswers__attempt=attempt))
         questions = questions | earlier_questions
-        questions = questions.distinct().filter(
-            Q(questionBoxes__isnull=False) | Q(questionTexts__isnull=False) | Q(questionCodes__isnull=False))
+
+        #Add only if questions have alternatives
+        #questions = questions.distinct().filter(
+        #    Q(questionBoxes__isnull=False) | Q(questionTexts__isnull=False) | Q(questionCodes__isnull=False))
 
         return questions
 
