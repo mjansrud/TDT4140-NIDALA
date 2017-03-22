@@ -10,7 +10,7 @@ https://docs.djangoproject.com/en/1.10/howto/deployment/wsgi/
 import os, sys
 
 try:
-    exec (open("config.py").read())
+    exec (open("/home/nidala/configuration/config.py").read())
 
     # add the hellodjango project path into the sys.path
     sys.path.append('/home/nidala/public_html/nidala')
