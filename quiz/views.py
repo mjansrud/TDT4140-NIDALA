@@ -200,9 +200,9 @@ def quizResult(request, quiz_hash, attempt_hash):
         attempt.image = 'images/failed.png'
 
 
-    if(quiz.hasFailedQuiz()):
+    if(quiz.hasFailedQuiz(request.user)):
 
-        mail.send(
+        mail.send(   
             'forelesere@nidala.no',  # List of email addresses also accepted
             'post@nidala.no',
             subject= request.user.username + ' is failing in ' + quiz.subject.code + "!",
