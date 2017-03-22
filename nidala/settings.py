@@ -230,7 +230,7 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': '.logfile',
+            'filename': BASE_DIR + '/.logfile',
         },
     },
     'loggers': {
