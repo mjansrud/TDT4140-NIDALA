@@ -38,8 +38,9 @@
       </div>
       <ul class="list-group">
         {% for resource in resources %}
+
           <a href="{{ resource.url }}" target="_blank" class="list-group-item">
-            {{ resource.title }}
+            {{ resource.title }} tilhører spørsmål {{ resource.question }}
           </a>
         {% empty %}
           <li class="list-group-item">

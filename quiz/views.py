@@ -159,10 +159,11 @@ def quizResult(request, quiz_hash, attempt_hash):
     attempt = Attempt.objects.get(hash=attempt_hash)
     questions = [question for question in quiz.getRelevantQuestions(request.user, attempt)]
     answers = Answer.objects.filter(question__in=questions, attempt=attempt, attempt__user=request.user)
-    resources = Resource.objects.distinct().filter(question__in=questions)
-
     # Run update functions
     Question.setQuestionsStatus(questions, attempt)
+
+    # Get resources for questions answered wrong.
+    resources = Resource.getResourcesByResult(questions,request.user)
 
     #Count the number of questions the user has answered correct
     attempt.correct_count = 0
@@ -170,6 +171,8 @@ def quizResult(request, quiz_hash, attempt_hash):
         for answer in answers:
             if question == answer.question and answer.correct:
                 attempt.correct_count = attempt.correct_count + 1
+
+
 
     attempt.correct_percent = round(attempt.correct_count / len(questions) * 100, 1)
 
