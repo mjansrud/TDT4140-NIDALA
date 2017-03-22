@@ -4,5 +4,6 @@ django-post-office==2.0.8
 django-ckeditor==5.2.1
 django-suit==0.2.24
 django-ace==1.0.2
+whitenoise==3.3.0
 coverage==4.3.4
 codecov==2.0.5
