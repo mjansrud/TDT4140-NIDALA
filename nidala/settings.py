@@ -20,7 +20,7 @@ if os.environ.get('SERVER_PRODUCTION', '') == 'True':
     DEBUG = False
     SECURE_SSL_REDIRECT = True
     PRODUCTION = True
-    FILENAME = '/home/nidala/public_html/logfile.txt'
+    FILENAME = '/home/nidala/public_html/nidala/static/log.txt'
 else:
     PRODUCTION = False
     DEBUG = True
