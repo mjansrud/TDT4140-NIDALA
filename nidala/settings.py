@@ -20,9 +20,11 @@ if os.environ.get('SERVER_PRODUCTION', '') == 'True':
     DEBUG = False
     SECURE_SSL_REDIRECT = True
     PRODUCTION = True
+    FILENAME = '/home/nidala/public_html/logfile.txt'
 else:
     PRODUCTION = False
     DEBUG = True
+    FILENAME = BASE_DIR + '/.logfile'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -230,7 +232,7 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': BASE_DIR + '/.logfile',
+            'filename': FILENAME,
         },
     },
     'loggers': {
