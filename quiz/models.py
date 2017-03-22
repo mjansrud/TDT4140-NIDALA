@@ -89,7 +89,7 @@ class Quiz(models.Model):
             if Attempt.objects.filter(user=user, quiz__id=quiz.id).count() < quiz.attempts:
                 quiz.new_attempt = 'new-attempt'
 
-    def hasFailedQuiz(self, user):
+    def hasFailedQuiz(self, user): 
         if Attempt.objects.filter(user=user, quiz=self, status=STATUS_ATTEMPT.PASSED).count() > 0:
             return False
         elif Attempt.objects.filter(user=user, quiz=self, status=STATUS_ATTEMPT.FAILED).count() == self.attempts:
