@@ -23,10 +23,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '78!#*f5j3lzkc1odq_pjt8ki3-%b^3-!d=u7%l5^g=f!n^!_dk'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False 
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['nidala.no']
+SECURE_SSL_REDIRECT = True
 
 # Application definition
 
@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'nidala.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
-LOCAL = True
+LOCAL = False
 
 if LOCAL:
     DATABASES = {
@@ -90,12 +90,11 @@ if LOCAL:
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
-
 else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'nidala_main',
+            'NAME': 'nidala_django',
             'USER': 'nidala_user',
             'PASSWORD': os.environ.get('SERVER_PASSWORD', ''),
             'HOST': 'localhost',
@@ -157,13 +156,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "nidala/static") 
 
 #Custom constants
 class STATUS_QUESTION:
     UNANSWERED = 0
     CORRECT = 1
-    UNCORRECT = 2
+    UNCORRECT = 2 
 
 class STATUS_ATTEMPT:
     STARTED = 0
