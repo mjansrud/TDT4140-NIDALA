@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from .models import *
 
@@ -12,7 +12,7 @@ STATUS_ATTEMPT = settings.STATUS_ATTEMPT
 # URL functions
 @login_required
 def quizList(request, subject_id):
-    subject = Subject.objects.get(code=subject_id)
+    subject = get_object_or_404(Subject, code=subject_id)
     quizes = [quiz for quiz in Quiz.objects.filter(subject=subject)]
     Quiz.setQuizStatus(quizes, request.user)
     Quiz.getResources(quizes)
@@ -43,7 +43,7 @@ def quizFindQuestion(request, quiz_hash, attempt_hash):
 @login_required
 def quizRequestAttempt(request, quiz_hash):
     # Fetch from database
-    quiz = Quiz.objects.get(hash=quiz_hash)
+    quiz = get_object_or_404(Quiz, hash=quiz_hash)
     attempts = Attempt.objects.filter(quiz=quiz, user=request.user)
 
     if attempts.count() <= quiz.attempts - 1:
@@ -61,10 +61,10 @@ def quizRequestAttempt(request, quiz_hash):
 def quiz(request, quiz_hash, attempt_hash, quiz_question):
 
     # Fetch from database
-    quiz = Quiz.objects.get(hash=quiz_hash)
+    quiz = get_object_or_404(Quiz, hash=quiz_hash)
     quizes = Quiz.objects.filter(subject=quiz.subject, exercise_number__lte=quiz.exercise_number)
-    question = Question.objects.get(id=quiz_question)
-    attempt = Attempt.objects.get(quiz=quiz, hash=attempt_hash, user=request.user)
+    question = get_object_or_404(Question, id=quiz_question)
+    attempt = get_object_or_404(Attempt, hash=attempt_hash, user=request.user)
     questions = [question for question in quiz.getRelevantQuestions(request.user, attempt)]
     resources = Resource.objects.filter(question=question)
 
@@ -85,9 +85,9 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
     if question.type == 'CHECKBOX' or question.type == 'RADIOBOX':
         question.alternatives = Select.objects.filter(question=question.id)
     elif question.type == 'TEXT':
-        question.alternative = Text.objects.get(question=question.id)
+        question.alternative = get_object_or_404(Text, uestion=question.id)
     elif question.type == 'CODE':
-        question.alternative = Code.objects.get(question=question.id)
+        question.alternative = get_object_or_404(Code, uestion=question.id)
 
     if (request.method == "POST"):
 
@@ -155,8 +155,8 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
 def quizResult(request, quiz_hash, attempt_hash):
 
     # Fetch from database
-    quiz = Quiz.objects.get(hash=quiz_hash)
-    attempt = Attempt.objects.get(hash=attempt_hash)
+    quiz = get_object_or_404(Quiz, hash=quiz_hash)
+    attempt = get_object_or_404(Attempt, hash=attempt_hash, user=request.user)
     questions = [question for question in quiz.getRelevantQuestions(request.user, attempt)]
     answers = Answer.objects.filter(question__in=questions, attempt=attempt, attempt__user=request.user)
     # Run update functions
