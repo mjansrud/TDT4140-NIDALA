@@ -31,7 +31,7 @@ def quizList(request, subject_id):
 def quizFindQuestion(request, quiz_hash, attempt_hash):
     quiz = Quiz.objects.filter(hash=quiz_hash)
     attempt = Attempt.objects.filter(hash=attempt_hash)
-    question = Question.objects.filter(quiz=quiz).order_by('order').first()
+    question = get_object_or_404(Question, quiz=quiz).order_by('order')
     answers = Answer.objects.filter(attempt=attempt, attempt__user=request.user)
 
     if (answers.count() > 0):
