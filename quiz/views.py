@@ -30,9 +30,10 @@ def quizList(request, subject_id):
 
 @login_required
 def quizFindQuestion(request, quiz_hash, attempt_hash):
+
     quiz = get_object_or_404(Quiz, hash=quiz_hash)
     attempt = get_object_or_404(Attempt, hash=attempt_hash, user=request.user)
-    question = get_object_or_404(Question.objects.order_by('order').first(), quiz=quiz)
+    question = get_object_or_404(Question, quiz=quiz, pk=1)
     answers = Answer.objects.filter(attempt=attempt, attempt__user=request.user)
 
     if (answers.count() > 0):
@@ -202,7 +203,7 @@ def quizResult(request, quiz_hash, attempt_hash):
 
     if(quiz.hasFailedQuiz(request.user)):
 
-        mail.send(   
+        mail.send(
             'forelesere@nidala.no',  # List of email addresses also accepted
             'post@nidala.no',
             subject= request.user.username + ' is failing in ' + quiz.subject.code + "!",
