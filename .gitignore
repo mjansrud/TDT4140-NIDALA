@@ -13,3 +13,4 @@ db.sqlite3
 *.sql
 /nidala/nidala/settings.py
 .logfile
+logfile.txt
