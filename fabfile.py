@@ -18,4 +18,4 @@ def deploy(project='beta', ref='master'):
         run('git checkout {0}'.format(ref))
         run('git reset --hard origin/{0}'.format(ref))
     with cd(root_folder + projects[project]['repo_folder']):
-        run('./startserver.sh')
+        run('./startserver.sh', pty=False)
