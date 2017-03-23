@@ -28,7 +28,7 @@ else:
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SERVER_SECRET_KEY', 'Default server key')
-ALLOWED_HOSTS = ['nidala.no', 'localhost'] 
+ALLOWED_HOSTS = ['nidala.no', 'localhost', 'beta.nidala.no']
 
 # Application definition
 
@@ -155,7 +155,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, "nidala/static") 
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 #Custom constants
 class STATUS_QUESTION:
@@ -229,7 +229,7 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': '.logfile',
+            'filename': BASE_DIR + '/logfile.txt',
         },
     },
     'loggers': {
