@@ -18,7 +18,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Check if production
 if os.environ.get('SERVER_PRODUCTION', '') == 'True':
     DEBUG = False
-    SECURE_SSL_REDIRECT = True
     PRODUCTION = True
 else:
     PRODUCTION = False
