@@ -64,7 +64,7 @@ class Quiz(models.Model):
     subject = models.ForeignKey(Subject, related_name='subjectQuizes')
 
     def getRelevantQuestions(self, user, attempt):
-        questions = Question.objects.filter(quiz=self)
+        questions = Question.objects.filter(quiz=self).order_by('quiz__exercise_number', 'order')
         quizes = Quiz.objects.filter(subject=self.subject, exercise_number__lt=self.exercise_number)
         earlier_questions = Question.objects.filter(quiz__in=quizes)
         earlier_questions = earlier_questions.exclude(
