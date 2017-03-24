@@ -16,7 +16,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Check if production
-if os.environ.get('SERVER_PRODUCTION', '') == 'True':
+if os.environ.get('PRODUCTION', '') == 'True':
     DEBUG = False
     PRODUCTION = True
 else:
@@ -27,7 +27,7 @@ else:
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SERVER_SECRET_KEY', 'Default server key')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'Default server key')
 ALLOWED_HOSTS = ['nidala.no', 'localhost', 'beta.nidala.no']
 
 # Application definition
@@ -89,7 +89,7 @@ if PRODUCTION:
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'nidala_django',
             'USER': 'nidala_user',
-            'PASSWORD': os.environ.get('SERVER_PASSWORD', ''),
+            'PASSWORD': os.environ.get('DATABASE_PASSWORD', ''),
             'HOST': 'localhost',
             'PORT': '',  # Set to empty string for default.
         }
@@ -115,7 +115,7 @@ EMAIL_PORT = '465'
 EMAIL_USE_SSL = True
 DEFAULT_FROM_MAIL = 'post@nidala.no'
 EMAIL_HOST_USER = 'post@nidala.no'
-EMAIL_HOST_PASSWORD = os.environ.get('SERVER_PASSWORD', '')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD', '')
 
 
 # Password validation
