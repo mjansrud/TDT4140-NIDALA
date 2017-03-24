@@ -197,6 +197,7 @@ def quizResult(request, quiz_hash, attempt_hash):
         attempt.status = STATUS_ATTEMPT.FAILED
         attempt.image = 'images/failed.png'
 
+    attempt.save()
 
     if(quiz.hasFailedQuiz(request.user)):
 
@@ -207,8 +208,6 @@ def quizResult(request, quiz_hash, attempt_hash):
             message='We have detected that the student has failed an attempt on a quiz in your class',
             html_message='We have detected that the student has failed an attempt on a quiz in your class',
         )
-
-    attempt.save()
 
     context = {
         'quiz': quiz,
