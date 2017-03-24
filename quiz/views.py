@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from post_office import mail
 
 from .models import *
 
@@ -8,12 +9,13 @@ from .models import *
 STATUS_QUESTION = settings.STATUS_QUESTION
 STATUS_ATTEMPT = settings.STATUS_ATTEMPT
 
-
 # URL functions
 @login_required
 def quizList(request, subject_id):
-    subject = Subject.objects.get(code=subject_id)
+
+    subject = get_object_or_404(Subject, code=subject_id)
     quizes = [quiz for quiz in Quiz.objects.filter(subject=subject)]
+
     Quiz.setQuizStatus(quizes, request.user)
     Quiz.getResources(quizes)
     Quiz.getAttempts(quizes, request.user)
@@ -26,11 +28,11 @@ def quizList(request, subject_id):
 
     return render(request, 'quiz/quizList.html', context)
 
-
 @login_required
 def quizFindQuestion(request, quiz_hash, attempt_hash):
-    quiz = Quiz.objects.filter(hash=quiz_hash)
-    attempt = Attempt.objects.filter(hash=attempt_hash)
+
+    quiz = get_object_or_404(Quiz, hash=quiz_hash)
+    attempt = get_object_or_404(Attempt, hash=attempt_hash, user=request.user)
     question = Question.objects.filter(quiz=quiz).order_by('order').first()
     answers = Answer.objects.filter(attempt=attempt, attempt__user=request.user)
 
@@ -39,11 +41,10 @@ def quizFindQuestion(request, quiz_hash, attempt_hash):
 
     return redirect('quiz', quiz_hash, attempt_hash, question.id)
 
-
 @login_required
 def quizRequestAttempt(request, quiz_hash):
     # Fetch from database
-    quiz = Quiz.objects.get(hash=quiz_hash)
+    quiz = get_object_or_404(Quiz, hash=quiz_hash)
     attempts = Attempt.objects.filter(quiz=quiz, user=request.user)
 
     if attempts.count() <= quiz.attempts - 1:
@@ -56,15 +57,14 @@ def quizRequestAttempt(request, quiz_hash):
     # Find quiz
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-
 @login_required
 def quiz(request, quiz_hash, attempt_hash, quiz_question):
 
     # Fetch from database
-    quiz = Quiz.objects.get(hash=quiz_hash)
+    quiz = get_object_or_404(Quiz, hash=quiz_hash)
     quizes = Quiz.objects.filter(subject=quiz.subject, exercise_number__lte=quiz.exercise_number)
-    question = Question.objects.get(id=quiz_question)
-    attempt = Attempt.objects.get(quiz=quiz, hash=attempt_hash, user=request.user)
+    question = get_object_or_404(Question, id=quiz_question)
+    attempt = get_object_or_404(Attempt, hash=attempt_hash, user=request.user)
     questions = [question for question in quiz.getRelevantQuestions(request.user, attempt)]
     resources = Resource.objects.filter(question=question)
 
@@ -85,9 +85,9 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
     if question.type == 'CHECKBOX' or question.type == 'RADIOBOX':
         question.alternatives = Select.objects.filter(question=question.id)
     elif question.type == 'TEXT':
-        question.alternative = Text.objects.get(question=question.id)
+        question.alternative = get_object_or_404(Text, question=question.id)
     elif question.type == 'CODE':
-        question.alternative = Code.objects.get(question=question.id)
+        question.alternative = get_object_or_404(Code, question=question.id)
 
     if (request.method == "POST"):
 
@@ -150,19 +150,20 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
 
     return render(request, 'quiz/quiz.html', context)
 
-
 @login_required
 def quizResult(request, quiz_hash, attempt_hash):
 
     # Fetch from database
-    quiz = Quiz.objects.get(hash=quiz_hash)
-    attempt = Attempt.objects.get(hash=attempt_hash)
+    quiz = get_object_or_404(Quiz, hash=quiz_hash)
+    attempt = get_object_or_404(Attempt, hash=attempt_hash, user=request.user)
     questions = [question for question in quiz.getRelevantQuestions(request.user, attempt)]
     answers = Answer.objects.filter(question__in=questions, attempt=attempt, attempt__user=request.user)
-    resources = Resource.objects.distinct().filter(question__in=questions)
 
     # Run update functions
     Question.setQuestionsStatus(questions, attempt)
+
+    # Get resources for questions answered wrong.
+    resources = Resource.getResourcesByResult(questions,request.user)
 
     #Count the number of questions the user has answered correct
     attempt.correct_count = 0
@@ -170,6 +171,8 @@ def quizResult(request, quiz_hash, attempt_hash):
         for answer in answers:
             if question == answer.question and answer.correct:
                 attempt.correct_count = attempt.correct_count + 1
+
+
 
     attempt.correct_percent = round(attempt.correct_count / len(questions) * 100, 1)
 
@@ -194,6 +197,17 @@ def quizResult(request, quiz_hash, attempt_hash):
         attempt.status = STATUS_ATTEMPT.FAILED
         attempt.image = 'images/failed.png'
 
+
+    if(quiz.hasFailedQuiz(request.user)):
+
+        mail.send(
+            'forelesere@nidala.no',  # List of email addresses also accepted
+            'post@nidala.no',
+            subject= request.user.username + ' is failing in ' + quiz.subject.code + "!",
+            message='We have detected that the student has failed an attempt on a quiz in your class',
+            html_message='We have detected that the student has failed an attempt on a quiz in your class',
+        )
+
     attempt.save()
 
     context = {
@@ -204,7 +218,6 @@ def quizResult(request, quiz_hash, attempt_hash):
     }
 
     return render(request, 'quiz/quizResult.html', context)
-
 
 @login_required
 def subjects(request):

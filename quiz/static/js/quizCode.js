@@ -62,7 +62,7 @@ $(function () {
         createStatusMessage("Skaffer resultat ...")
         $.ajax({
             type: "GET",
-            url: "http://aecae34f.compilers.sphere-engine.com/api/v3/submissions/" + id + "?access_token=27a39299db2cb8376648f2d1adc907ce&withOutput=true&withSource=true&withCmpinfo=true",
+            url: "https://aecae34f.compilers.sphere-engine.com/api/v3/submissions/" + id + "?access_token=27a39299db2cb8376648f2d1adc907ce&withOutput=true&withSource=true&withCmpinfo=true",
             success: function (result) {
                 createStatusMessage("Validerer resultat ...")
                 json = $.parseJSON(result);
@@ -102,7 +102,7 @@ $(function () {
         createStatusMessage("Oppretter innlevering ... ");
         $.ajax({
             type: "POST",
-            url: "http://aecae34f.compilers.sphere-engine.com/api/v3/submissions?access_token=27a39299db2cb8376648f2d1adc907ce",
+            url: "https://aecae34f.compilers.sphere-engine.com/api/v3/submissions?access_token=27a39299db2cb8376648f2d1adc907ce",
             data: {
                 language: language,
                 source: $("#usable").html() + '\n' + editor.getValue()
