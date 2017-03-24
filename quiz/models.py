@@ -70,8 +70,10 @@ class Quiz(models.Model):
         earlier_questions = earlier_questions.exclude(
             Q(questionAnswers__correct=True) & ~Q(questionAnswers__attempt=attempt))
         questions = questions | earlier_questions
-        questions = questions.distinct().filter(
-            Q(questionBoxes__isnull=False) | Q(questionTexts__isnull=False) | Q(questionCodes__isnull=False))
+
+        #Add only if questions have alternatives
+        #questions = questions.distinct().filter(
+        #    Q(questionBoxes__isnull=False) | Q(questionTexts__isnull=False) | Q(questionCodes__isnull=False))
 
         return questions
 
@@ -88,6 +90,12 @@ class Quiz(models.Model):
 
             if Attempt.objects.filter(user=user, quiz__id=quiz.id).count() < quiz.attempts:
                 quiz.new_attempt = 'new-attempt'
+
+    def hasFailedQuiz(self, user): 
+        if Attempt.objects.filter(user=user, quiz=self, status=STATUS_ATTEMPT.PASSED).count() > 0:
+            return False
+        elif Attempt.objects.filter(user=user, quiz=self, status=STATUS_ATTEMPT.FAILED).count() == self.attempts:
+            return True
 
     @staticmethod
     def getResources(quizes):
@@ -210,6 +218,10 @@ class Resource(models.Model):
     def getResourcesByQuiz(self, quiz):
         questions = Question.filter(quiz=quiz)
         return self.filter(question__in=questions)
+
+    @staticmethod
+    def getResourcesByResult(questions, user):
+        return Resource.objects.distinct().filter(question__in=questions, question__questionAnswers__correct=False, question__questionAnswers__attempt__user=user)
 
     class Meta:
         verbose_name = "Resource"
@@ -351,3 +363,5 @@ class Answer(models.Model):
 
     def __str__(self):
         return str('Resultat ' + str(self.correct))
+
+

@@ -69,16 +69,16 @@ class QuestionAdmin(ModelAdmin):
         if obj != None:
             if obj.type == 'CHECKBOX':
                 QuestionAdmin.suit_form_tabs = (
-                ('question', 'Question'), ('selects', 'Checkboxes'))
+                ('question', 'Question'), ('selects', 'Checkboxes'), ('resources', 'Resources'))
             if obj.type == 'RADIOBOX':
                 QuestionAdmin.suit_form_tabs = (
-                    ('question', 'Question'), ('selects', 'Radioboxes'))
+                    ('question', 'Question'), ('selects', 'Radioboxes'), ('resources', 'Resources'))
             if obj.type == 'TEXT':
                 QuestionAdmin.suit_form_tabs = (
-                    ('question', 'Question'), ('text', 'Text answer'))
+                    ('question', 'Question'), ('text', 'Text answer'), ('resources', 'Resources'))
             if obj.type == 'CODE':
                 QuestionAdmin.suit_form_tabs = (
-                    ('question', 'Question'), ('code', 'Code answer'))
+                    ('question', 'Question'), ('code', 'Code answer'), ('resources', 'Resources'))
         return super(QuestionAdmin, self).get_form(request, obj, **kwargs)
 
     fieldsets = [
