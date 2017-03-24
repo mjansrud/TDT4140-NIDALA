@@ -11,5 +11,5 @@ urlpatterns = [
     url(r'^quiz/(?P<quiz_hash>[a-f0-9]+)/(?P<attempt_hash>[a-f0-9]+)/(?P<quiz_question>[0-9]+)/$', views.quiz,
         name='quiz'),
     url(r'^subjects/$', views.subjects, name='subjects'),
-    url(r'^subjects/(?P<subject_id>[a-zA-Z]{3}[0-9]{4})/$', views.quizList, name='quizList'),
+    url(r'^subjects/(?P<subject_id>[a-zA-Z0-9]+)/$', views.quizList, name='quizList'),
 ]
