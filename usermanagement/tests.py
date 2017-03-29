@@ -71,7 +71,7 @@ class LoginViewAndLogoutViewTestCase(TestCase):
     def test_login_succesful(self):
         self.client.get(self.url)
         response = self.client.post(self.url, self.payload)
-        self.assertRedirects(response, reverse('index'))
+        self.assertRedirects(response, reverse('subjects'))
 
     def test_login_while_already_logged_in(self):
         self.client.post(self.url, self.payload)
