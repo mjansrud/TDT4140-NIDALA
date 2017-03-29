@@ -1,0 +1,30 @@
+{% extends 'nidala/base.html' %}
+{% load static %}
+
+{% block css %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/quiz.css' %}">
+{% endblock css %}
+
+{% block content %}
+  <div class="col-md-8 col-md-offset-2">
+    <div class="container-fluid">
+      <h3>Emner</h3>
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>Emnekode</th>
+          <th>Navn</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for subject in subjects %}
+          <tr>
+            <td><a href="{% url 'quizAdminSubject' subject.code %}">{{ subject.code }}</a></td>
+            <td><a href="{% url 'quizAdminSubject' subject.code %}">{{ subject.title }}</a></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock content %}

@@ -227,3 +227,60 @@ def subjects(request):
     }
 
     return render(request, 'quiz/subjects.html', context)
+
+
+def quiz_admin(request):
+    subjects = Subject.objects.all()
+    context = {
+        'subjects': subjects
+    }
+    return render(request, 'quiz/quizAdmin.html', context)
+
+def quiz_admin_subject(request, subject_code):
+    subject = get_object_or_404(Subject, code=subject_code)
+    quizes = list(Quiz.objects.filter(subject=subject).prefetch_related('quizAttempts'))
+    for quiz in quizes:
+        quiz.attempts_count = quiz.quizAttempts.count()
+        quiz.attempts_passed_count = quiz.quizAttempts.filter(status=STATUS_ATTEMPT.PASSED).count()
+
+    users = list(User.objects.all())
+    failing_users = []
+    for user in users:
+        passed_quizes = 0
+        for quiz in quizes:
+
+            if quiz.quizAttempts.filter(user=user, status=STATUS_ATTEMPT.PASSED).count() > 0:
+                passed_quizes += 1
+        user.attempts = user.userAttempts.filter(quiz__in=quizes).count()
+        user.passed_quizes = passed_quizes
+        user.attempt_grade = (user.passed_quizes / user.attempts) * 100
+        failing_users.append(user)
+
+
+    failing_users.sort(key=lambda x:x.attempt_grade)
+
+
+    context = {
+        'subject': subject,
+        'quizes': quizes,
+        'failing_users': failing_users,
+    }
+
+    return render(request, 'quiz/quizAdminSubject.html', context)
+
+
+def quiz_admin_quiz(request, quiz_hash):
+    quiz = get_object_or_404(Quiz, hash=quiz_hash)
+    questions = list(Question.objects.filter(quiz=quiz).prefetch_related('questionAnswers'))
+    for question in questions:
+        question.answer_count = Answer.objects.filter(question=question).count()
+        question.correct_count = Answer.objects.filter(question=question, correct=True).count()
+        if question.answer_count:
+            question.correct_grade = (question.correct_count / question.answer_count) * 100
+        else:
+            question.correct_grade = 0.0
+    context = {
+        'quiz': quiz,
+        'questions': questions,
+    }
+    return render(request, 'quiz/quizAdminQuiz.html', context)
