@@ -11,7 +11,7 @@ If you stuggle with the same concepts over several assignments NIDALA will notif
 
 NIDALA is developed using the Django Framework for Python 3.6
 
-##Getting started
+# Getting started
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 **Optinal**<br />
@@ -49,8 +49,8 @@ This command will run a local server that comes with Django. Be deafult the webs
 * Martin Simensen <br />
 * Håvard Opheim <br />
 
-##Acknowledgments
+# Acknowledgments
 * Pekka <br />
 
-##Furhter reading
+# Furhter reading
 We will soon™ have a wiki. Should you have any further questions check our [wiki](https://github.com/mjansrud/TDT4140-NIDALA/wiki/)
