@@ -1,0 +1,82 @@
+.video-section .pattern-overlay {
+    background-color: rgba(71, 71, 71, 0.59);
+    padding: 110px 0 32px;
+    min-height: 496px;
+    /* Incase of overlay problems just increase the min-height*/
+}
+.video-section h1, .video-section h3{
+    text-align:center;
+    color:#fff;
+}
+.video-section h1{
+    display:inline;
+    font-size:100px;
+    font-family: 'Buenard', serif;
+    font-weight:bold;
+    text-transform: uppercase;
+    margin: 40px auto 0px;
+    text-shadow: 1px 1px 1px #000;
+    -webkit-text-shadow: 1px 1px 1px #000;
+    -moz-text-shadow: 1px 1px 1px #000;
+    color:#d9981a !important;
+}
+
+.video-section h2{
+    display:inline;
+    font-size:85px;
+    font-family: 'Buenard', serif;
+    font-weight:bold;
+    text-transform: uppercase;
+    margin: 40px auto 0px;
+    text-shadow: 1px 1px 1px #000;
+    -webkit-text-shadow: 1px 1px 1px #000;
+    -moz-text-shadow: 1px 1px 1px #000;
+    color:#fff !important;
+}
+.video-section h3{
+    font-size: 25px;
+    font-weight:lighter;
+    margin: 0px auto 15px;
+}
+.video-section .buttonBar{display:none;}
+.player {font-size: 1px;}
+
+.navbar {
+    margin-bottom: -1px !important;
+}
+
+.jumbotron {
+    margin-top: 40px;
+    min-height: 400px;
+}
+
+.employee{
+    padding-top:20px;
+}
+
+.footer{
+    background:#666666;
+    min-height:300px;
+    padding-top: 50px;
+    margin-top:50px;
+
+}
+
+.footer h3{
+    display:inline;
+    font-size:35px;
+    font-family: 'Buenard', serif;
+    font-weight:bold;
+    text-transform: uppercase;
+    margin: 40px auto 0px;
+    color:#fff !important;
+}
+
+.footer p{
+    color:#fff !important;
+    padding-top:25px;
+}
+
+.footer a{
+    color:#fff !important;
+}
