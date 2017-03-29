@@ -16,7 +16,7 @@ def login_view(request):
         if form.is_valid():
             form.authenticate_user(request)
             if request.POST.get('next') == None or request.POST.get('next') == 'None':
-                return HttpResponseRedirect(reverse('index'))
+                return HttpResponseRedirect(reverse('subjects'))
             else:
                 return HttpResponseRedirect(request.POST.get('next'))
     else:
