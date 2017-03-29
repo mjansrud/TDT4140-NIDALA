@@ -38,6 +38,7 @@
             <ul class="dropdown-menu">
               {% if request.user.is_staff %}
                 <li class="dropdown-header">Admin</li>
+                <li><a href="{% url 'quizAdmin' %}">Adminpanel</a></li>
                 <li role="separator" class="divider"></li>
                 <li class="dropdown-header">Profile</li>
               {% endif %}

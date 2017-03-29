@@ -1,0 +1,55 @@
+{% extends 'nidala/base.html' %}
+{% load static %}
+
+{% block css %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/quiz.css' %}">
+{% endblock css %}
+
+{% block content %}
+  <div class="col-md-8 col-md-offset-2">
+    <div class="container-fluid">
+      <h3>{{ subject }}</h3>
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>Quiz</th>
+          <th>Antall forsøk</th>
+          <th>Antall bestått</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for quiz in quizes %}
+          <tr>
+            <td><a href="{% url 'quizAdminQuiz' quiz.hash %}">{{ quiz }}</a></td>
+            <td>{{ quiz.attempts_count }}</td>
+            <td>{{ quiz.attempts_passed_count }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <h4>Studenter</h4>
+      <table class="table table-striped" id="user-table">
+        <thead>
+        <tr>
+          <th>Student</th>
+          <th>E-post</th>
+          <th>Antall forsøk</th>
+          <th>Beståtte øvinger</th>
+          <th>Forsøksgrad</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in failing_users %}
+          <tr class="user-row">
+            <td>{{ user }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.attempts }}</td>
+            <td>{{ user.passed_quizes }}</td>
+            <td>{{ user.attempt_grade|floatformat:"0" }} %</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock content %}

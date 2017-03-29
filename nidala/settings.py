@@ -16,7 +16,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Check if production
-if os.environ.get('PRODUCTION', '') == 'True':
+if os.environ.get('SERVER_PRODUCTION', '') == 'True':
     DEBUG = False
     PRODUCTION = True
 else:
