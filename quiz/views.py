@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from post_office import mail
 
@@ -9,10 +9,10 @@ from .models import *
 STATUS_QUESTION = settings.STATUS_QUESTION
 STATUS_ATTEMPT = settings.STATUS_ATTEMPT
 
+
 # URL functions
 @login_required
 def quizList(request, subject_id):
-
     subject = get_object_or_404(Subject, code=subject_id)
     quizes = [quiz for quiz in Quiz.objects.filter(subject=subject)]
 
@@ -28,9 +28,9 @@ def quizList(request, subject_id):
 
     return render(request, 'quiz/quizList.html', context)
 
+
 @login_required
 def quizFindQuestion(request, quiz_hash, attempt_hash):
-
     quiz = get_object_or_404(Quiz, hash=quiz_hash)
     attempt = get_object_or_404(Attempt, hash=attempt_hash, user=request.user)
     question = Question.objects.filter(quiz=quiz).order_by('order').first()
@@ -40,6 +40,7 @@ def quizFindQuestion(request, quiz_hash, attempt_hash):
         return redirect('quiz', quiz_hash, attempt_hash, answers.last().question.id)
 
     return redirect('quiz', quiz_hash, attempt_hash, question.id)
+
 
 @login_required
 def quizRequestAttempt(request, quiz_hash):
@@ -57,9 +58,9 @@ def quizRequestAttempt(request, quiz_hash):
     # Find quiz
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+
 @login_required
 def quiz(request, quiz_hash, attempt_hash, quiz_question):
-
     # Fetch from database
     quiz = get_object_or_404(Quiz, hash=quiz_hash)
     quizes = Quiz.objects.filter(subject=quiz.subject, exercise_number__lte=quiz.exercise_number)
@@ -107,7 +108,7 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
 
                 for alternative in question.alternatives:
                     if (alternative.correct == True and alternative.id not in user_current_answers) or (
-                            alternative.correct == False and alternative.id in user_current_answers):
+                                alternative.correct == False and alternative.id in user_current_answers):
                         user_current_answer_correct = False
 
         if question.type == 'RADIOBOX':
@@ -141,18 +142,19 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
         context['user_current_answer_correct'] = user_current_answer_correct
 
         # Register that the user has answered a question
-        if Answer.objects.filter(question=question, attempt=attempt, attempt__user=request.user).count() + 1 <= question.attempts:
+        if Answer.objects.filter(question=question, attempt=attempt,
+                                 attempt__user=request.user).count() + 1 <= question.attempts:
             Answer.objects.create(attempt=attempt, question=question, correct=user_current_answer_correct)
 
-    #Run functions
+    # Run functions
     Question.setQuestionsStatus(questions, attempt)
     question.setQuestionVariables(attempt)
 
     return render(request, 'quiz/quiz.html', context)
 
+
 @login_required
 def quizResult(request, quiz_hash, attempt_hash):
-
     # Fetch from database
     quiz = get_object_or_404(Quiz, hash=quiz_hash)
     attempt = get_object_or_404(Attempt, hash=attempt_hash, user=request.user)
@@ -163,16 +165,14 @@ def quizResult(request, quiz_hash, attempt_hash):
     Question.setQuestionsStatus(questions, attempt)
 
     # Get resources for questions answered wrong.
-    resources = Resource.getResourcesByResult(questions,request.user)
+    resources = Resource.getResourcesByResult(questions, request.user)
 
-    #Count the number of questions the user has answered correct
+    # Count the number of questions the user has answered correct
     attempt.correct_count = 0
     for question in questions:
         for answer in answers:
             if question == answer.question and answer.correct:
                 attempt.correct_count = attempt.correct_count + 1
-
-
 
     attempt.correct_percent = round(attempt.correct_count / len(questions) * 100, 1)
 
@@ -199,12 +199,11 @@ def quizResult(request, quiz_hash, attempt_hash):
 
     attempt.save()
 
-    if(quiz.hasFailedQuiz(request.user)):
-
+    if (quiz.hasFailedQuiz(request.user)):
         mail.send(
             'forelesere@nidala.no',  # List of email addresses also accepted
             'post@nidala.no',
-            subject= request.user.username + ' is failing in ' + quiz.subject.code + "!",
+            subject=request.user.username + ' is failing in ' + quiz.subject.code + "!",
             message='We have detected that the student has failed an attempt on a quiz in your class',
             html_message='We have detected that the student has failed an attempt on a quiz in your class',
         )
@@ -218,6 +217,7 @@ def quizResult(request, quiz_hash, attempt_hash):
 
     return render(request, 'quiz/quizResult.html', context)
 
+
 @login_required
 def subjects(request):
     subjects = Subject.objects.all()
@@ -229,14 +229,21 @@ def subjects(request):
     return render(request, 'quiz/subjects.html', context)
 
 
+@login_required
 def quiz_admin(request):
+    if not request.user.is_staff:
+        raise Http404
     subjects = Subject.objects.all()
     context = {
         'subjects': subjects
     }
     return render(request, 'quiz/quizAdmin.html', context)
 
+
+@login_required
 def quiz_admin_subject(request, subject_code):
+    if not request.user.is_staff:
+        raise Http404
     subject = get_object_or_404(Subject, code=subject_code)
     quizes = list(Quiz.objects.filter(subject=subject).prefetch_related('quizAttempts'))
     for quiz in quizes:
@@ -259,9 +266,7 @@ def quiz_admin_subject(request, subject_code):
             user.attempt_grade = 0.0
         failing_users.append(user)
 
-
-    failing_users.sort(key=lambda x:x.attempt_grade)
-
+    failing_users.sort(key=lambda x: x.attempt_grade)
 
     context = {
         'subject': subject,
@@ -272,7 +277,10 @@ def quiz_admin_subject(request, subject_code):
     return render(request, 'quiz/quizAdminSubject.html', context)
 
 
+@login_required
 def quiz_admin_quiz(request, quiz_hash):
+    if not request.user.is_staff:
+        raise Http404
     quiz = get_object_or_404(Quiz, hash=quiz_hash)
     questions = list(Question.objects.filter(quiz=quiz).prefetch_related('questionAnswers'))
     for question in questions:
