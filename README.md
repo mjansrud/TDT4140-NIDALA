@@ -43,7 +43,7 @@ Run
 python manage.py runserver
 ```
 This command will run a local server that comes with Django. Be deafult the website will be running on your localhost (127.0.0.1:8000)<br />
-##Authors
+# Authors
 * Morten Jansrud <br />
 * Kristian Haga <br />
 * Martin Simensen <br />
