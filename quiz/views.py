@@ -253,7 +253,10 @@ def quiz_admin_subject(request, subject_code):
                 passed_quizes += 1
         user.attempts = user.userAttempts.filter(quiz__in=quizes).count()
         user.passed_quizes = passed_quizes
-        user.attempt_grade = (user.passed_quizes / user.attempts) * 100
+        if user.attempts:
+            user.attempt_grade = (user.passed_quizes / user.attempts) * 100
+        else:
+            user.attempt_grade = 0.0
         failing_users.append(user)
 
 
