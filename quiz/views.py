@@ -13,6 +13,12 @@ STATUS_ATTEMPT = settings.STATUS_ATTEMPT
 # URL functions
 @login_required
 def quizList(request, subject_id):
+
+    """
+    View for displaying exercises to the user.
+    Fetches exercises, related resources and current user attempts
+    """
+
     subject = get_object_or_404(Subject, code=subject_id)
     quizes = [quiz for quiz in Quiz.objects.filter(subject=subject)]
 
@@ -31,6 +37,15 @@ def quizList(request, subject_id):
 
 @login_required
 def quizFindQuestion(request, quiz_hash, attempt_hash):
+
+    """
+    Redirecting view to fetch the current quiz question
+    Finds out wether the user has previous answers
+        - If yes - send them to the current question
+        - If no - send them to the first question in the quiz
+        - Provides the ability to send URLs without specifying question
+    """
+
     quiz = get_object_or_404(Quiz, hash=quiz_hash)
     attempt = get_object_or_404(Attempt, hash=attempt_hash, user=request.user)
     question = Question.objects.filter(quiz=quiz).order_by('order').first()
@@ -44,6 +59,17 @@ def quizFindQuestion(request, quiz_hash, attempt_hash):
 
 @login_required
 def quizRequestAttempt(request, quiz_hash):
+
+    """
+    View to request new attempt
+    Checks if the user has maxed out available attempts
+        - If no - create a new attempt and redirect to the specified quiz
+        - If yes - send them to their current page
+            - Prevented frontend, second security meassure
+        - Provides the ability to send URLs to a friend without specifying an attempt
+            - Ex: https://beta.nidala.no/quiz/1b54373ade/
+    """
+
     # Fetch from database
     quiz = get_object_or_404(Quiz, hash=quiz_hash)
     attempts = Attempt.objects.filter(quiz=quiz, user=request.user)
@@ -51,16 +77,25 @@ def quizRequestAttempt(request, quiz_hash):
     if attempts.count() <= quiz.attempts - 1:
         question = Question.objects.filter(quiz=quiz).order_by('order').first()
 
-        # Register that the user has answered a question
+        # Create a new attempt and redirect
         Attempt.objects.create(quiz=quiz, user=request.user)
         return redirect('quiz', quiz_hash, Attempt.objects.latest('id').hash, question.id)
 
-    # Find quiz
+    # Redirect to current page without creating a new attempt
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required
 def quiz(request, quiz_hash, attempt_hash, quiz_question):
+
+    """
+    Displays the current question to be answered
+        - Fetches questions related to a quiz for navigation and resources for assistance
+        - Redirects the user away from the quiz if the quiz is finished ( failed or success )
+        - Fetch answer based on question type ( checkbox, radiobox, text or code )
+        - Check if user has submitted an answer
+            - Check answer, save and give feedback
+    """
 
     # Fetch from database
     quiz = get_object_or_404(Quiz, hash=quiz_hash)
@@ -161,6 +196,16 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
 @login_required
 def quizResult(request, quiz_hash, attempt_hash):
 
+    """
+    Displays the quiz result answered by the student
+        - Fetches
+            - Questions related to a quiz
+            - Answers based on questions - Set status on each question ( correct / uncorrect )
+            - Resources based on failed questions
+            - Give the user a score (A-F)
+            - Send the professors a concern email on max failed attempts by a student
+    """
+
     # Fetch from database
     quiz = get_object_or_404(Quiz, hash=quiz_hash)
     attempt = get_object_or_404(Attempt, hash=attempt_hash, user=request.user)
@@ -226,8 +271,12 @@ def quizResult(request, quiz_hash, attempt_hash):
 
 @login_required
 def subjects(request):
-    subjects = Subject.objects.all()
 
+    """
+    Displays subjects
+    """
+
+    subjects = Subject.objects.all()
     context = {
         'subjects': subjects
     }
@@ -237,6 +286,11 @@ def subjects(request):
 
 @login_required
 def quiz_admin(request):
+
+    """
+    Displays subjects - admin
+    """
+
     if not request.user.is_staff:
         raise Http404
     subjects = Subject.objects.all()
@@ -248,6 +302,13 @@ def quiz_admin(request):
 
 @login_required
 def quiz_admin_subject(request, subject_code):
+
+    """
+    Displays statistics for the admin based on subject
+        - Redirect if not staff
+        - Calculate statistics based on user attempts
+    """
+
     if not request.user.is_staff:
         raise Http404
     subject = get_object_or_404(Subject, code=subject_code)
@@ -285,6 +346,13 @@ def quiz_admin_subject(request, subject_code):
 
 @login_required
 def quiz_admin_quiz(request, quiz_hash):
+
+    """
+    Displays statistics for the admin based on quiz/exercise
+        - Redirect if not staff
+        - Calculate statistics based on quiz
+    """
+
     if not request.user.is_staff:
         raise Http404
     quiz = get_object_or_404(Quiz, hash=quiz_hash)

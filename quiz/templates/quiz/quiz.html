@@ -8,6 +8,7 @@
 {% block content %}
   {% load quizFilters %}
 
+  <!-- Left menu - Quiz navigation -->
   <div class="col-md-4">
     <ul class="list-group">
       <div>
@@ -22,11 +23,15 @@
          data-pass-percent="{{ quiz.pass_percent }}">Gå til resultat</a>
     </ul>
   </div>
+
+  <!-- Main question -->
   <div class="col-md-8">
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
           <form method="POST">{% csrf_token %}
+
+            <!-- Question header -->
             <input type=hidden name="question_id" value="{{ question.id }}">
             <div class="row">
               <div class="col-md-6">
@@ -39,6 +44,8 @@
                 {% endif %}
               </div>
             </div>
+
+            <!-- Error handling -->
             {% if user_answered %}
               {% if user_current_answer_correct %}
                 <div class="alert alert-success" role="alert">
@@ -55,7 +62,9 @@
               {% endif %}
             {% endif %}
             {{ question.description|safe }}
-            <ul class="list-group"> {#Iterer gjennom alle spørsmålene#}
+
+            <!-- Show question dependant on type -->
+            <ul class="list-group">
               <li class="list-group-item">
                 <div class="form-group">
                   {% if question.type == "CHECKBOX" %}
@@ -113,6 +122,8 @@
                 </div>
               </li>
             </ul>
+
+            <!-- Question footer - Buttons -->
             <div class="row">
               <div class="col-md-8">
                 <button id="submit" class="btn btn-primary submit-button"
@@ -130,6 +141,8 @@
                 {% endif %}
               </div>
             </div>
+
+            <!-- Resources -->
             <div class="resources-padding">
               <h5>Nyttige lenker / ressurser</h5>
             </div>

@@ -10,6 +10,7 @@ from usermanagement.models import *
 
 
 def login_view(request):
+
     """
     View for logging the user in.
     If the login form is valid, log the user in and redirect to the requested page
@@ -40,6 +41,7 @@ def login_view(request):
 
 
 def logout_view(request):
+
     """
     View for logging the user out
     """
@@ -49,6 +51,7 @@ def logout_view(request):
 
 
 def signup_view(request):
+
     """
     View for signing up new users. If the signup form is valid,
     create a new unactivated user and send them an email for activation.
@@ -79,6 +82,7 @@ def signup_view(request):
 
 
 def forgot_password_view(request):
+
     """
     View where users can get a new password.
     Sends a unique temporary link to the user where they can reset their password.
@@ -137,6 +141,7 @@ def change_password_view(request):
 
 
 def activate(request, key):
+
     """
     View for activating new users. After signup the users receive an email with a link to this view.
     """
@@ -151,6 +156,7 @@ def activate(request, key):
 
 
 def set_password_view(request, key):
+    
     """
     View where users can set a new password. When a user uses the forgot password view,
     it will receive an email with a unique temporary link to this view.
