@@ -156,7 +156,7 @@ def activate(request, key):
 
 
 def set_password_view(request, key):
-    
+
     """
     View where users can set a new password. When a user uses the forgot password view,
     it will receive an email with a unique temporary link to this view.

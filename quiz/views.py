@@ -91,7 +91,6 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
     """
     Displays the current question to be answered
         - Fetches questions related to a quiz for navigation and resources for assistance
-        - Redirects the user away from the quiz if the quiz is finished ( failed or success )
         - Fetch answer based on question type ( checkbox, radiobox, text or code )
         - Check if user has submitted an answer
             - Check answer, save and give feedback
@@ -103,17 +102,14 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
     question = get_object_or_404(Question, id=quiz_question)
     attempt = get_object_or_404(Attempt, hash=attempt_hash, user=request.user)
     questions = [question for question in quiz.getRelevantQuestions(request.user, attempt)]
+    answers = Answer.objects.filter(question__in=questions, attempt=attempt, attempt__user=request.user)
     resources = Resource.objects.filter(question=question)
-
-    if (attempt.status != STATUS_ATTEMPT.STARTED):
-        return redirect('quizResult', quiz_hash, attempt_hash)
 
     context = {
         'quiz': quiz,
         'quizes': quizes,
         'questions': questions,
         'resources': resources,
-        'attempt': attempt,
         'STATUS_QUESTION': STATUS_QUESTION,
     }
 
@@ -187,7 +183,19 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
     question.setQuestionVariables(attempt)
     question.setNextQuestions(questions)
 
+    #Check if attempt is finished ( failed / passed )
+    if attempt.status != STATUS_ATTEMPT.STARTED:
+        attempt.finished = True
+    else:
+        #Show confirmation popup
+        attempt.bootbox = True
+
+    #Hide popup if user has answered all questions
+    if not quiz.getRelevantQuestions(request.user, attempt).exclude(questionAnswers__in=answers).count():
+            attempt.bootbox = False
+
     #Attach last variables after manipulation
+    context['attempt'] = attempt
     context['question'] = question
 
     return render(request, 'quiz/quiz.html', context)
@@ -241,7 +249,7 @@ def quizResult(request, quiz_hash, attempt_hash):
         attempt.grade = 'E'
 
     # Update the database
-    if (attempt.grade != 'F'):
+    if  attempt.grade != 'F':
         attempt.status = STATUS_ATTEMPT.PASSED
         attempt.image = 'images/passed.png'
     else:

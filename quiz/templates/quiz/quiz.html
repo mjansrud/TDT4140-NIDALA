@@ -19,7 +19,8 @@
            class="list-group-item {{ question.status }} {{ question.current }}">{{ question.title }}</a>
       {% endfor %}
       <br>
-      <a href="{% url 'quizResult' quiz.hash attempt.hash %}" class="btn btn-primary submit-button result"
+      <a href="{% url 'quizResult' quiz.hash attempt.hash %}"
+         class="btn btn-primary submit-button {% if attempt.bootbox %} result {% endif %}"
          data-pass-percent="{{ quiz.pass_percent }}">Gå til resultat</a>
     </ul>
   </div>
@@ -115,9 +116,7 @@
                       });
                     </script>
                   {% else %}
-
                     Ukjent type spørsmål
-
                   {% endif %}
                 </div>
               </li>
@@ -126,9 +125,11 @@
             <!-- Question footer - Buttons -->
             <div class="row">
               <div class="col-md-8">
-                <button id="submit" class="btn btn-primary submit-button"
-                        {% if question.finished %}
-                        disabled {% endif %}>{{ question.button }}</button>
+                {% if not attempt.finished %}
+                  <button id="submit" class="btn btn-primary submit-button"
+                          {% if question.finished %}
+                          disabled {% endif %}>{{ question.button }}</button>
+                {% endif %}
               </div>
               <div class="col-md-4">
                 {% if question.next %}
@@ -136,7 +137,7 @@
                      class="btn btn-primary btn-block">Neste spørsmål</a>
                 {% else %}
                   <a href="{% url 'quizResult' quiz.hash attempt.hash %}"
-                     class="btn btn-primary submit-button result"
+                     class="btn btn-primary submit-button  {% if attempt.bootbox %} result {% endif %}"
                      data-pass-percent="{{ quiz.pass_percent }}">Gå til resultat</a>
                 {% endif %}
               </div>

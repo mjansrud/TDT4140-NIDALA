@@ -193,6 +193,10 @@ class Question(models.Model):
         elif (Answer.objects.filter(question=self, correct=False, attempt__user=attempt.user, attempt=attempt).count()):
             self.status = 'uncorrect'
 
+        #If attempt is passed / failed, show correct answers anyways
+        if attempt.status != STATUS_ATTEMPT.STARTED:
+            self.finished = True
+
         #If the user has answered correct or is out of attempts
         if self.finished:
             # Get answers based on type

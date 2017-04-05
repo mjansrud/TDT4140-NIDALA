@@ -63,10 +63,8 @@
     <div class="col-md-12" style="padding-bottom: 8px">
       <ul class="list-group">
         {% for question in questions %}
-          <li href="{% url 'quiz' quiz.hash attempt.hash question.id %}"
-              class="list-group-item {{ question.status }}">
-            {{ question.title }}
-          </li>
+          <a href="{% url 'quiz' quiz.hash attempt.hash question.id %}"
+             class="list-group-item {{ question.status }} {{ question.current }}">{{ question.title }}</a>
         {% endfor %}
       </ul>
       <br>
