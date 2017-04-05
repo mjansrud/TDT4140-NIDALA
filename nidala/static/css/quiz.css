@@ -20,3 +20,7 @@
 .description{
     padding:18px;
 }
+
+.current{
+    font-weight: bold;
+}

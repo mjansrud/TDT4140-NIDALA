@@ -61,6 +61,7 @@ def quizRequestAttempt(request, quiz_hash):
 
 @login_required
 def quiz(request, quiz_hash, attempt_hash, quiz_question):
+
     # Fetch from database
     quiz = get_object_or_404(Quiz, hash=quiz_hash)
     quizes = Quiz.objects.filter(subject=quiz.subject, exercise_number__lte=quiz.exercise_number)
@@ -75,7 +76,6 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
     context = {
         'quiz': quiz,
         'quizes': quizes,
-        'question': question,
         'questions': questions,
         'resources': resources,
         'attempt': attempt,
@@ -90,6 +90,7 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
     elif question.type == 'CODE':
         question.alternative = get_object_or_404(Code, question=question.id)
 
+    #Check if a user has answered a question
     if (request.method == "POST"):
 
         # Defined variables
@@ -149,12 +150,17 @@ def quiz(request, quiz_hash, attempt_hash, quiz_question):
     # Run functions
     Question.setQuestionsStatus(questions, attempt)
     question.setQuestionVariables(attempt)
+    question.setNextQuestions(questions)
+
+    #Attach last variables after manipulation
+    context['question'] = question
 
     return render(request, 'quiz/quiz.html', context)
 
 
 @login_required
 def quizResult(request, quiz_hash, attempt_hash):
+
     # Fetch from database
     quiz = get_object_or_404(Quiz, hash=quiz_hash)
     attempt = get_object_or_404(Attempt, hash=attempt_hash, user=request.user)

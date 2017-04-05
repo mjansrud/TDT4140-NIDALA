@@ -15,7 +15,7 @@
       </div>
       {% for question in questions %}
         <a href="{% url 'quiz' quiz.hash attempt.hash question.id %}"
-           class="list-group-item {{ question.status }}">{{ question.title }}</a>
+           class="list-group-item {{ question.status }} {{ question.current }}">{{ question.title }}</a>
       {% endfor %}
       <br>
       <a href="{% url 'quizResult' quiz.hash attempt.hash %}" class="btn btn-primary submit-button result"
@@ -33,8 +33,10 @@
                 <h5>{{ question.title }}</h5>
               </div>
               <div class="col-md-6" align="right">
-                <h5>Forsøk {{ question.user_attempts }}
-                  av {{ question.attempts }}</h5>
+                {% if not question.finished %}
+                  <h5>Forsøk {{ question.user_attempts }}
+                    av {{ question.attempts }}</h5>
+                {% endif %}
               </div>
             </div>
             {% if user_answered %}
@@ -118,8 +120,8 @@
                         disabled {% endif %}>{{ question.button }}</button>
               </div>
               <div class="col-md-4">
-                {% if questions|filterQuestionsFetchNext:question != False %}
-                  <a href="{% url 'quiz' quiz.hash attempt.hash questions|filterQuestionsFetchNext:question %}"
+                {% if question.next %}
+                  <a href="{% url 'quiz' quiz.hash attempt.hash question.next %}"
                      class="btn btn-primary btn-block">Neste spørsmål</a>
                 {% else %}
                   <a href="{% url 'quizResult' quiz.hash attempt.hash %}"
@@ -129,7 +131,7 @@
               </div>
             </div>
             <div class="resources-padding">
-              <h5>Ressurser</h5>
+              <h5>Nyttige lenker / ressurser</h5>
             </div>
             <ul class="list-group">
               {% for resource in resources %}

@@ -39,20 +39,20 @@
         {% for attempt in quiz.attempts_list %}
           {% if attempt.status == STATUS_ATTEMPT.PASSED %}
             <a href="{% url 'quizResult' quiz.hash attempt.hash %}" class="list-group-item correct">
-              Du besto forsøk {{ attempt.hash }}
-            </a>
+              Du besto forsøket {{ attempt.updated|date:"j. F H:i"|lower }}
+            </a> 
           {% elif attempt.status == STATUS_ATTEMPT.FAILED %}
             <a href="{% url 'quizResult' quiz.hash attempt.hash %}" class="list-group-item uncorrect ">
-              Du besto ikke forsøk {{ attempt.hash }}
+              Du besto ikke forsøket {{ attempt.updated|date:"j. F H:i"|lower }}
             </a>
           {% else %}
             <a href="{% url 'quizFindQuestion' quiz.hash attempt.hash %}" class="list-group-item">
-              Fortsett på {{ attempt.hash }}
+              Fortsett på forsøk fra {{ attempt.updated|date:"j. F H:i"|lower }}
             </a>
           {% endif %}
         {% endfor %}
         <div class="resources-padding">
-          <h5>Ressurser</h5>
+          <h5>Nyttige lenker / ressurser</h5>
         </div>
         {% for resource in quiz.resources %}
           <a href="{{ resource.url }}" target="_blank" class="list-group-item">

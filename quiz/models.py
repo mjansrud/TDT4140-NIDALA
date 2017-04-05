@@ -68,7 +68,7 @@ class Quiz(models.Model):
         quizes = Quiz.objects.filter(subject=self.subject, exercise_number__lt=self.exercise_number)
         earlier_questions = Question.objects.filter(quiz__in=quizes)
         earlier_questions = earlier_questions.exclude(
-            Q(questionAnswers__correct=True) & ~Q(questionAnswers__attempt=attempt))
+            Q(questionAnswers__correct=True, questionAnswers__attempt__user = user) & ~Q(questionAnswers__attempt=attempt))
         questions = questions | earlier_questions
 
         #Add only if questions have alternatives
@@ -155,6 +155,19 @@ class Question(models.Model):
                 question.status = 'correct'
             elif (Answer.objects.filter(question=question, correct=False, attempt__user=attempt.user, attempt=attempt).count()):
                 question.status = 'uncorrect'
+
+    def setNextQuestions(self, questions):
+
+        #Attributes
+        self.next = 0
+
+        # Check which questions the user has answered correct
+        for index, value in enumerate(questions):
+            value.current = 'not-current'
+            if value == self:
+                value.current = 'current'
+                if len(questions) - 1 > index:
+                   self.next = Question.objects.get(id=questions[index + 1].id).id
 
     def setQuestionVariables(self, attempt):
 
