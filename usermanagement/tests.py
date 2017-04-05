@@ -195,17 +195,17 @@ class ChangePasswordViewTestCase(TestCase):
         self.user.save()
         self.url = reverse('user:change-password')
         self.payload = {
-            'current_password' : self.password,
-            'new_password' : self.new_password,
+            'current_password': self.password,
+            'new_password': self.new_password,
             'confirm_password': self.new_password,
         }
 
         self.client = Client()
 
-
     def test_change_password_without_authentication(self):
         response = self.client.post(self.url)
-        self.assertEqual(response.status_code, 404, 'Should get 404 when trying to change password without being logged in')
+        self.assertEqual(response.status_code, 404,
+                         'Should get 404 when trying to change password without being logged in')
 
     def test_change_password_successful(self):
         self.client.login(username=self.username, password=self.password)
@@ -270,6 +270,7 @@ class SetPasswordViewTestCase(TestCase):
         response = self.client.post(self.url, payload)
         self.assertIsNotNone(response.context['errors'])
 
+
 class ActivateUserTestCase(TestCase):
     def setUp(self):
         self.username = 'test'
@@ -287,12 +288,3 @@ class ActivateUserTestCase(TestCase):
     def test_valid_activation(self):
         response = self.client.post(self.url)
         self.assertRedirects(response, reverse('index'))
-
-
-
-
-
-
-
-
-
