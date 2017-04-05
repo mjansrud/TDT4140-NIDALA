@@ -1,15 +1,23 @@
-from django.http import HttpResponseRedirect
-from django.contrib.auth import logout
-from usermanagement.forms import *
-from django.shortcuts import reverse, render, Http404
-from django.contrib import messages
-from usermanagement.models import *
-from post_office import mail
 from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import logout
+from django.http import HttpResponseRedirect
+from django.shortcuts import reverse, render, Http404
+from post_office import mail
+
+from usermanagement.forms import *
+from usermanagement.models import *
+
 
 def login_view(request):
+    """
+    View for logging the user in.
+    If the login form is valid, log the user in and redirect to the requested page
+    """
+
     if request.user.is_authenticated:
         raise Http404
+
     if request.method == 'POST':
         next = request.POST.get('next')
         form = LoginForm(request.POST)
@@ -23,8 +31,6 @@ def login_view(request):
         form = LoginForm()
         next = request.GET.get('next')
 
-
-
     context = {
         'form': form,
         'next': next
@@ -34,11 +40,20 @@ def login_view(request):
 
 
 def logout_view(request):
+    """
+    View for logging the user out
+    """
+
     logout(request)
     return HttpResponseRedirect(reverse('index'))
 
 
 def signup_view(request):
+    """
+    View for signing up new users. If the signup form is valid,
+    create a new unactivated user and send them an email for activation.
+    """
+
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
@@ -49,7 +64,8 @@ def signup_view(request):
                       sender=settings.DEFAULT_FROM_MAIL,
                       template='activation_email',
                       context={'request': request, 'user': user, 'token': token})
-            messages.add_message(request, messages.INFO, 'You will receive a confirmation email to verify your email address')
+            messages.add_message(request, messages.INFO,
+                                 'You will receive a confirmation email to verify your email address')
             return HttpResponseRedirect(reverse('index'))
 
     else:
@@ -63,6 +79,11 @@ def signup_view(request):
 
 
 def forgot_password_view(request):
+    """
+    View where users can get a new password.
+    Sends a unique temporary link to the user where they can reset their password.
+    """
+
     if request.method == 'POST':
         form = ForgotPasswordForm(request.POST)
         if form.is_valid():
@@ -111,10 +132,15 @@ def change_password_view(request):
     context = {
         'form': form
     }
+
     return render(request, 'usermanagement/change_password.html', context)
 
 
 def activate(request, key):
+    """
+    View for activating new users. After signup the users receive an email with a link to this view.
+    """
+
     try:
         token = UserToken.objects.get(key=key)
         token.activate()
@@ -125,6 +151,11 @@ def activate(request, key):
 
 
 def set_password_view(request, key):
+    """
+    View where users can set a new password. When a user uses the forgot password view,
+    it will receive an email with a unique temporary link to this view.
+    """
+
     try:
         token = UserToken.objects.get(key=key)
     except UserToken.DoesNotExist:
@@ -144,6 +175,5 @@ def set_password_view(request, key):
         'form': form,
         'key': key,
     }
+
     return render(request, 'usermanagement/set_password.html', context)
-
-
