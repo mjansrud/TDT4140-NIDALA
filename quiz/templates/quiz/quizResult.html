@@ -4,6 +4,7 @@
   {% load static %}
   {% load quizFilters %}
 
+  <!-- Result screen for quiz-->
   <div class="col-md-4">
     <div class="col-md-12" style="padding-bottom: 8px">
       <div><h5 class="title ">R</h5><h5 class="sub-title">esultat</h5></div>
@@ -17,6 +18,8 @@
         </div>
       </div>
     </div>
+
+    <!-- Grade -->
     <div class="col-md-12">
       <div>
         <h5>Karakter</h5>
@@ -34,6 +37,7 @@
     </div>
     <div class="col-md-12">
       <div>
+        <!-- Displays resources based on questions answered wrong -->
         <h5>Basert på feil: Les følgende ressurser</h5>
       </div>
       <ul class="list-group">
@@ -49,9 +53,9 @@
         {% endfor %}
       </ul>
     </div>
-
-
   </div>
+
+  <!-- Question Overview -->
   <div class="col-md-8">
     <div class="col-md-12" style="padding-bottom: 8px">
       <div><h5 class="title ">D</h5><h5 class="sub-title">etaljert resultat</h5></div>

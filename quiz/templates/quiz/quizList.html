@@ -2,6 +2,8 @@
 {% load static %}
 {% block content %}
   {% load quizFilters %}
+
+  <!-- Displays quizzes available for current subject-->
   <div class="col-md-4">
     <ul class="list-group ">
       <div>
@@ -25,6 +27,8 @@
     <div>
       <h5>Forsøk</h5>
     </div>
+
+    <!-- Displays information about currently selected quiz -->
     {% for quiz in quizes %}
       <ul class="list-group attempt" id="{{ quiz.hash }}" style="display:none">
         <div>
@@ -36,6 +40,7 @@
             Nytt forsøk
           </a>
         {% endif %}
+        <!-- Display attempts -->
         {% for attempt in quiz.attempts_list %}
           {% if attempt.status == STATUS_ATTEMPT.PASSED %}
             <a href="{% url 'quizResult' quiz.hash attempt.hash %}" class="list-group-item correct">
@@ -54,6 +59,7 @@
         <div class="resources-padding">
           <h5>Nyttige lenker / ressurser</h5>
         </div>
+        <!-- Resources for current quiz -->
         {% for resource in quiz.resources %}
           <a href="{{ resource.url }}" target="_blank" class="list-group-item">
             {{ resource.title }}
@@ -66,6 +72,8 @@
       </ul>
     {% endfor %}
   </div>
+
+  <!-- Pop-up -->
   <div id="confirm" class="modal fade">
     <div class="modal-body">
       Are you sure?
