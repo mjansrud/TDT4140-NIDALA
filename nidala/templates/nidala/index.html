@@ -3,23 +3,27 @@
 
 {% block css %}
   <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
+  <link href='http://fonts.googleapis.com/css?family=Buenard:700' rel='stylesheet' type='text/css'>
 {% endblock css %}
 
-{% block content %}
-
-  <!-- Warming Up -->
-  <link href='http://fonts.googleapis.com/css?family=Buenard:700' rel='stylesheet' type='text/css'>
+{% block javascript %}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mb.YTPlayer/3.0.12/jquery.mb.YTPlayer.min.js"></script>
+  <script src="{% static 'js/index.js' %}"></script>
+{% endblock %}
+
+{% block content %}
 
   <!--Video Section-->
   <section class="content-section video-section">
     <div class="pattern-overlay">
       <a name="start"></a>
-      <a id="bgndVideo" class="player" data-property="{videoURL:'https://www.youtube.com/watch?v=fdJc1_IBKJA',containment:'.video-section', quality:'large', autoPlay:true, mute:true, opacity:1}">bg</a>
+      <a id="bgndVideo" class="player"
+         data-property="{videoURL:'https://www.youtube.com/watch?v=fdJc1_IBKJA',containment:'.video-section', quality:'large', autoPlay:true, mute:true, opacity:1}">bg</a>
       <div class="container">
         <div class="row">
           <div class="col-md-12" align="center">
-            <h1>N</h1><h2>idala - smart læring</h2>
+            <h1>N</h1>
+            <h2>idala - smart læring</h2>
             <h3>Make quiz great again!</h3>
           </div>
         </div>
@@ -33,13 +37,15 @@
   </section>
   <!--Video Section Ends Here-->
 
+  <!--Main content of frontpage-->
   <a name="information"></a>
   <div class="container-fluid">
     <div class="container">
       <div class="row">
         <div class="col-md-6">
           <div class="jumbotron">
-            <h1 class="title">R</h1><h2 class="sub-title">epeter og lær</h2>
+            <h1 class="title">R</h1>
+            <h2 class="sub-title">epeter og lær</h2>
             <p>Nidala tilbyr et system hvor feil besvarte spørsmål repeteres for bedre læring.</p>
             <div style="padding-top:10px" align="center"><img width="100%" src="{% static 'images/repeat.png' %}"></div>
           </div>
@@ -54,8 +60,10 @@
     <div class="row">
       <div class="col-md-6">
         <div class="jumbotron">
-          <h1 class="title">N</h1><h2 class="sub-title">idala - smart læring</h2>
-          <p style="padding-top:35px">Nidala er et quizsystem som skal hjelpe studentene til å lettere få med seg de viktigste
+          <h1 class="title">N</h1>
+          <h2 class="sub-title">idala - smart læring</h2>
+          <p style="padding-top:35px">Nidala er et quizsystem som skal hjelpe studentene til å lettere få med seg de
+            viktigste
             momentene i pensum ved å gjennta nøkkelspørsmål. Nidala lager et skreddersydd quizsystem til
             hver enkelt student ved å automatisk leggge inn tidligere feilbesvarte spørsmål i fremtidige
             quizer.
@@ -71,8 +79,76 @@
               // Create a new StyledMapType object, passing it an array of styles,
               // and the name to be displayed on the map type control.
               var styledMapType = new google.maps.StyledMapType(
-                      [{"featureType":"all","elementType":"geometry.fill","stylers":[{"weight":"2.00"}]},{"featureType":"all","elementType":"geometry.stroke","stylers":[{"color":"#9c9c9c"}]},{"featureType":"all","elementType":"labels.text","stylers":[{"visibility":"on"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"landscape","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"landscape.man_made","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45}]},{"featureType":"road","elementType":"geometry.fill","stylers":[{"color":"#eeeeee"}]},{"featureType":"road","elementType":"labels.text.fill","stylers":[{"color":"#7b7b7b"}]},{"featureType":"road","elementType":"labels.text.stroke","stylers":[{"color":"#ffffff"}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#46bcec"},{"visibility":"on"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"color":"#c8d7d4"}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"color":"#070707"}]},{"featureType":"water","elementType":"labels.text.stroke","stylers":[{"color":"#ffffff"}]}],
-                      {name: 'Styled Map'});
+                  [{
+                    "featureType": "all",
+                    "elementType": "geometry.fill",
+                    "stylers": [{"weight": "2.00"}]
+                  }, {
+                    "featureType": "all",
+                    "elementType": "geometry.stroke",
+                    "stylers": [{"color": "#9c9c9c"}]
+                  }, {
+                    "featureType": "all",
+                    "elementType": "labels.text",
+                    "stylers": [{"visibility": "on"}]
+                  }, {
+                    "featureType": "landscape",
+                    "elementType": "all",
+                    "stylers": [{"color": "#f2f2f2"}]
+                  }, {
+                    "featureType": "landscape",
+                    "elementType": "geometry.fill",
+                    "stylers": [{"color": "#ffffff"}]
+                  }, {
+                    "featureType": "landscape.man_made",
+                    "elementType": "geometry.fill",
+                    "stylers": [{"color": "#ffffff"}]
+                  }, {
+                    "featureType": "poi",
+                    "elementType": "all",
+                    "stylers": [{"visibility": "off"}]
+                  }, {
+                    "featureType": "road",
+                    "elementType": "all",
+                    "stylers": [{"saturation": -100}, {"lightness": 45}]
+                  }, {
+                    "featureType": "road",
+                    "elementType": "geometry.fill",
+                    "stylers": [{"color": "#eeeeee"}]
+                  }, {
+                    "featureType": "road",
+                    "elementType": "labels.text.fill",
+                    "stylers": [{"color": "#7b7b7b"}]
+                  }, {
+                    "featureType": "road",
+                    "elementType": "labels.text.stroke",
+                    "stylers": [{"color": "#ffffff"}]
+                  }, {
+                    "featureType": "road.highway",
+                    "elementType": "all",
+                    "stylers": [{"visibility": "simplified"}]
+                  }, {
+                    "featureType": "road.arterial",
+                    "elementType": "labels.icon",
+                    "stylers": [{"visibility": "off"}]
+                  }, {
+                    "featureType": "transit",
+                    "elementType": "all",
+                    "stylers": [{"visibility": "off"}]
+                  }, {
+                    "featureType": "water",
+                    "elementType": "all",
+                    "stylers": [{"color": "#46bcec"}, {"visibility": "on"}]
+                  }, {
+                    "featureType": "water",
+                    "elementType": "geometry.fill",
+                    "stylers": [{"color": "#c8d7d4"}]
+                  }, {
+                    "featureType": "water",
+                    "elementType": "labels.text.fill",
+                    "stylers": [{"color": "#070707"}]
+                  }, {"featureType": "water", "elementType": "labels.text.stroke", "stylers": [{"color": "#ffffff"}]}],
+                  {name: 'Styled Map'});
 
               map = new google.maps.Map(document.getElementById('map'), {
                 center: {lat: 63.417664, lng: 10.403982},
@@ -85,14 +161,10 @@
               map.setOptions({draggable: false, zoomControl: false, scrollwheel: false, disableDoubleClickZoom: true});
 
               var marker = new google.maps.Marker({
-                position:  new google.maps.LatLng(63.417664, 10.403982),
+                position: new google.maps.LatLng(63.417664, 10.403982),
                 icon: '{% static 'images/marker.png' %}',
                 map: map
               });
-
-
-
-
             }
           </script>
           <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrlZ9ykxZy9lDEi8qukGv9ofx2sRP_IXI&callback=initMap"
@@ -137,41 +209,47 @@
           </div>
         </div>
       </div>
-       <div class="row">
-          <div class="col-md-12" align="center">
-            <a href="#start"><img width="50px" src="{% static 'images/up.png' %}"></a>
-          </div>
-        </div>
-    </div>
-    <footer class="footer">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-3">
-            <h3>Om oss</h3>
-            <p>Nidala ble utviklet i faget TDT4140 Programvareutvikling ved NTNU og skal hjelpe studenter med effektiv læring.</p>
-          </div>
-          <div class="col-md-2">
-            <h3>Meny</h3>
-            <p>
-              - <a href="/">Hjem</a></br>
-              {% if request.user.is_authenticated %}
-                - <a href="/subjects/">Fag</a></br>
-              {% endif %}
-            </p>
-          </div>
-          <div class="col-md-4">
-            <h3>Kontakt</h3>
-            <p>
-              Ikke nøl med å ta kontakt. </br> Du kan nå oss på post(at)nidala.no.</br>Kildekoden ligger åpent på <a target="_BLANK" href="http://github.com/mjansrud/TDT4140-NIDALA">Github</a>
-            </p>
-          </div>
-          <div class="col-md-3">
-            <h3>Del av</h3>
-            <a href="http://ntnu.no" target="_BLANK"><div style="padding-top: 30px"><img width="75%" src="{% static 'images/ntnu.png' %}"></div></a>
-          </div>
+      <div class="row">
+        <div class="col-md-12" align="center">
+          <a href="#start"><img width="50px" src="{% static 'images/up.png' %}"></a>
         </div>
       </div>
-    </footer>
+    </div>
   </div>
-  <script src="{% static 'js/index.js' %}" ></script>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3">
+          <h3>Om oss</h3>
+          <p>Nidala ble utviklet i faget TDT4140 Programvareutvikling ved NTNU og skal hjelpe studenter med effektiv
+            læring.</p>
+        </div>
+        <div class="col-md-2">
+          <h3>Meny</h3>
+          <p>
+            - <a href="/">Hjem</a></br>
+            {% if request.user.is_authenticated %}
+              - <a href="/subjects/">Fag</a></br>
+            {% endif %}
+          </p>
+        </div>
+        <div class="col-md-4">
+          <h3>Kontakt</h3>
+          <p>
+            Ikke nøl med å ta kontakt. </br> Du kan nå oss på post(at)nidala.no.</br>Kildekoden ligger åpent på <a
+                  target="_BLANK" href="http://github.com/mjansrud/TDT4140-NIDALA">Github</a>
+          </p>
+        </div>
+        <div class="col-md-3">
+          <h3>Del av</h3>
+          <a href="http://ntnu.no" target="_BLANK">
+            <div style="padding-top: 30px"><img width="75%" src="{% static 'images/ntnu.png' %}"></div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
 {% endblock content %}
