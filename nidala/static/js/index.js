@@ -6,7 +6,10 @@ $(document).ready(function () {
 
     $(".player").mb_YTPlayer();
 
-}); 
+    setTimeout(function() {
+          $("#header-title").fadeOut("slow");
+    }, 1000);
+});
 
 $(function() {
   $('a[href*="#"]:not([href="#"])').click(function() {
