@@ -3,11 +3,12 @@
 
 {% block css %}
   <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
-  <link href='http://fonts.googleapis.com/css?family=Buenard:700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Buenard:700' rel='stylesheet' type='text/css'>
+  <link href='https://cdnjs.cloudflare.com/ajax/libs/jquery.mb.YTPlayer/3.0.15/css/jquery.mb.YTPlayer.min.css' rel='stylesheet' type='text/css'>
 {% endblock css %}
 
 {% block javascript %}
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mb.YTPlayer/3.0.12/jquery.mb.YTPlayer.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mb.YTPlayer/3.0.15/jquery.mb.YTPlayer.min.js"></script>
   <script src="{% static 'js/index.js' %}"></script>
 {% endblock %}
 
@@ -18,8 +19,8 @@
     <div class="pattern-overlay">
       <a name="start"></a>
       <a id="bgndVideo" class="player"
-         data-property="{videoURL:'https://www.youtube.com/watch?v=fdJc1_IBKJA',containment:'.video-section', quality:'large', autoPlay:true, mute:true, opacity:1}">bg</a>
-      <div class="container">
+         data-property="{videoURL:'https://www.youtube.com/watch?v=y_Bne3Ef0mk',containment:'.video-section', quality:'hd1080', autoPlay:true, mute:true, opacity:1}">bg</a>
+      <div class="container" id="header-title">
         <div class="row">
           <div class="col-md-12" align="center">
             <h1>N</h1>
