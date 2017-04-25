@@ -6,9 +6,12 @@ $(document).ready(function () {
 
     $(".player").mb_YTPlayer();
 
-    setTimeout(function() {
+    if(! /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+        setTimeout(function() {
           $("#header-title").fadeOut("slow");
-    }, 1000);
+        }, 1000);
+    }
+
 });
 
 $(function() {
