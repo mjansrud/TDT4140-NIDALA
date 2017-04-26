@@ -51,6 +51,10 @@ This command will run a local server that comes with Django. Be deafult the webs
 
 # Acknowledgments
 * Pekka <br />
+* Our TA Kari <br />
+* The user tester <br />
+* Everyone providing feedback on our product <br />
+* Caffeine
 
 # Furhter reading
 We will soon™ have a wiki. Should you have any further questions check our [wiki](https://github.com/mjansrud/TDT4140-NIDALA/wiki/)
